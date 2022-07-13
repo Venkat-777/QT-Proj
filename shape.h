@@ -19,7 +19,7 @@ class Shape
     *  PRE-CONDITIONS:                                                           *
     *   The following parameters can be optionally set with an argument          *
     *                                                                            *
-    *     device (QPaintDivice) : The widget to do the paining on                *
+    *     device (QPaintDivice) : The widget to do the painting on               *
     *     id     (int)          : The shapes id                                  *
     *     shape  (ShapeType)    : The type of shape                              *
     * ---------------------------------------------------------------------------*
