@@ -122,7 +122,7 @@ MC_Vec::Vector<T>::Vector(int space)
  ********************************************************************/
 template <typename T>
 MC_Vec::Vector<T>::Vector(int space, const T& value)
-    : sizeV {space}, space {space}, elem { new T[space] }
+    : sizeV { space }, space { space }, elem { new T[space] }
 {
     for (int index {0}; index < space; ++index)
     {
@@ -168,7 +168,7 @@ MC_Vec::Vector<T>::Vector(const Vector& source)
  ********************************************************************/
 template <typename T>
 MC_Vec::Vector<T>::Vector(Vector&& source) noexcept
-    : sizeV {source.sizeV}, space {source.space}, elem { source.elem }
+    : sizeV { source.sizeV }, space { source.space }, elem { source.elem }
 {
     source.elem = nullptr;
 }
@@ -255,9 +255,9 @@ MC_Vec::Vector<T>& MC_Vec::Vector<T>::operator=(Vector&& rhs) noexcept
         delete[] elem;
     }
 
-    elem  = rhs.elem;
-    sizeV = rhs.sizeV;
-    space = rhs.space;
+    elem  = std::move(rhs.elem);
+    sizeV = std::move(rhs.sizeV);
+    space = std::move(rhs.space);
 
     rhs.elem = nullptr;
 }
@@ -332,7 +332,7 @@ void MC_Vec::Vector<T>::reserve(int capacity)
 
         for (int index {0}; index < sizeV; ++index)
         {
-            array[index] = elem[index];
+            array[index] = std::move(elem[index]);
         }
 
         if (sizeV)
