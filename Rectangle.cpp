@@ -15,13 +15,13 @@ void Rectangle::draw(QPainterDevice * device)
     painter->begin(device);
     painter->setPen(getPen());
     painter->setBrush(getBrush());
-    painter->drawRect(location.x(), location.y(), width, length);
+    painter->drawRect(x, y, width, length);
     painter->end();
 }
 void Rectangle::move(int x, int y)
 {
-    Qpoint temp(x, y);
-    location = temp;
+    this->x = x;
+    this->y = y;
 }
 
 void Rectangle::area()
