@@ -330,14 +330,14 @@ void MC_Vec::Vector<T>::reserve(int capacity)
     {
         array = new T[capacity];
 
-        for (int index {0}; index < sizeV; ++index)
-        {
-            array[index] = std::move(elem[index]);
-        }
-
         if (sizeV)
-        {
-            delete[] elem;  
+        {    
+            for (int index {0}; index < sizeV; ++index)
+            {
+               array[index] = std::move(elem[index]);
+            }
+          
+            delete[] elem;
         }
 
         elem  = array;
