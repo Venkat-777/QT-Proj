@@ -66,7 +66,7 @@ int Rectangle::getWidth()
 {
     return width;
 }
-int Rectangle:: getLength()
+int Rectangle::getLength()
 {
     return length;
 }
