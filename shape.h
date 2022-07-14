@@ -280,7 +280,7 @@ class Shape
 
     /*** Pure Virtual Methods - To be defined by inherited classes  ***/
 
-    virtual void draw(const int translateX, const int translateY) = 0;
+    virtual void draw(QPaintDevice* device) = 0;
     virtual void move(const int translateX, const int translateY) = 0;
     virtual double  perimeter() = 0;
     virtual double  area()      = 0;
