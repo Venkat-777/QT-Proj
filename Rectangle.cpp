@@ -1,12 +1,12 @@
 #include "Rectangle.h" 
 
 Rectangle::Rectangle(QPainterDevice* device, int id)
-    : Shape(device, id, ShapeType::Rectangle), x { 0 }, y { 0 } , width { 0 }, length { 0 }
+    : Shape(device, id, ShapeType::Rectangle), width { 0 }, length { 0 }, x { 0 }, y { 0 }
 {
 }
 
 Rectangle(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0)
-    : Shape(device, id, ShapeType::Rectangle, pen, brush), x { x }, y { y }, width { width }, length { length }
+    : Shape(device, id, ShapeType::Rectangle, pen, brush), width { width }, length { length }, x { x }, y { y }
 {
 }
 
