@@ -7,6 +7,7 @@ class Rectangle : public Shape
 {
 public:
     Rectangle(QPaintDevice* device = nullptr, int id = -1);
+    Rectangle(QPaintDevice* device, int id, QPen pen, QBrush brush, int x = 0, int y = 0);
     ~Rectangle() override;
 
     void draw(QPaintDevice* device) override;
