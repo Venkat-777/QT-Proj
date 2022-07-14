@@ -282,8 +282,8 @@ class Shape
 
     virtual void draw(const int translateX, const int translateY) = 0;
     virtual void move(const int translateX, const int translateY) = 0;
-    virtual int  perimeter() = 0;
-    virtual int  area()      = 0;
+    virtual double  perimeter() = 0;
+    virtual double  area()      = 0;
     /*----------------------------------------------------------------*/
 
 
