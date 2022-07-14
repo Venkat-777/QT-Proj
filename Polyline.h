@@ -10,7 +10,7 @@ public:
     ~Polyline();
     
     void draw(QPaintDevice* device) override;
-    void move(int x, int y) override;
+    //void move(int x, int y) override;
     
 private:
 
