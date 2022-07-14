@@ -10,7 +10,7 @@ public:
     Rectangle(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0);
     ~Rectangle() override;
 
-    void draw(const int x, const int y) override;
+    void draw(QPaintDevice* device) override;
     void move(const int x, const int y) override;
     double area() override;
     double perimeter() override;
