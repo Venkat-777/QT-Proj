@@ -19,11 +19,11 @@ public:
     void setWidth(int width);
     void setLength(int length);
 
-    int getX();
-    int getY();
+    int getX() const;
+    int getY() const;
 
-    int getWidth();
-    int getLength();
+    int getWidth() const;
+    int getLength() const;
 
 private:
     int width, length, x , y;
