@@ -26,6 +26,6 @@ public:
     int getLength();
 
 private:
-    int width, length, x , y, id;
+    int width, length, x , y;
 
 };
