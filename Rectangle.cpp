@@ -14,9 +14,9 @@ Rectangle::~Rectangle() override
 {
 }
 
-void Rectangle::draw(QPainterDevice * device)
+void Rectangle::draw(int x, int y)
 {
-
+    QPainter* painter = getQPainter();
     painter->begin(device);
     painter->setPen(getPen());
     painter->setBrush(getBrush());
