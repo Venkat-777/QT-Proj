@@ -171,7 +171,6 @@ void Parser::ReadShapeFile(const string fileName)
         // ?????
 //        else if(identifier == "ShapeDimensions")
 //        {
-//            getline(inFile, array[arrayPosition].ShapeDimensions);
 //        }
 
         // get pen colors
