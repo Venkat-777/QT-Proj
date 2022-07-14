@@ -5,12 +5,12 @@ Rectangle::Rectangle(QPainterDevice* device, int id)
 {
 }
 
-Rectangle(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0)
+Rectangle::Rectangle(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0)
     : Shape(device, id, ShapeType::Rectangle, pen, brush), width { width }, length { length }, x { x }, y { y }
 {
 }
 
-Rectangle::~Rectangle() override
+Rectangle::~Rectangle() 
 {
 }
 
@@ -30,12 +30,12 @@ void Rectangle::move(int x, int y)
     this->y = y;
 }
 
-void Rectangle::area()
+double Rectangle::area()
 {
     return length * width;
 }
 
-void Rectangle::perimeter()
+double Rectangle::perimeter()
 {
     return length + length + width + width;
 }
