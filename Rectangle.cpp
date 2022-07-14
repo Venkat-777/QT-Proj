@@ -54,19 +54,19 @@ void Rectangle::setLength(int length)
     this->length = length;
 }
 
-int Rectangle::getX()
+int Rectangle::getX() const
 {
     return x;
 }
-int Rectangle::getY()
+int Rectangle::getY() const
 {
     return y;
 }
-int Rectangle::getWidth()
+int Rectangle::getWidth() const
 {
     return width;
 }
-int Rectangle::getLength()
+int Rectangle::getLength() const
 {
     return length;
 }
