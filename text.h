@@ -2,7 +2,8 @@
 #define TEXT_H
 
 #include "shape.h"
-#include <string>
+#include <QFont>
+#include <QString>
 
 class Text : public Shape
 {
