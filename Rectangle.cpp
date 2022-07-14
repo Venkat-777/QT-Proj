@@ -14,14 +14,15 @@ Rectangle::~Rectangle()
 {
 }
 
-void Rectangle::draw(const int x, const int y)
+void Rectangle::draw(QPaintDevice* device)
 {
-    QPainter* painter = getQPainter();
-    painter->begin(device);
-    painter->setPen(getPen());
-    painter->setBrush(getBrush());
-    painter->drawRect(x, y, width, length);
-    painter->end();
+    QPainter& painter = getQPainter();
+    
+    painter.begin(device);
+    painter.setPen(getPen());
+    painter.setBrush(getBrush());
+    painter.drawRect(x, y, width, length);
+    painter.end();
 }
 
 void Rectangle::move(const int x, const int y)
