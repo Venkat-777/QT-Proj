@@ -14,7 +14,7 @@ Rectangle::~Rectangle()
 {
 }
 
-void Rectangle::draw(int x, int y)
+void Rectangle::draw(const int x, const int y)
 {
     QPainter* painter = getQPainter();
     painter->begin(device);
@@ -24,7 +24,7 @@ void Rectangle::draw(int x, int y)
     painter->end();
 }
 
-void Rectangle::move(int x, int y)
+void Rectangle::move(const int x, const int y)
 {
     this->x = x;
     this->y = y;
