@@ -95,7 +95,7 @@ class Parser
   /*******************************************************************************
   * variables                                                                    *
   *******************************************************************************/
-    std::unique_ptr<Shape> currentShape;                  // PROC & PROC - current Shape being read
+    shared_ptr<Shape> currentShape;                  // PROC & PROC - current Shape being read
     MC_Vec::Vector<shared_ptr<Shape>> parserVector;  // PROC & PROC - a vector containing Shape properties
 
 };
