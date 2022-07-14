@@ -7,7 +7,7 @@ class Polyline : public Shape
 {
 public:
     Polyline(QPaintDevice* device = nullptr, int id = -1);
-    ~Polyline();
+    ~Polyline() override;
     
     void draw(QPaintDevice* device) override;
     //void move(int x, int y) override;
