@@ -1,6 +1,6 @@
 #include "Rectangle.h" 
 
-Rectangle::Rectangle(QPainterDevice* device, int id)
+Rectangle::Rectangle(QPaintDevice* device, int id)
     : Shape(device, id, ShapeType::Rectangle), width { 0 }, length { 0 }, x { 0 }, y { 0 }
 {
 }
