@@ -5,7 +5,7 @@ Rectangle::Rectangle(QPainterDevice* device, int id)
     {
 
     }
-Rectangle::~Rectangle()
+Rectangle::~Rectangle() override
 {
     
 }
