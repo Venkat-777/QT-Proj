@@ -36,6 +36,9 @@ void MainWindow::on_pushButton_Login_clicked()
     if(username == "jmark" && password == "1214")
      {
         QMessageBox::information(this, "Login", "Account is valid");
+        hide();
+        secDialog = new SecDialog(this);
+        secDialog->show();
     }
     else
        {
