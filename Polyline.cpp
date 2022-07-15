@@ -13,7 +13,7 @@ void Polyline::draw(QPaintDevice* device)
     painter.begin(device);
     painter.setPen(getPen());
     painter.setBrush(getBrush());
-    // painter.drawRect(x, y, width, length);
+    painter.drawPolyline(points, pointCount);
     painter.end();
 }
 
