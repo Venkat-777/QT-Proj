@@ -2,6 +2,7 @@
 #define POLYLINE_H
 
 #include "shape.h"
+const int SIZE = 50;
 
 class Polyline : public Shape
 {
@@ -13,7 +14,8 @@ public:
     //void move(int x, int y) override;
     
 private:
-
+    int pointCount;
+    QPointF points[SIZE];
 };
 
 #endif
