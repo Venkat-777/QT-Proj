@@ -22,22 +22,22 @@ void Ellipse::draw(QPaintDevice* device)
     painter.begin(device);
     painter.setPen(getPen());
     painter.setBrush(getBrush());
-    painter.drawEllipse(rectangle);
+    painter.drawEllipse(rectangle(x,y);
     painter.end();
 }
 
-void Rectangle::move(const int x, const int y)
+void Ellipse::move(const int x, const int y)
 {
     this->x = x;
     this->y = y;
 }
 
-double Rectangle::area()
+double Ellipse::area()
 {
-    return length * width;
+    return 3.14 * 
 }
 
-double Rectangle::perimeter()
+double Ellipse::perimeter()
 {
     return length + length + width + width;
 }
