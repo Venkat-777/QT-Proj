@@ -22,7 +22,7 @@ void Ellipse::draw(QPaintDevice* device)
     painter.begin(device);
     painter.setPen(getPen());
     painter.setBrush(getBrush());
-    painter.drawEllipse(Rectangle);
+    painter.drawEllipse(rectangle);
     painter.end();
 }
 
