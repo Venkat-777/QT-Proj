@@ -1,4 +1,5 @@
 #include "Rectangle.h" 
+#include "Ellipse.h"
 
 Ellipse::Ellipse(QPaintDevice* device, int id)
     : Shape(device, id, ShapeType::Ellipse), width { 0 }, length { 0 }, x { 0 }, y { 0 }
@@ -21,7 +22,7 @@ void Ellipse::draw(QPaintDevice* device)
     painter.begin(device);
     painter.setPen(getPen());
     painter.setBrush(getBrush());
-    painter.drawRect(x, y, width, length);
+    painter.drawEllipse(Rectangle);
     painter.end();
 }
 
