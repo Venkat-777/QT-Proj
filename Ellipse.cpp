@@ -39,7 +39,7 @@ double Ellipse::area()
 
 double Ellipse::perimeter()
 {
-    return length + length + width + width;
+    return 2 * 3.14 * radius;
 }
 
 void Rectangle::setX(int x)
