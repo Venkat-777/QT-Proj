@@ -37,7 +37,7 @@ double Ellipse::area()
     return 3.14 * 
 }
 
-double Ellipse::perimeter()
+double Ellipse::perimeter(double radius)
 {
     return 2 * 3.14 * radius;
 }
