@@ -32,9 +32,12 @@ void Ellipse::move(const int x, const int y)
     this->y = y;
 }
 
-double Ellipse::area()
+double Ellipse::area(float a, float b)
 {
-    return 3.14 * 
+   float Area;
+   Area = 3.142 * a * b ;
+    
+   return Area;
 }
 
 double Ellipse::perimeter(double radius)
