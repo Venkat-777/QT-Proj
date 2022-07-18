@@ -32,5 +32,4 @@ public:
 private: 
 
     int width, length, x , y;
-    QRectF rectangle;
 };
