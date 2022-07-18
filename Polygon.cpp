@@ -1,21 +1,15 @@
 #include "Polygon.h"
 
-Polygon::Polygon(QPaintDevice* device, int id) : Shape(device, id, ShapeType::Polygon), numOfSides{0}
-{
-    for (int i = 0; i < SIZE; i++)
-    {
-        points[i].setX(0);
-        points[i].setY(0);
-    }
-}
-Polygon::Polygon(QPaintDevice* device,int id,QPen pen, QBrush brush, QPointF* points,int numOfSides ) :
+Polygon::Polygon(QPaintDevice* device, int id) : Shape(device, id, ShapeType::Polygon), numOfPoints{0}
+{}
+Polygon::Polygon(QPaintDevice* device,int id,QPen pen, QBrush brush, QPointF* points,int numOfPoints ) :
          Shape{device, id, ShapeType::Polygon, pen, brush}
 {
-    this->numOfSides = numOfSides;
-    for (int i = 0; i < numOfSides; i++)
+    this->numOfPoints = numOfPoints;
+    for (int i = 0; i < numOfPoints; i++)
     {
-        this->points->setX(points->x());
-        this->points->setY(points->y());
+        this->points[i].setX(points[i].x());
+        this->points[i].setY(points[i].y());
     }
     
 
@@ -31,13 +25,21 @@ void Polygon::draw(QPaintDevice* device)
     painter.begin(device);
     painter.setPen(getPen());
     painter.setBrush(getBrush());
-    painter.drawPolygon(points, numOfSides);
-    painter.end();
+
+    //Copying contents of vector to an array
+    QPointF pointsArray[numOfPoints];
+    for (int i = 0; i< numOfPoints; i++)
+    {
+        pointsArray[i].setX(points[i].x());
+        pointsArray[i].setY(points[i].y());
+    }
+
+    painter.drawPolygon( pointsArray, numOfPoints);
 }
 
 void Polygon::move(const int translateX, const int translateY)
 {
-    for (int i = 0; i < numOfSides; i++)
+    for (int i = 0; i < numOfPoints; i++)
     {
         //I need to translate each x,y value
         points[i].setX(points[i].x() + translateX);
@@ -56,6 +58,6 @@ double Polygon::area()
 }
 void Polygon::newCoords(int x,int y)
 {
-    points[numOfSides] = QPointF(x,y);
-    numOfSides++;
+    points[numOfPoints] = QPointF(x,y);
+    numOfPoints++;
 }

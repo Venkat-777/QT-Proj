@@ -4,12 +4,11 @@
 #include "shape.h"
 #include <vector>
 
-int const SIZE = 50;
 class Polygon : public Shape
 {
 private:
-    int numOfSides;
-    QPointF points[SIZE];
+    int numOfPoints;
+    std::vector<QPointF> points;
 
 public:
     Polygon(QPaintDevice* device = nullptr, int id = -1);
