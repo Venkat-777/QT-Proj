@@ -18,6 +18,7 @@ using std::string;
 using std::ifstream;
 
 
+
 // class declaration
 class Parser
 {
@@ -96,7 +97,10 @@ class Parser
   * variables                                                                    *
   *******************************************************************************/
     shared_ptr<Shape> currentShape;                  // PROC & PROC - current Shape being read
+
     MC_Vec::Vector<shared_ptr<Shape>> parserVector;  // PROC & PROC - a vector containing Shape properties
+
+    std::vector<int> shapeDimensions(ifstream& fileName);
 
 };
 
