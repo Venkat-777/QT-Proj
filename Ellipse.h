@@ -8,6 +8,7 @@
 class Ellipse : public Shape
 {
 public:
+
     Ellipse(QPaintDevice* device = nullptr, int id = -1);
     Ellipse(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0);
     ~Ellipse() override;
@@ -29,6 +30,7 @@ public:
     int getLength() const;
 
 private: 
+
     int width, length, x , y;
     QRectF rectangle;
 };
