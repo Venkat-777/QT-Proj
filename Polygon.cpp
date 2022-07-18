@@ -31,8 +31,8 @@ void Polygon::draw(QPaintDevice* device)
     painter.begin(device);
     painter.setPen(getPen());
     painter.setBrush(getBrush());
-
     painter.drawPolygon(points, numOfSides);
+    painter.end();
 }
 
 void Polygon::move(const int translateX, const int translateY)
