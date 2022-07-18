@@ -28,7 +28,7 @@ public:
     int getWidth() const;
     int getLength() const;
 
-private:
+private: 
     int width, length, x , y;
     QRectF rectangle;
 };
