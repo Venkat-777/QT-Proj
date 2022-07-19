@@ -8,10 +8,13 @@ class Polyline : public Shape
 {
 public:
     Polyline(QPaintDevice* device = nullptr, int id = -1);
+    Polyline(QPaintDevice* device, int id, QPen pen, QBrush brush, QPointF* points, int pointCount);
     ~Polyline() override;
     
     void draw(QPaintDevice* device) override;
-    //void move(int x, int y) override;
+    void move(const int newX, const int newY) override;
+    double perimeter() override;
+    double area() override;
     
 private:
     int pointCount;
