@@ -109,7 +109,8 @@ void Shape::setShape(const ShapeType shape)
 *                                                                             *
 *      pen (QPen&)  : A reference to a Qpen object                            *
 * ----------------------------------------------------------------------------*
-* POST-CONDITIONS: The pen will be set with the pen provided as an argument   *
+* POST-CONDITIONS:                                                            *
+*    The pen will be set with the values of thepen provided as an argument    *
 *******************************************************************************/
 void Shape::setPen(const QPen& pen)
 {
@@ -129,12 +130,6 @@ void Shape::setPen(const QPen& pen)
 *  PRE-CONDITIONS:  The fallowing arguments need a defined value              *
 *                                                                             *
 *    brush (QBrush&)  : A reference to a QBrush                               *
-*                                                                             *
-*   Options:                                                                  *
-*    BrushStyle - SolidPattern,   Dense(1-7)Pattern, HorPattern,   VerPattern,*
-*                 CrossPattern,   BDiagPattern,      FDiagPattern, NoBrush    *
-*                 TexturePattern, DiagCrossPattern,  LinearGradientPattern,   *
-*                 RadialGradientPattern, ConicalGradientPattern,              *
 * ----------------------------------------------------------------------------*
 *  POST-CONDITIONS:                                                           *
 *    The brush will be set to the values of the brush passed as an argument   *
@@ -155,7 +150,7 @@ void Shape::setBrush(const QBrush& brush)
 *                                                                             *
 *      color (QColor)  : The color to set the pen to                          *
 * ----------------------------------------------------------------------------*
-* POST-CONDITIONS: The pens color will be set to the value of the argument    *
+* POST-CONDITIONS:The pens color will be set to the value of the argument    *
 *******************************************************************************/
 void Shape::setPenColor(QColor color)
 {
