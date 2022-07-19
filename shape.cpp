@@ -94,7 +94,7 @@ Shape::~Shape()
 * ---------------------------------------------------------------------------*
 * POST-CONDITIONS: The shapes type will be set to the value of the argument  *
 ******************************************************************************/
-void Shape::setShape(ShapeType shape)
+void Shape::setShape(const ShapeType shape)
 {
     this->shape = shape;
 }
@@ -103,51 +103,21 @@ void Shape::setShape(ShapeType shape)
 /******************************************************************************
 * Method setPen:  Class Shape                                                 *
 * ----------------------------------------------------------------------------*
-*  Mutator;  Sets the color of the shapes pen                                 *
+*  Mutator;  Sets the shapes pen                                              *
 * ----------------------------------------------------------------------------*
 *  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
 *                                                                             *
-*      color (Qt::GlobalColor)  : The pens color                              *
+*      pen (QPen&)  : A reference to a Qpen object                            *
 * ----------------------------------------------------------------------------*
-* POST-CONDITIONS: The pens color will be set to the value of the argument    *
+* POST-CONDITIONS: The pen will be set with the pen provided as an argument   *
 *******************************************************************************/
-void Shape::setPen(Qt::GlobalColor color)
+void Shape::setPen(const QPen& pen)
 {
-    pen.setColor(color);
-}
-
-
-/******************************************************************************
-* Method setPen:  Class Shape                                                 *
-* ----------------------------------------------------------------------------*
-*  Mutator;  Sets the pens color, style, cap-style, join-style and width      *
-* ----------------------------------------------------------------------------*
-*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
-*                                                                             *
-*      color     (Qt::GlobalColor)   : The color of the pen                   *
-*      style     (Qt::PenStyle )     : The style of the pen                   *
-*      capStyle  (Qt::PenCapStyle)   : The style of the pen cap               *
-*      joinStyle (Qt::PenJointStyle) : The style of the pens join             *
-*                                                                             *
-*   Options:                                                                  *
-*    PenStyle     - SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine *
-*    PenCapStyle  - SquareCap, FlatCap, RoundCap                              *
-*    PenJoinStyle - BevelJoin, MilterJoin, RoundJoin                          *
-* ----------------------------------------------------------------------------*
-*  POST-CONDITIONS:                                                           *
-*    The shapes pen will be set with the values of all the arguments provided *
-*******************************************************************************/
-void Shape::setPen(Qt::GlobalColor  color,
-                   Qt::PenStyle     penStyle,
-                   Qt::PenCapStyle  capStyle,
-                   Qt::PenJoinStyle joinStyle,
-                   qreal            width)
-{
-    pen.setColor(color);
-    pen.setStyle(penStyle);
-    pen.setCapStyle(capStyle);
-    pen.setJoinStyle(joinStyle);
-    pen.setWidthF(width);
+    this->pen.setColor(pen.color());
+    this->pen.setStyle(pen.style());
+    this->pen.setCapStyle(pen.capStyle());
+    this->pen.setJoinStyle(pen.joinStyle());
+    this->pen.setWidthF(pen.widthF());
 }
 
 
@@ -158,8 +128,7 @@ void Shape::setPen(Qt::GlobalColor  color,
 * ----------------------------------------------------------------------------*
 *  PRE-CONDITIONS:  The fallowing arguments need a defined value              *
 *                                                                             *
-*      color     (Qt::GlobalColor)  : The color of the brush                  *
-*      style     (Qt::BrushStyle )  : The style of the brush                  *
+*    brush (QBrush&)  : A reference to a QBrush                               *
 *                                                                             *
 *   Options:                                                                  *
 *    BrushStyle - SolidPattern,   Dense(1-7)Pattern, HorPattern,   VerPattern,*
@@ -168,12 +137,97 @@ void Shape::setPen(Qt::GlobalColor  color,
 *                 RadialGradientPattern, ConicalGradientPattern,              *
 * ----------------------------------------------------------------------------*
 *  POST-CONDITIONS:                                                           *
-*    The brush's color and style will be set with the arugments provided      *
+*    The brush will be set to the values of the brush passed as an argument   *
 *******************************************************************************/
-void Shape::setBrush(Qt::GlobalColor color, Qt::BrushStyle style)
+void Shape::setBrush(const QBrush& brush)
 {
-    brush.setColor(color);
-    brush.setStyle(style);
+    this->brush.setColor(brush.color());
+    this->brush.setStyle(brush.style());
+}
+
+
+/******************************************************************************
+* Method setPenColor:  Class Shape                                            *
+* ----------------------------------------------------------------------------*
+*  Mutator;  Sets the pens color                                              *
+* ----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+*                                                                             *
+*      color (QColor)  : The color to set the pen to                          *
+* ----------------------------------------------------------------------------*
+* POST-CONDITIONS: The pens color will be set to the value of the argument    *
+*******************************************************************************/
+void Shape::setPenColor(QColor color)
+{
+    pen.setColor(color);
+}
+
+
+/******************************************************************************
+* Method setPenStyle:  Class Shape                                            *
+* ----------------------------------------------------------------------------*
+*  Mutator;  Sets the pens style                                              *
+* ----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+*                                                                             *
+*      style (Qt::PenStyle)  : The pens style                                 *
+* ----------------------------------------------------------------------------*
+* POST-CONDITIONS: The pens style will be set to the value of the argument    *
+*******************************************************************************/
+void Shape::setPenStyle(Qt::PenStyle style)
+{
+    pen.setStyle(style);
+}
+
+
+/******************************************************************************
+* Method setPenCapStyle:  Class Shape                                         *
+* ----------------------------------------------------------------------------*
+*  Mutator;  Sets the pens cap style                                          *
+* ----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+*                                                                             *
+*      capStyle (Qt::PenCapStyle)  : The style of the pen cap                 *
+* ----------------------------------------------------------------------------*
+* POST-CONDITIONS: The pens cap style will be set to value of the argument    *
+*******************************************************************************/
+void Shape::setPenCapStyle(Qt::PenCapStyle capStyle)
+{
+    pen.setCapStyle(capStyle);
+}
+
+
+/******************************************************************************
+* Method setPenJoinStyle:  Class Shape                                        *
+* ----------------------------------------------------------------------------*
+*  Mutator;  Sets the pens join style                                         *
+* ----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+*                                                                             *
+*      joinStyle (Qt::PenJoinStyle)  : The pens join style                    *
+* ----------------------------------------------------------------------------*
+* POST-CONDITIONS: The pens join style will be set to value of the argument   *
+*******************************************************************************/
+void Shape::setPenJoinStyle(Qt::PenJoinStyle joinStyle)
+{
+    pen.setJoinStyle(joinStyle);
+}
+
+
+/******************************************************************************
+* Method setPenWith:  Class Shape                                             *
+* ----------------------------------------------------------------------------*
+*  Mutator;  Sets the pens width                                              *
+* ----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+*                                                                             *
+*      width (qreal)  : The pens width                                        *
+* ----------------------------------------------------------------------------*
+* POST-CONDITIONS: The pens width will be set to value of the argument        *
+*******************************************************************************/
+void Shape::setPenWidth(qreal width)
+{
+    pen.setWidthF(width);
 }
 
 
@@ -191,27 +245,4 @@ void Shape::defaultStyle()
 {
      pen   = QPen(Qt::black, 1, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin);
      brush = QBrush(Qt::black,  Qt::SolidPattern);
-}
-
-
-/******************************************************************************
-* Method drawRect:  Class Shape                                               *
-* ----------------------------------------------------------------------------*
-*  Uses the shapes pen & brush to draw a rectangle                            *
-* ----------------------------------------------------------------------------*
-*  PRE-CONDITIONS:                                                            *
-*     The following parameters needs a defined argument                       *
-*       width  (int) : the width of the rectangle                             *
-*       height (int) : the height of the rectangle                            *
-*                                                                             *
-*     The following parameters are optional                                   *
-*       x (int) : x-coordinate of the upper-left corner                       *
-*       y (int) : y-coordinate of the upper-left corner                       *
-* ----------------------------------------------------------------------------*
-* POST-CONDITIONS:  No data members will be modified                          *
-*                   Draws a rectangle of the given width & height             *
-*******************************************************************************/
-void Shape::drawRect(int width, int height, int x, int y)
-{
-    painter->drawRect(x, y, width, height);
 }
