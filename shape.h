@@ -247,7 +247,7 @@ class Shape
 
 
     /******************************************************************************
-    * Method setPenWith:  Class Shape                                             *
+    * Method setPenWidth:  Class Shape                                             *
     * ----------------------------------------------------------------------------*
     *  Mutator;  Sets the pens width                                              *
     * ----------------------------------------------------------------------------*
@@ -258,6 +258,34 @@ class Shape
     * POST-CONDITIONS: The pens width will be set to value of the argument        *
     *******************************************************************************/
     void setPenWidth(qreal width);
+
+
+    /******************************************************************************
+    * Method setBrushColor:  Class Shape                                          *
+    * ----------------------------------------------------------------------------*
+    *  Mutator;  Sets the brushes color                                           *
+    * ----------------------------------------------------------------------------*
+    *  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+    *                                                                             *
+    *      color (QColor)  : The brushes color                                    *
+    * ----------------------------------------------------------------------------*
+    * POST-CONDITIONS: The brush will be set to the color provided as an argument *
+    *******************************************************************************/
+    void setBrushColor(QColor color);
+
+
+    /******************************************************************************
+    * Method setBrushStyle:  Class Shape                                          *
+    * ----------------------------------------------------------------------------*
+    *  Mutator;  Sets the brushes style                                           *
+    * ----------------------------------------------------------------------------*
+    *  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+    *                                                                             *
+    *      style (Qt::BrushStyle)  : The brushes style                            *
+    * ----------------------------------------------------------------------------*
+    * POST-CONDITIONS: The brush will be set to the style provided as an argument *
+    *******************************************************************************/
+    void setBrushStyle(Qt::BrushStyle);
 
 
     /******************************************************************************
