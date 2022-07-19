@@ -116,26 +116,38 @@ void Parser::ReadShapeFile(const string fileName)
         // store the shape and go to the next shape
         else
         {
+            currentShape -> setPen(shapePen);
+            currentShape -> setBrush(shapeBrush);
+
             switch(shapeType)
             {
+                // shapeID contains the shape's unique ID
+                // definePoints is a vector that contains points <QPoint1, QPoint2, etc.>
+                //                                               where QPoint contains <(x1 ,y1), (x2, y2), etc.>
+                // defineLength contains the length
+                // defineWidth contains the width
+                // defineMajor contains the major axis
+                // defineMinor contains the minor axis
+                // text, textFont, etc. contains all text information
                 case Shape::ShapeType::None      : break;
 
-                case Shape::ShapeType::Line      : currentShape = new Line();
+                case Shape::ShapeType::Line      : currentShape = std::make_shared<Shape> ( new Line(shapeID, definePoints) );
                                                    break;
 
-                case Shape::ShapeType::Polyline  : currentShape = new Polyline();
+                case Shape::ShapeType::Polyline  : currentShape = std::make_shared<Shape> ( new Polyline(shapeID, definePoints) );
                                                    break;
 
-                case Shape::ShapeType::Polygon   : currentShape = new Polygon();
+                case Shape::ShapeType::Polygon   : currentShape = std::make_shared<Shape> ( new Polygon(shapeID, definePoints) );
                                                    break;
 
-                case Shape::ShapeType::Rectangle : currentShape = new Rectangle(nullptr, shapeID);
+                case Shape::ShapeType::Rectangle : currentShape = std::make_shared<Shape> ( new Rectangle(shapeID, definePoints, defineLength, defineWidth) );
                                                    break;
 
-                case Shape::ShapeType::Ellipse   : currentShape = new Ellipse();
+                case Shape::ShapeType::Ellipse   : currentShape = std::make_shared<Shape> ( new Ellipse(shapeID, definePoints, defineMajor, defineMinor) );
                                                    break;
 
-                case Shape::ShapeType::Text      : currentShape = new Text();
+                case Shape::ShapeType::Text      : currentShape = std::make_shared<Shape> ( new Text(shapeID, definePoints, defineLength, defineWidth,
+                                                                                                     text, textFont, textAlignFlag, textColor) );
                                                    break;
             }
 
