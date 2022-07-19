@@ -16,6 +16,11 @@ public:
     double perimeter() override;
     double area() override;
     
+    void setNewCoords(int pointNum, int newX, int newY); 
+    
+    int getX(int pointNum) const;
+    int getY(int pointNum) const;
+    
 private:
     int pointCount;
     QPointF points[SIZE];
