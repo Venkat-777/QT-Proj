@@ -162,9 +162,10 @@ class Shape
     * ----------------------------------------------------------------------------*
     *  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
     *                                                                             *
-    *      pen (QPen&)  : A reference to a Qpen object                            *
+    *      pen (QPen&)  : A reference to a Qpen                                   *
     * ----------------------------------------------------------------------------*
-    * POST-CONDITIONS: The pen will be set with the pen provided as an argument   *
+    * POST-CONDITIONS:                                                            *
+    *    The pen will be set with the values of the pen provided as an argument   *
     *******************************************************************************/
     void setPen(const QPen& pen);
 
@@ -177,12 +178,6 @@ class Shape
     *  PRE-CONDITIONS:  The fallowing arguments need a defined value              *
     *                                                                             *
     *    brush (QBrush&)  : A reference to a QBrush                               *
-    *                                                                             *
-    *   Options:                                                                  *
-    *    BrushStyle - SolidPattern,   Dense(1-7)Pattern, HorPattern,   VerPattern,*
-    *                 CrossPattern,   BDiagPattern,      FDiagPattern, NoBrush    *
-    *                 TexturePattern, DiagCrossPattern,  LinearGradientPattern,   *
-    *                 RadialGradientPattern, ConicalGradientPattern,              *
     * ----------------------------------------------------------------------------*
     *  POST-CONDITIONS:                                                           *
     *    The brush will be set to the values of the brush passed as an argument   *
