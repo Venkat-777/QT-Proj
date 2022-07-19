@@ -32,12 +32,12 @@ void Text::move(int x, int y)
 
 double Text::area()
 {
-    return height;
+    return 0;
 }
 
 double Text::perimeter()
 {
-    return width + width + height + height;
+    return 0;
 }
 
 void Text::setText(QString text)
