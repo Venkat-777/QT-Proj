@@ -45,39 +45,39 @@ double Ellipse::perimeter(double radius)
     return 2 * 3.14 * radius;
 }
 
-void Rectangle::setX(int x)
+void Ellipse::setX(int x)
 {
     this->x = x;
 }
 
-void Rectangle::setY(int y)
+void Ellipse::setY(int y)
 {
     this->y = y;
 }
 
-void Rectangle::setWidth(int width)
+void Ellipse::setWidth(int width)
 {
     this->width = width;
 }
 
-void Rectangle::setLength(int length)
+void Ellipse::setLength(int length)
 {
     this->length = length;
 }
 
-int Rectangle::getX() const
+int Ellipse::getX() const
 {
     return x;
 }
-int Rectangle::getY() const
+int Ellipse::getY() const
 {
     return y;
 }
-int Rectangle::getWidth() const
+int Ellipse::getWidth() const
 {
     return width;
 }
-int Rectangle::getLength() const
+int Ellipse::getLength() const
 {
     return length;
 }
