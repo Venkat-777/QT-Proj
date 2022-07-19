@@ -215,7 +215,7 @@ void Shape::setPenJoinStyle(Qt::PenJoinStyle joinStyle)
 
 
 /******************************************************************************
-* Method setPenWith:  Class Shape                                             *
+* Method setPenWidth:  Class Shape                                            *
 * ----------------------------------------------------------------------------*
 *  Mutator;  Sets the pens width                                              *
 * ----------------------------------------------------------------------------*
@@ -228,6 +228,40 @@ void Shape::setPenJoinStyle(Qt::PenJoinStyle joinStyle)
 void Shape::setPenWidth(qreal width)
 {
     pen.setWidthF(width);
+}
+
+
+/******************************************************************************
+* Method setBrushColor:  Class Shape                                          *
+* ----------------------------------------------------------------------------*
+*  Mutator;  Sets the brushes color                                           *
+* ----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+*                                                                             *
+*      color (QColor)  : The brushes color                                    *
+* ----------------------------------------------------------------------------*
+* POST-CONDITIONS: The brush will be set to the color provided as an argument *
+*******************************************************************************/
+void Shape::setBrushColor(QColor color)
+{
+    brush.setColor(color);
+}
+
+
+/******************************************************************************
+* Method setBrushStyle:  Class Shape                                          *
+* ----------------------------------------------------------------------------*
+*  Mutator;  Sets the brushes style                                           *
+* ----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:  The fallowing argument needs a defined value              *
+*                                                                             *
+*      style (Qt::BrushStyle)  : The brushes style                            *
+* ----------------------------------------------------------------------------*
+* POST-CONDITIONS: The brush will be set to the style provided as an argument *
+*******************************************************************************/
+void Shape::setBrushStyle(Qt::BrushStyle style)
+{
+    brush.setStyle(style);
 }
 
 
