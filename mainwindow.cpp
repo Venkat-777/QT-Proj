@@ -46,3 +46,13 @@ void MainWindow::on_pushButton_Login_clicked()
     }
 }
 
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    if(ui->checkBox->isChecked())
+    {
+        secDialog = new SecDialog(this);
+        secDialog->show();
+    }
+}
+
