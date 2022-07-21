@@ -6,7 +6,7 @@
 class Shape
 {
   public:
-    enum class ShapeType { None, Line, Polyline, Polygon, Rectangle, Ellipse, Text };
+    enum class ShapeType { None, Line, Polyline, Polygon, Rectangle, Ellipse, Text, Circle, Square };
 
     /*****************************************************************************
     * Constructor:  Class Shape                                                  *
