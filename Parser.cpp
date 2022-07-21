@@ -77,12 +77,13 @@ void Parser::ReadShapeFile(const string fileName)
     Qt::AlignmentFlag textAlignFlag; // PROC & PROC - text alignment
     Qt::GlobalColor   textColor;     // PROC & PROC - text color
 
-    std::vector<int>    tempDimensions;
-    std::vector<QPoint> definePoints;
+    Vector<int>         tempDimensions;
+    Vector<QPoint>      definePoints;
     int                 defineLength;
     int                 defineWidth;
     int                 defineMinor;
     int                 defineMajor;
+    int                 defineRadius;
 
 
 
@@ -131,23 +132,29 @@ void Parser::ReadShapeFile(const string fileName)
                 // text, textFont, etc. contains all text information
                 case Shape::ShapeType::None      : break;
 
-                case Shape::ShapeType::Line      : currentShape = std::make_shared<Shape> ( new Line(shapeID, definePoints) );
+                case Shape::ShapeType::Line      : currentShape = new Line(shapeID, definePoints);
                                                    break;
 
-                case Shape::ShapeType::Polyline  : currentShape = std::make_shared<Shape> ( new Polyline(shapeID, definePoints) );
+                case Shape::ShapeType::Polyline  : currentShape = new Polyline(shapeID, definePoints);
                                                    break;
 
-                case Shape::ShapeType::Polygon   : currentShape = std::make_shared<Shape> ( new Polygon(shapeID, definePoints) );
+                case Shape::ShapeType::Polygon   : currentShape = new Polygon(shapeID, definePoints);
                                                    break;
 
-                case Shape::ShapeType::Rectangle : currentShape = std::make_shared<Shape> ( new Rectangle(shapeID, definePoints, defineLength, defineWidth) );
+                case Shape::ShapeType::Rectangle : currentShape = new Rectangle(shapeID, definePoints, defineLength, defineWidth);
                                                    break;
 
-                case Shape::ShapeType::Ellipse   : currentShape = std::make_shared<Shape> ( new Ellipse(shapeID, definePoints, defineMajor, defineMinor) );
+                case Shape::ShapeType::Square    : currentShape = new Rectangle(shapeID, definePoints, defineLength, defineLength);
                                                    break;
 
-                case Shape::ShapeType::Text      : currentShape = std::make_shared<Shape> ( new Text(shapeID, definePoints, defineLength, defineWidth,
-                                                                                                     text, textFont, textAlignFlag, textColor) );
+                case Shape::ShapeType::Ellipse   : currentShape = new Ellipse(shapeID, definePoints, defineMajor, defineMinor);
+                                                   break;
+
+                case Shape::ShapeType::Circle   :  currentShape = new Ellipse(shapeID, definePoints, defineRadius, defineRadius);
+                                                   break;
+
+                case Shape::ShapeType::Text      : currentShape = new Text(shapeID, definePoints, defineLength, defineWidth,
+                                                                           text, textFont, textAlignFlag, textColor);
                                                    break;
             }
 
@@ -186,9 +193,17 @@ void Parser::ReadShapeFile(const string fileName)
             {
               currentShape -> setShape(Shape::ShapeType::Rectangle);
             }
+            else if(setType == "Square")
+            {
+              currentShape -> setShape(Shape::ShapeType::Square);
+            }
             else if(setType == "Ellipse")
             {
               currentShape -> setShape(Shape::ShapeType::Ellipse);
+            }
+            else if(setType == "Circle")
+            {
+              currentShape -> setShape(Shape::ShapeType::Circle);
             }
             else if(setType == "Text")
             {
@@ -620,7 +635,7 @@ void Parser::ReadShapeFile(const string fileName)
 
 
 
-std::vector<int> Parser::shapeDimensions(ifstream& fileName)
+Vector<int> Parser::shapeDimensions(ifstream& fileName)
 {
     /*******************************************************************************
     * variables                                                                    *
@@ -628,7 +643,7 @@ std::vector<int> Parser::shapeDimensions(ifstream& fileName)
     string readDimensions;          // PROC & PROC - reads dimensions as a string
     char   delimiter;               // PROC & PROC - determines when an integer has been read
     string singleDimension;         // PROC & PROC - reads 1 dimension from the string
-    std::vector<int> dimensions;    // PROC & PROC - stores the transformed string into integers
+    Vector<int> dimensions;    // PROC & PROC - stores the transformed string into integers
 
 
 
