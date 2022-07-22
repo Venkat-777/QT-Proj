@@ -37,8 +37,8 @@ void MainWindow::on_pushButton_Login_clicked()
      {
         QMessageBox::information(this, "Login", "Account is valid");
         hide();
-        secDialog = new SecDialog(this);
-        secDialog->show();
+        shapeWindow = new ShapeWindow(this);
+        shapeWindow->show();
     }
     else
        {
@@ -51,8 +51,7 @@ void MainWindow::on_pushButton_2_clicked()
 {
     if(ui->checkBox->isChecked())
     {
-        secDialog = new SecDialog(this);
-        secDialog->show();
+        shapeWindow = new ShapeWindow(this);
+        shapeWindow->show();
     }
 }
-
