@@ -314,8 +314,8 @@ void ShapeWindow::displayTextForm()
 
     ui->shapeForm->addRow(horLayouts[6]);
 
-//    QObject::connect(combos[0], &QComboBox::currentIndexChanged,
-//                     this,      &ShapeWindow::changeTextColor);
+    QObject::connect(combos[0], &QComboBox::currentTextChanged,
+                     this,      &ShapeWindow::changeTextColor);
 
 
     // ** TextAllignment **
@@ -334,8 +334,8 @@ void ShapeWindow::displayTextForm()
 
     ui->shapeForm->addRow(horLayouts[7]);
 
-//    QObject::connect(combos[1], &QComboBox::currentIndexChanged,
-//                     this,      &ShapeWindow::changeTextAllignment);
+    QObject::connect(combos[1], &QComboBox::currentTextChanged,
+                     this,      &ShapeWindow::changeTextAllignment);
 
 
 
@@ -354,8 +354,8 @@ void ShapeWindow::displayTextForm()
 
     ui->shapeForm->addRow(horLayouts[8]);
 
-//    QObject::connect(combos[2], &QComboBox::currentIndexChanged,
-//                     this,      &ShapeWindow::changeTextFontFamily);
+    QObject::connect(combos[2], &QComboBox::currentTextChanged,
+                     this,      &ShapeWindow::changeTextFontFamily);
 
 
     // ** TextFontStyle **
@@ -372,8 +372,8 @@ void ShapeWindow::displayTextForm()
 
     ui->shapeForm->addRow(horLayouts[9]);
 
-//    QObject::connect(combos[3], &QComboBox::currentIndexChanged,
-//                     this,      &ShapeWindow::changeTextFontStyle);
+    QObject::connect(combos[3], &QComboBox::currentTextChanged,
+                     this,      &ShapeWindow::changeTextFontStyle);
 
 
     // ** TextFontWeight **
@@ -391,8 +391,8 @@ void ShapeWindow::displayTextForm()
 
     ui->shapeForm->addRow(horLayouts[10]);
 
-//    QObject::connect(combos[4], &QComboBox::currentIndexChanged,
-//                     this,      &ShapeWindow::changeTextFontWeight);
+    QObject::connect(combos[4], &QComboBox::currentTextChanged,
+                     this,      &ShapeWindow::changeTextFontWeight);
 }
 
 
@@ -616,11 +616,10 @@ void ShapeWindow::changeBrushStyle(QString color){}
 
 
 // Change Text settings
-void ShapeWindow::changeText(QString){}
-void ShapeWindow::changeTextPointSize(int) {}
-void ShapeWindow::changeTextColor(QString)     {}
-void ShapeWindow::changeTextAllignment(QString){}
-void ShapeWindow::changeTextFontFamily(QString){}
-void ShapeWindow::changeTextFontStyle(QString) {}
-void ShapeWindow::changeTextFontWeight(QString){}
-
+void ShapeWindow::changeText(QString text){}
+void ShapeWindow::changeTextPointSize(int pointSize) {}
+void ShapeWindow::changeTextColor(QString color)     {}
+void ShapeWindow::changeTextAllignment(QString allignment){}
+void ShapeWindow::changeTextFontFamily(QString fontFamily){}
+void ShapeWindow::changeTextFontStyle(QString fontStyle)  {}
+void ShapeWindow::changeTextFontWeight(QString fontWeight){}
