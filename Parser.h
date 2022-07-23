@@ -17,6 +17,7 @@
 #include <memory>
 
 // file includes
+#include <iostream>
 #include <string>
 #include <fstream>
 
@@ -86,18 +87,18 @@ class Parser
   * ACCESSORS                                                                    *
   *******************************************************************************/
     /*****************************************************************************
-    *  Method GetProperties:  Class Parser                                       *
+    *  Method getShapeVector:  Class Parser                                      *
     *----------------------------------------------------------------------------*
     *   xxxxxxxx.                                                                *
     *                                                                            *
     *----------------------------------------------------------------------------*
     *  PRE-CONDITIONS:                                                           *
-    *   xxxxxxxx.                                                                *
+    *   read file must be performed first.                                       *
     *----------------------------------------------------------------------------*
     *  POST-CONDITIONS:                                                          *
-    *   xxxxxxxx.                                                                *
+    *   returns the shape vector.                                                *
     *****************************************************************************/
-    Shape GetProperties(const int& ID) const;
+    MC_Vec::Vector<Shape*> getShapeVector() const;
 
 
   private:
@@ -106,9 +107,34 @@ class Parser
   *******************************************************************************/
     Shape* currentShape;                  // PROC & PROC - current Shape being read
 
-    MC_Vec::Vector<Shape*> parserVector;  // PROC & PROC - a vector containing Shape properties
+    MC_Vec::Vector<Shape*> shapeVector;  // PROC & PROC - a vector containing Shape properties
 
-    Vector<int> shapeDimensions(ifstream& fileName);
+
+
+
+
+    void ReadDelimiter(ifstream& fileName, char delimiter);
+
+    void ReadPolyline(ifstream& fileName, Vector<QPoint>& definePoints, QPen& shapePen);
+
+    void ReadPolygon(ifstream& fileName, Vector<QPoint>& definePoints, QPen& shapePen, QBrush& shapeBrush);
+
+    void ReadRectangle(ifstream& fileName, Vector<QPoint>& definePoints, int& defineLength, int& defineWidth, QPen& shapePen, QBrush& shapeBrush);
+
+    void ReadEllipse(ifstream& fileName, Vector<QPoint>& definePoints, int& minor, int& major, QPen& shapePen, QBrush& shapeBrush);
+
+    void ReadText(ifstream& fileName, Vector<QPoint>& definePoints, int& defineLength, int& defineWidth,
+                  QString& text, QFont& textFont, Qt::AlignmentFlag& textAlignFlag, Qt::GlobalColor& textColor);
+
+    void ReadPenProperties(ifstream& fileName, QPen& shapePen);
+
+    void ReadBrushProperties(ifstream& fileName, QBrush& shapeBrush);
+
+    void ReadTextProperties(ifstream& fileName, QString& text, QFont& textFont, Qt::AlignmentFlag& textAlignFlag, Qt::GlobalColor& textColor);
+
+    Vector<int> ReadDimensions(ifstream& fileName);
+
+
 
 };
 

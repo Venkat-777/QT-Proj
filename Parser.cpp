@@ -77,7 +77,7 @@ void Parser::ReadShapeFile(const string fileName)
     Qt::AlignmentFlag textAlignFlag; // PROC & PROC - text alignment
     Qt::GlobalColor   textColor;     // PROC & PROC - text color
 
-    Vector<int>         tempDimensions;
+
     Vector<QPoint>      definePoints;
     int                 defineLength;
     int                 defineWidth;
@@ -87,555 +87,644 @@ void Parser::ReadShapeFile(const string fileName)
 
 
 
+
     // open file
-    inFile.open("Shape.txt");
+    inFile.open(fileName);
 
     // read the file
     while(inFile)
     {
-        // get first character in text file
-        inFile.get(delimiter);
+        // remove "ShapeID: "
+        ReadDelimiter(inFile, ':');
 
-        // begin getting shape information
-        if(delimiter != '\n')
+        // get shape id
+        inFile >> shapeID;
+        inFile.ignore(1000, '\n');
+
+
+        // remove "ShapeType: "
+        ReadDelimiter(inFile, ':');
+        getline(inFile, setType);
+
+        if(setType == "Line")
         {
-            // find the colon delimiter
-            while(delimiter != ':')
-            {
-                // read into the identifier as text is parsed for the colon
-                identifier += delimiter;
+          ReadPolyline(inFile, definePoints, shapePen);
+          currentShape = new Line(shapeID, definePoints);
+          currentShape -> setShape(Shape::ShapeType::Line);
+          currentShape -> setPen(shapePen);
 
-                // get next character
-                inFile.get(delimiter);
-            }
+        }
+        else if(setType == "Polyline")
+        {
+          ReadPolyline(inFile, definePoints, shapePen);
+          currentShape = new Polyline(shapeID, definePoints);
+          currentShape -> setShape(Shape::ShapeType::Polyline);
+          currentShape -> setPen(shapePen);
 
-            // ignore space after the colon
-            inFile.ignore(1000,' ');
+        }
+        else if(setType == "Polygon")
+        {
+          ReadPolygon(inFile, definePoints, shapePen, shapeBrush);
+          currentShape = new Polygon(shapeID, definePoints);
+          currentShape -> setShape(Shape::ShapeType::Polygon);
+          currentShape -> setPen(shapePen);
+          currentShape -> setBrush(shapeBrush);
+
         }
 
-        // if there is a break in the text file (e.g. a new line character '\n')
-        // store the shape and go to the next shape
-        else
+        else if(setType == "Rectangle")
         {
+          ReadRectangle(inFile, definePoints, defineLength, defineWidth, shapePen, shapeBrush);
+          currentShape = new Rectangle(shapeID, definePoints, defineLength, defineWidth);
+          currentShape -> setShape(Shape::ShapeType::Rectangle);
+          currentShape -> setPen(shapePen);
+          currentShape -> setBrush(shapeBrush);
+
+        }
+        else if(setType == "Square")
+        {
+            ReadRectangle(inFile, definePoints, defineLength, defineWidth, shapePen, shapeBrush);
+            currentShape = new Rectangle(shapeID, definePoints, defineLength, defineWidth);
+            currentShape -> setShape(Shape::ShapeType::Square);
             currentShape -> setPen(shapePen);
             currentShape -> setBrush(shapeBrush);
 
-            switch(shapeType)
-            {
-                // shapeID contains the shape's unique ID
-                // definePoints is a vector that contains points <QPoint1, QPoint2, etc.>
-                //                                               where QPoint contains <(x1 ,y1), (x2, y2), etc.>
-                // defineLength contains the length
-                // defineWidth contains the width
-                // defineMajor contains the major axis
-                // defineMinor contains the minor axis
-                // text, textFont, etc. contains all text information
-                case Shape::ShapeType::None      : break;
-
-                case Shape::ShapeType::Line      : currentShape = new Line(shapeID, definePoints);
-                                                   break;
-
-                case Shape::ShapeType::Polyline  : currentShape = new Polyline(shapeID, definePoints);
-                                                   break;
-
-                case Shape::ShapeType::Polygon   : currentShape = new Polygon(shapeID, definePoints);
-                                                   break;
-
-                case Shape::ShapeType::Rectangle : currentShape = new Rectangle(shapeID, definePoints, defineLength, defineWidth);
-                                                   break;
-
-                case Shape::ShapeType::Square    : currentShape = new Rectangle(shapeID, definePoints, defineLength, defineLength);
-                                                   break;
-
-                case Shape::ShapeType::Ellipse   : currentShape = new Ellipse(shapeID, definePoints, defineMajor, defineMinor);
-                                                   break;
-
-                case Shape::ShapeType::Circle   :  currentShape = new Ellipse(shapeID, definePoints, defineRadius, defineRadius);
-                                                   break;
-
-                case Shape::ShapeType::Text      : currentShape = new Text(shapeID, definePoints, defineLength, defineWidth,
-                                                                           text, textFont, textAlignFlag, textColor);
-                                                   break;
-            }
-
-            parserVector.push_back(currentShape);
         }
-
-        // get shape id
-        if(identifier == "ShapeId")
+        else if(setType == "Ellipse")
         {
-            inFile >> shapeID;
-            inFile.ignore(1000,'\n');
+          ReadEllipse(inFile, definePoints, defineMinor, defineMajor, shapePen, shapeBrush);
+          currentShape = new Ellipse(shapeID, definePoints, defineMinor, defineMajor);
+          currentShape -> setShape(Shape::ShapeType::Ellipse);
+          currentShape -> setPen(shapePen);
+          currentShape -> setBrush(shapeBrush);
+
         }
-
-        // get shape type
-        else if(identifier == "ShapeType")
+        else if(setType == "Circle")
         {
-            getline(inFile, setType);
+          ReadEllipse(inFile, definePoints, defineMinor, defineMinor, shapePen, shapeBrush);
+          currentShape = new Ellipse(shapeID, definePoints, defineMinor, defineMajor);
+          currentShape -> setShape(Shape::ShapeType::Circle);
+          currentShape -> setPen(shapePen);
+          currentShape -> setBrush(shapeBrush);
 
-            if(setType == "None")
-            {
-              currentShape -> setShape(Shape::ShapeType::None);
-            }
-            else if(setType == "Line")
-            {
-              currentShape -> setShape(Shape::ShapeType::Line);
-            }
-            else if(setType == "Polyline")
-            {
-              currentShape -> setShape(Shape::ShapeType::Polyline);
-            }
-            else if(setType == "Polygon")
-            {
-              currentShape -> setShape(Shape::ShapeType::Polygon);
-            }
-            else if(setType == "Rectangle")
-            {
-              currentShape -> setShape(Shape::ShapeType::Rectangle);
-            }
-            else if(setType == "Square")
-            {
-              currentShape -> setShape(Shape::ShapeType::Square);
-            }
-            else if(setType == "Ellipse")
-            {
-              currentShape -> setShape(Shape::ShapeType::Ellipse);
-            }
-            else if(setType == "Circle")
-            {
-              currentShape -> setShape(Shape::ShapeType::Circle);
-            }
-            else if(setType == "Text")
-            {
-              currentShape -> setShape(Shape::ShapeType::Text);
-            }
         }
-
-        else if(identifier == "ShapeDimensions")
+        else if(setType == "Text")
         {
-            tempDimensions = shapeDimensions(inFile);
-
-            // two points
-            if(shapeType == (Shape::ShapeType::Line) )
-            {
-                for(int index = 0 ; index < tempDimensions.size() ; index++)
-                {
-                    definePoints[index].setX(tempDimensions[index]);
-                    definePoints[index].setY(tempDimensions[++index]);
-                }
-            }
-
-            // n points
-            else if(shapeType == (Shape::ShapeType::Polyline) )
-            {
-                for(int index = 0 ; index < tempDimensions.size() ; index++)
-                {
-                    definePoints[index].setX(tempDimensions[index]);
-                    definePoints[index].setY(tempDimensions[++index]);
-                }
-            }
-
-            // n points
-            else if(shapeType == (Shape::ShapeType::Polygon) )
-            {
-                for(int index = 0 ; index < tempDimensions.size() ; index++)
-                {
-                    definePoints[index].setX(tempDimensions[index]);
-                    definePoints[index].setY(tempDimensions[++index]);
-                }
-            }
-
-            // one point, length, width
-            else if(shapeType == (Shape::ShapeType::Rectangle) )
-            {
-                for(int index = 0 ; index < tempDimensions.size() ; index++)
-                {
-                    switch(index)
-                    {
-                        case 0  :   definePoints[index].setX(tempDimensions[index]);
-                                    definePoints[index].setY(tempDimensions[++index]);
-                                    break;
-
-                        case 2  :   defineLength = tempDimensions[index];
-                                    break;
-                        case 3  :   defineWidth  = tempDimensions[index];
-                                    break;
-                    }
-                }
-
-            }
-
-            // one point, semi major axis, semi minor axis
-            else if(shapeType == (Shape::ShapeType::Ellipse) )
-            {
-                for(int index = 0 ; index < tempDimensions.size() ; index++)
-                {
-                    switch(index)
-                    {
-                        case 0  :   definePoints[index].setX(tempDimensions[index]);
-                                    definePoints[index].setY(tempDimensions[++index]);
-                                    break;
-
-                        case 2  :   defineMajor = tempDimensions[index];
-                                    break;
-                        case 3  :   defineMinor = tempDimensions[index];
-                                    break;
-                    }
-                }
-            }
-
-            // one point, length, width
-            else if(shapeType == (Shape::ShapeType::Text) )
-            {
-                for(int index = 0 ; index < tempDimensions.size() ; index++)
-                {
-                    switch(index)
-                    {
-                        case 0  :   definePoints[index].setX(tempDimensions[index]);
-                                    definePoints[index].setY(tempDimensions[++index]);
-                                    break;
-
-                        case 2  :   defineLength = tempDimensions[index];
-                                    break;
-                        case 3  :   defineWidth = tempDimensions[index];
-                                    break;
-                    }
-
-                }
-
-            }
-
-        } // END SHAPE-DIMENSIONS
-
-        // get pen colors
-        else if(identifier == "PenColor")
-        {
-            getline(inFile, setType);
-
-            if(setType == "white")
-            {
-              shapePen.setColor(Qt::white);
-            }
-            else if(setType == "black")
-            {
-              shapePen.setColor(Qt::black);
-            }
-            else if(setType == "red")
-            {
-              shapePen.setColor(Qt::red);
-            }
-            else if(setType == "green")
-            {
-              shapePen.setColor(Qt::green);
-            }
-            else if(setType == "blue")
-            {
-              shapePen.setColor(Qt::blue);
-            }
-            else if(setType == "cyan")
-            {
-              shapePen.setColor(Qt::cyan);
-            }
-            else if(setType == "magenta")
-            {
-              shapePen.setColor(Qt::magenta);
-            }
-            else if(setType == "yellow")
-            {
-              shapePen.setColor(Qt::yellow);
-            }
-            else if(setType == "gray")
-            {
-              shapePen.setColor(Qt::gray);
-            }
+          ReadText(inFile, definePoints, defineLength, defineWidth, text, textFont, textAlignFlag, textColor);
+          currentShape = new Text(shapeID, definePoints, defineLength, defineWidth, text, textFont, textAlignFlag);
+          currentShape -> setShape(Shape::ShapeType::Text);
+          currentShape -> setPen(shapePen);
+          currentShape -> setBrush(shapeBrush);
 
         }
 
-        // get pen width
-        else if(identifier == "PenWidth")
-        {
-            inFile >> tempInt;
-            shapePen.setWidth(tempInt);
+        // ignore space between shapes
+        inFile.ignore(1000, '\n');
 
-            inFile.ignore(1000,'\n');
-        }
-
-        // get pen style
-        else if(identifier == "PenStyle")
-        {
-            getline(inFile, setType);
-
-            if(setType == "NoPen")
-            {
-              shapePen.setStyle(Qt::NoPen);
-            }
-            else if(setType == "SolidLine")
-            {
-              shapePen.setStyle(Qt::SolidLine);
-            }
-            else if(setType == "DashLine")
-            {
-              shapePen.setStyle(Qt::DashLine);
-            }
-            else if(setType == "DotLine")
-            {
-              shapePen.setStyle(Qt::DotLine);
-            }
-            else if(setType == "DashDotLine")
-            {
-              shapePen.setStyle(Qt::DashDotLine);
-            }
-            else if(setType == "DashDotDotLine")
-            {
-              shapePen.setStyle(Qt::DashDotDotLine);
-            }
-
-        }
-
-        // get pen cap style
-        else if(identifier == "PenCapStyle")
-        {
-            getline(inFile, setType);
-
-            if(setType == "FlatCap")
-            {
-              shapePen.setCapStyle(Qt::FlatCap);
-            }
-            else if(setType == "SquareCap")
-            {
-              shapePen.setCapStyle(Qt::SquareCap);
-            }
-            else if(setType == "RoundCap")
-            {
-              shapePen.setCapStyle(Qt::RoundCap);
-            }
-        }
-
-        // get pen join style
-        else if(identifier == "PenJoinStyle")
-        {
-            getline(inFile, setType);
-
-            if(setType == "MiterJoin")
-            {
-              shapePen.setJoinStyle(Qt::MiterJoin);
-            }
-            else if(setType == "BevelJoin")
-            {
-              shapePen.setJoinStyle(Qt::BevelJoin);
-            }
-            else if(setType == "RoundJoin")
-            {
-              shapePen.setJoinStyle(Qt::RoundJoin);
-            }
-        }
-
-        // get brush color
-        else if(identifier == "BrushColor")
-        {
-            getline(inFile, setType);
-
-            if(setType == "white")
-            {
-              shapeBrush.setColor(Qt::white);
-            }
-            else if(setType == "black")
-            {
-              shapeBrush.setColor(Qt::black);
-            }
-            else if(setType == "red")
-            {
-              shapeBrush.setColor(Qt::red);
-            }
-            else if(setType == "green")
-            {
-              shapeBrush.setColor(Qt::green);
-            }
-            else if(setType == "blue")
-            {
-              shapeBrush.setColor(Qt::blue);
-            }
-            else if(setType == "cyan")
-            {
-              shapeBrush.setColor(Qt::cyan);
-            }
-            else if(setType == "magenta")
-            {
-              shapeBrush.setColor(Qt::magenta);
-            }
-            else if(setType == "yellow")
-            {
-              shapeBrush.setColor(Qt::yellow);
-            }
-            else if(setType == "gray")
-            {
-              shapeBrush.setColor(Qt::gray);
-            }
-        }
-
-        // get brush style
-        else if(identifier == "BrushStyle")
-        {
-            getline(inFile, setType);
-
-            if(setType == "SolidPattern")
-            {
-              shapeBrush.setStyle(Qt::SolidPattern);
-            }
-            else if(setType == "HorPattern")
-            {
-              shapeBrush.setStyle(Qt::HorPattern);
-            }
-            else if(setType == "VerPattern")
-            {
-              shapeBrush.setStyle(Qt::VerPattern);
-            }
-            else if(setType == "NoBrush")
-            {
-              shapeBrush.setStyle(Qt::NoBrush);
-            }
-        }
-
-        else if(identifier == "TextString")
-        {
-            getline(inFile, tempString);
-            text.fromStdString(tempString);
-        }
-
-        else if(identifier == "TextColor")
-        {
-            getline(inFile, setType);
-
-            if(setType == "white")
-            {
-              textColor = Qt::GlobalColor::white;
-            }
-            else if(setType == "black")
-            {
-              textColor = Qt::GlobalColor::black;
-            }
-            else if(setType == "red")
-            {
-              textColor = Qt::GlobalColor::red;
-            }
-            else if(setType == "green")
-            {
-              textColor = Qt::GlobalColor::green;
-            }
-            else if(setType == "blue")
-            {
-              textColor = Qt::GlobalColor::blue;
-            }
-            else if(setType == "cyan")
-            {
-              textColor = Qt::GlobalColor::cyan;
-            }
-            else if(setType == "magenta")
-            {
-              textColor = Qt::GlobalColor::magenta;
-            }
-            else if(setType == "yellow")
-            {
-              textColor = Qt::GlobalColor::yellow;
-            }
-            else if(setType == "gray")
-            {
-              textColor = Qt::GlobalColor::gray;
-            }
-        }
-
-        else if(identifier == "TextAlignment")
-        {
-            getline(inFile, setType);
-
-            if(setType == "AlignLeft")
-            {
-              textAlignFlag = Qt::AlignLeft;
-            }
-            else if(setType == "AlignRight")
-            {
-              textAlignFlag = Qt::AlignRight;
-            }
-            else if(setType == "AlignTop")
-            {
-              textAlignFlag = Qt::AlignTop;
-            }
-            else if(setType == "AlignBottom")
-            {
-              textAlignFlag = Qt::AlignBottom;
-            }
-            else if(setType == "AlignCenter")
-            {
-              textAlignFlag = Qt::AlignCenter;
-            }
-        }
-
-        else if(identifier == "TextPointSize")
-        {
-            inFile >> tempInt;
-            textFont.setPointSize(tempInt);
-            inFile.ignore(1000,'\n');
-        }
-
-        else if(identifier == "TextFontFamily")
-        {
-            getline(inFile, tempString);
-            qTempString.fromStdString(tempString);
-            textFont.setFamily(qTempString);
-        }
-
-        else if(identifier == "TextFontStyle")
-        {
-            getline(inFile, setType);
-
-            if(setType == "StyleNormal")
-            {
-              textFont.setStyle(QFont::StyleNormal);
-            }
-            else if(setType == "StyleItalic")
-            {
-              textFont.setStyle(QFont::StyleItalic);
-            }
-            else if(setType == "StyleOblique")
-            {
-              textFont.setStyle(QFont::StyleOblique);
-            }
-        }
-
-        else if(identifier == "TextFontWeight")
-        {
-            getline(inFile, setType);
-
-            if(setType == "Thin")
-            {
-              textFont.setWeight(QFont::Thin);
-            }
-            else if(setType == "Light")
-            {
-              textFont.setWeight(QFont::Light);
-            }
-            else if(setType == "Normal")
-            {
-              textFont.setWeight(QFont::Normal);
-            }
-            else if(setType == "Bold")
-            {
-              textFont.setWeight(QFont::Bold);
-            }
-        }
-
-        // clear the identifier and setType and go through next line in text file
+        // clear identifier and setType for next shape reading
         identifier.clear();
         setType.clear();
 
-    } // END WHILE-LOOP (INFILE)
+        // push shape into vector
+        shapeVector.push_back(currentShape);
+
+        definePoints = Vector<QPoint>();
+
+    } // END WHILE-LOOP
 
 } // END METHOD
 
 
 
+//***************************************************************************************************
 
-Vector<int> Parser::shapeDimensions(ifstream& fileName)
+MC_Vec::Vector<Shape*> Parser::getShapeVector() const
+{
+    return shapeVector;
+}
+
+//***************************************************************************************************
+
+void Parser::ReadDelimiter(ifstream& fileName, char delimiter)
+{
+    // ignore everything prior and including the delimiter
+    fileName.ignore(1000, delimiter);
+
+    // ignore the space after the delimiter
+    fileName.ignore(1000, ' ');
+}
+
+//***************************************************************************************************
+
+// POLYLINE + LINE
+// n points
+void Parser::ReadPolyline(ifstream& fileName, Vector<QPoint>& definePoints, QPen& shapePen)
+{
+    Vector<int> tempDimensions;
+    QPoint tempQPoint;
+
+
+    tempDimensions = ReadDimensions(fileName);
+    for(int index = 0 ; index < tempDimensions.size() ; index++)
+    {
+        tempQPoint.setX(tempDimensions[index++]);
+        tempQPoint.setY(tempDimensions[index]);
+
+        definePoints.push_back(tempQPoint);
+    }
+
+    ReadPenProperties(fileName, shapePen);
+}
+
+//***************************************************************************************************
+
+// POLYGON
+// n points
+void Parser::ReadPolygon(ifstream& fileName, Vector<QPoint>& definePoints, QPen& shapePen, QBrush& shapeBrush)
+{
+    Vector<int> tempDimensions;
+    QPoint tempQPoint;
+
+    tempDimensions = ReadDimensions(fileName);
+    for(int index = 0 ; index < tempDimensions.size() ; index++)
+    {
+        tempQPoint.setX(tempDimensions[index++]);
+        tempQPoint.setY(tempDimensions[index]);
+
+        definePoints.push_back(tempQPoint);
+    }
+
+    ReadPenProperties(fileName, shapePen);
+    ReadBrushProperties(fileName, shapeBrush);
+}
+
+//***************************************************************************************************
+
+// RECTANGLE + SQUARE
+// 1 point, length, width
+void Parser::ReadRectangle(ifstream& fileName, Vector<QPoint>& definePoints, int& defineLength, int& defineWidth, QPen& shapePen, QBrush& shapeBrush)
+{
+    Vector<int> tempDimensions;
+    QPoint tempQPoint;
+
+    tempDimensions = ReadDimensions(fileName);
+    for(int index = 0 ; index < tempDimensions.size() ; index++)
+    {
+        switch(index)
+        {
+            case 0  :   tempQPoint.setX(tempDimensions[index++]);
+                        tempQPoint.setY(tempDimensions[index]);
+                        break;
+
+            case 2  :   defineLength = tempDimensions[index];
+                        break;
+            case 3  :   defineWidth  = tempDimensions[index];
+                        break;
+        }
+
+        definePoints.push_back(tempQPoint);
+    }
+
+    ReadPenProperties(fileName, shapePen);
+    ReadBrushProperties(fileName, shapeBrush);
+}
+
+//***************************************************************************************************
+
+// ELLIPSE + CIRCLE
+// 1 point, minor axis, major axis
+void Parser::ReadEllipse(ifstream& fileName, Vector<QPoint>& definePoints, int& minor, int& major, QPen& shapePen, QBrush& shapeBrush)
+{
+    Vector<int> tempDimensions;
+    QPoint tempQPoint;
+
+    tempDimensions = ReadDimensions(fileName);
+    for(int index = 0 ; index < tempDimensions.size() ; index++)
+    {
+        switch(index)
+        {
+            case 0  :   tempQPoint.setX(tempDimensions[index++]);
+                        tempQPoint.setY(tempDimensions[index]);
+                        break;
+
+            case 2  :   minor = tempDimensions[index];
+                        break;
+            case 3  :   major = tempDimensions[index];
+                        break;
+        }
+
+         definePoints.push_back(tempQPoint);
+    }
+
+    ReadPenProperties(fileName, shapePen);
+    ReadBrushProperties(fileName, shapeBrush);
+}
+
+//***************************************************************************************************
+
+// TEXT
+// 1 point, length, width
+void Parser::ReadText(ifstream& fileName, Vector<QPoint>& definePoints, int& defineLength, int& defineWidth,
+                      QString& text, QFont& textFont, Qt::AlignmentFlag& textAlignFlag, Qt::GlobalColor& textColor)
+{
+    Vector<int> tempDimensions;
+    QPoint tempQPoint;
+
+    tempDimensions = ReadDimensions(fileName);
+    for(int index = 0 ; index < tempDimensions.size() ; index++)
+    {
+        switch(index)
+        {
+            case 0  :   tempQPoint.setX(tempDimensions[index++]);
+                        tempQPoint.setY(tempDimensions[index]);
+                        break;
+
+            case 2  :   defineLength = tempDimensions[index];
+                        break;
+            case 3  :   defineWidth  = tempDimensions[index];
+                        break;
+        }
+
+        definePoints.push_back(tempQPoint);
+    }
+
+    ReadTextProperties(fileName, text, textFont, textAlignFlag, textColor);
+}
+
+//***************************************************************************************************
+
+void Parser::ReadPenProperties(ifstream& fileName, QPen& shapePen)
+{
+    string identifier;
+    int tempInt;
+
+
+
+    // remove "PenColor: "
+    ReadDelimiter(fileName, ':');
+
+    // get pen color
+    getline(fileName, identifier);
+
+    if(identifier == "white")
+    {
+      shapePen.setColor(Qt::white);
+    }
+    else if(identifier == "black")
+    {
+      shapePen.setColor(Qt::black);
+    }
+    else if(identifier == "red")
+    {
+      shapePen.setColor(Qt::red);
+    }
+    else if(identifier == "green")
+    {
+      shapePen.setColor(Qt::green);
+    }
+    else if(identifier == "blue")
+    {
+      shapePen.setColor(Qt::blue);
+    }
+    else if(identifier == "cyan")
+    {
+      shapePen.setColor(Qt::cyan);
+    }
+    else if(identifier == "magenta")
+    {
+      shapePen.setColor(Qt::magenta);
+    }
+    else if(identifier == "yellow")
+    {
+      shapePen.setColor(Qt::yellow);
+    }
+    else if(identifier == "gray")
+    {
+      shapePen.setColor(Qt::gray);
+    }
+
+
+    // remove "PenWidth: "
+    ReadDelimiter(fileName, ':');
+
+    // get pen width
+    fileName >> tempInt;
+    shapePen.setWidth(tempInt);
+    fileName.ignore(1000,'\n');
+
+
+    // remove "PenStyle: "
+    ReadDelimiter(fileName, ':');
+
+    // get pen style
+    getline(fileName, identifier);
+
+    if(identifier == "NoPen")
+    {
+      shapePen.setStyle(Qt::NoPen);
+    }
+    else if(identifier == "SolidLine")
+    {
+      shapePen.setStyle(Qt::SolidLine);
+    }
+    else if(identifier == "DashLine")
+    {
+      shapePen.setStyle(Qt::DashLine);
+    }
+    else if(identifier == "DotLine")
+    {
+      shapePen.setStyle(Qt::DotLine);
+    }
+    else if(identifier == "DashDotLine")
+    {
+      shapePen.setStyle(Qt::DashDotLine);
+    }
+    else if(identifier == "DashDotDotLine")
+    {
+      shapePen.setStyle(Qt::DashDotDotLine);
+    }
+
+
+    // remove "PenCapStyle: "
+    ReadDelimiter(fileName, ':');
+
+    // get pen cap style
+    getline(fileName, identifier);
+
+    if(identifier == "FlatCap")
+    {
+      shapePen.setCapStyle(Qt::FlatCap);
+    }
+    else if(identifier == "SquareCap")
+    {
+      shapePen.setCapStyle(Qt::SquareCap);
+    }
+    else if(identifier == "RoundCap")
+    {
+      shapePen.setCapStyle(Qt::RoundCap);
+    }
+
+
+    // remove "PenJoinStyle: "
+    ReadDelimiter(fileName, ':');
+
+    // get pen join style
+    getline(fileName, identifier);
+
+    if(identifier == "MiterJoin")
+    {
+      shapePen.setJoinStyle(Qt::MiterJoin);
+    }
+    else if(identifier == "BevelJoin")
+    {
+      shapePen.setJoinStyle(Qt::BevelJoin);
+    }
+    else if(identifier == "RoundJoin")
+    {
+      shapePen.setJoinStyle(Qt::RoundJoin);
+    }
+}
+
+//***************************************************************************************************
+
+void Parser::ReadBrushProperties(ifstream& fileName, QBrush& shapeBrush)
+{
+    string identifier;
+
+
+
+    // remove "BrushColor: "
+    ReadDelimiter(fileName, ':');
+
+    // get brush color
+    getline(fileName, identifier);
+
+    if(identifier == "white")
+    {
+      shapeBrush.setColor(Qt::white);
+    }
+    else if(identifier == "black")
+    {
+      shapeBrush.setColor(Qt::black);
+    }
+    else if(identifier == "red")
+    {
+      shapeBrush.setColor(Qt::red);
+    }
+    else if(identifier == "green")
+    {
+      shapeBrush.setColor(Qt::green);
+    }
+    else if(identifier == "blue")
+    {
+      shapeBrush.setColor(Qt::blue);
+    }
+    else if(identifier == "cyan")
+    {
+      shapeBrush.setColor(Qt::cyan);
+    }
+    else if(identifier == "magenta")
+    {
+      shapeBrush.setColor(Qt::magenta);
+    }
+    else if(identifier == "yellow")
+    {
+      shapeBrush.setColor(Qt::yellow);
+    }
+    else if(identifier == "gray")
+    {
+      shapeBrush.setColor(Qt::gray);
+    }
+
+
+    // remove "BrushStyle: "
+    ReadDelimiter(fileName, ':');
+
+    // get brush style
+    getline(fileName, identifier);
+
+    if(identifier == "SolidPattern")
+    {
+      shapeBrush.setStyle(Qt::SolidPattern);
+    }
+    else if(identifier == "HorPattern")
+    {
+      shapeBrush.setStyle(Qt::HorPattern);
+    }
+    else if(identifier == "VerPattern")
+    {
+      shapeBrush.setStyle(Qt::VerPattern);
+    }
+    else if(identifier == "NoBrush")
+    {
+      shapeBrush.setStyle(Qt::NoBrush);
+    }
+
+}
+
+//***************************************************************************************************
+
+// TEXT
+void Parser::ReadTextProperties(ifstream& fileName, QString& text, QFont& textFont, Qt::AlignmentFlag& textAlignFlag, Qt::GlobalColor& textColor)
+{
+    string identifier;
+    QString qTempString;
+    int tempInt;
+
+
+
+
+    // remove "TextString: "
+    ReadDelimiter(fileName, ':');
+
+    // get text string
+    getline(fileName, identifier);
+
+    text.fromStdString(identifier);
+
+
+
+    // remove "TextColor: "
+    ReadDelimiter(fileName, ':');
+
+    // get text color
+    getline(fileName, identifier);
+
+    if(identifier == "white")
+    {
+      textColor = Qt::GlobalColor::white;
+    }
+    else if(identifier == "black")
+    {
+      textColor = Qt::GlobalColor::black;
+    }
+    else if(identifier == "red")
+    {
+      textColor = Qt::GlobalColor::red;
+    }
+    else if(identifier == "green")
+    {
+      textColor = Qt::GlobalColor::green;
+    }
+    else if(identifier == "blue")
+    {
+      textColor = Qt::GlobalColor::blue;
+    }
+    else if(identifier == "cyan")
+    {
+      textColor = Qt::GlobalColor::cyan;
+    }
+    else if(identifier == "magenta")
+    {
+      textColor = Qt::GlobalColor::magenta;
+    }
+    else if(identifier == "yellow")
+    {
+      textColor = Qt::GlobalColor::yellow;
+    }
+    else if(identifier == "gray")
+    {
+      textColor = Qt::GlobalColor::gray;
+    }
+
+
+
+    // remove "TextAlignment: "
+    ReadDelimiter(fileName, ':');
+
+    // get text alignment
+    getline(fileName, identifier);
+
+    if(identifier == "AlignLeft")
+    {
+      textAlignFlag = Qt::AlignLeft;
+    }
+    else if(identifier == "AlignRight")
+    {
+      textAlignFlag = Qt::AlignRight;
+    }
+    else if(identifier == "AlignTop")
+    {
+      textAlignFlag = Qt::AlignTop;
+    }
+    else if(identifier == "AlignBottom")
+    {
+      textAlignFlag = Qt::AlignBottom;
+    }
+    else if(identifier == "AlignCenter")
+    {
+      textAlignFlag = Qt::AlignCenter;
+    }
+
+
+    // remove "TextPointSize: "
+    ReadDelimiter(fileName, ':');
+
+    // get text point size
+    fileName >> tempInt;
+    textFont.setPointSize(tempInt);
+    fileName.ignore(1000,'\n');
+
+
+
+    // remove "TextFontFamily: "
+    ReadDelimiter(fileName, ':');
+
+    // get text font family
+    getline(fileName, identifier);
+    qTempString.fromStdString(identifier);
+    textFont.setFamily(qTempString);
+
+
+
+    // remove "TextFontStyle: "
+    ReadDelimiter(fileName, ':');
+
+    // get text font style
+    getline(fileName, identifier);
+
+    if(identifier == "StyleNormal")
+    {
+      textFont.setStyle(QFont::StyleNormal);
+    }
+    else if(identifier == "StyleItalic")
+    {
+      textFont.setStyle(QFont::StyleItalic);
+    }
+    else if(identifier == "StyleOblique")
+    {
+      textFont.setStyle(QFont::StyleOblique);
+    }
+
+
+
+    // remove "TextFontWeight: "
+    ReadDelimiter(fileName, ':');
+
+    // get text font weight
+    getline(fileName, identifier);
+
+    if(identifier == "Thin")
+    {
+      textFont.setWeight(QFont::Thin);
+    }
+    else if(identifier == "Light")
+    {
+      textFont.setWeight(QFont::Light);
+    }
+    else if(identifier == "Normal")
+    {
+      textFont.setWeight(QFont::Normal);
+    }
+    else if(identifier == "Bold")
+    {
+      textFont.setWeight(QFont::Bold);
+    }
+}
+
+//***************************************************************************************************
+
+Vector<int> Parser::ReadDimensions(ifstream& fileName)
 {
     /*******************************************************************************
     * variables                                                                    *
@@ -643,9 +732,12 @@ Vector<int> Parser::shapeDimensions(ifstream& fileName)
     string readDimensions;          // PROC & PROC - reads dimensions as a string
     char   delimiter;               // PROC & PROC - determines when an integer has been read
     string singleDimension;         // PROC & PROC - reads 1 dimension from the string
-    Vector<int> dimensions;    // PROC & PROC - stores the transformed string into integers
+    Vector<int> dimensions;         // PROC & PROC - stores the transformed string into integers
 
 
+
+    // remove "ShapeDimensions: "
+    ReadDelimiter(fileName, ':');
 
     // get dimensions as a string
     getline(fileName, readDimensions);
@@ -656,8 +748,14 @@ Vector<int> Parser::shapeDimensions(ifstream& fileName)
         // get first string character
         delimiter = readDimensions[index];
 
+        // ignore the space after a comma
+        if(delimiter == ' ')
+        {
+            index++;
+        }
+
         // check for a comma
-        while(delimiter != ',')
+        while(delimiter != ',' && index < readDimensions.length())
         {
             // add to single dimension
             singleDimension += readDimensions[index];
@@ -669,11 +767,6 @@ Vector<int> Parser::shapeDimensions(ifstream& fileName)
             delimiter = readDimensions[index];
         }
 
-        // ignore the space after a comma
-        if(delimiter == ' ')
-        {
-            index++;
-        }
 
         // transform the single dimension string to an integer
         dimensions.push_back(stoi(singleDimension));
@@ -685,4 +778,3 @@ Vector<int> Parser::shapeDimensions(ifstream& fileName)
     return dimensions;
 
 } // END FUNCTION
-
