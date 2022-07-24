@@ -112,7 +112,6 @@ void Parser::ReadShapeFile(const string fileName)
           currentShape = new Line(shapeID, definePoints);
           currentShape -> setShape(Shape::ShapeType::Line);
           currentShape -> setPen(shapePen);
-
         }
         else if(setType == "Polyline")
         {
@@ -193,6 +192,380 @@ void Parser::ReadShapeFile(const string fileName)
     } // END WHILE-LOOP
 
 } // END METHOD
+
+
+
+/*****************************************************************************
+*  Method SaveFile:  Class Parser                                            *
+*----------------------------------------------------------------------------*
+*  This method will read a file and store its contents into the Shape Vector.*
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:                                                           *
+*   The following parameters require a defined value prior to calling the    *
+*   method:                                                                  *
+*         fileName  -  the name of the file that contains the Shape contents *
+*----------------------------------------------------------------------------*
+*  POST-CONDITIONS:                                                          *
+*   This method will modify the Shape & Vector to contain the contents of    *
+*   the file provided.                                                       *
+*****************************************************************************/
+int Parser::StringToEnum(const string& type)
+{
+
+
+
+
+
+
+
+
+    return 0;
+}
+
+/*****************************************************************************
+*  Method SaveFile:  Class Parser                                            *
+*----------------------------------------------------------------------------*
+*  This method will read a file and store its contents into the Shape Vector.*
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:                                                           *
+*   The following parameters require a defined value prior to calling the    *
+*   method:                                                                  *
+*         fileName  -  the name of the file that contains the Shape contents *
+*----------------------------------------------------------------------------*
+*  POST-CONDITIONS:                                                          *
+*   This method will modify the Shape & Vector to contain the contents of    *
+*   the file provided.                                                       *
+*****************************************************************************/
+string Parser::EnumToString(const int& enumTypeValue, const int& enumListValue)
+{
+    int size;
+    string enumString {"error"};
+    switch(enumListValue)
+    {
+        case 0 : size = *(&convert::shapeList + 1) - convert::shapeList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::shapeList[index].e_shapeType))
+                     {
+                         enumString = convert::shapeList[index].s_shapeType;
+                     }
+                 }
+                 break;
+
+        case 1 : size = *(&convert::colorList + 1) - convert::colorList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::colorList[index].e_color))
+                     {
+                         enumString = convert::colorList[index].s_color;
+                     }
+                 }
+                 break;
+
+        case 2 : size = *(&convert::penStyleList + 1) - convert::penStyleList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::penStyleList[index].e_penStyle))
+                     {
+                         enumString = convert::penStyleList[index].s_penStyle;
+                     }
+                 }
+                 break;
+
+        case 3 : size = *(&convert::penCapStyleList + 1) - convert::penCapStyleList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::penCapStyleList[index].e_capStyle))
+                     {
+                         enumString = convert::penCapStyleList[index].s_capStyle;
+                     }
+                 }
+                 break;
+
+        case 4 : size = *(&convert::penJoinStyleList + 1) - convert::penJoinStyleList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::penJoinStyleList[index].e_joinStyle))
+                     {
+                         enumString = convert::penJoinStyleList[index].s_joinStyle;
+                     }
+                 }
+                 break;
+
+        case 5 : size = *(&convert::brushStyleList + 1) - convert::brushStyleList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::brushStyleList[index].e_brushStyle))
+                     {
+                         enumString = convert::brushStyleList[index].s_brushStyle;
+                     }
+                   }
+                 break;
+
+        case 6 : size = *(&convert::alignmentFlagList + 1) - convert::alignmentFlagList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::alignmentFlagList[index].e_fontAlignFlag))
+                     {
+                         enumString = convert::alignmentFlagList[index].s_fontAlignFlag;
+                     }
+                 }
+                 break;
+
+        case 7 : size = *(&convert::fontStyleList + 1) - convert::fontStyleList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::fontStyleList[index].e_fontStyle))
+                     {
+                         enumString = convert::fontStyleList[index].s_fontStyle;
+                     }
+                 }
+                 break;
+
+        case 8 : size = *(&convert::fontWeightList + 1) - convert::fontWeightList;
+                 for(int index = 0 ; index < size ; index++)
+                 {
+                     if(enumTypeValue == int(convert::fontWeightList[index].e_fontWeight))
+                     {
+                         enumString = convert::fontWeightList[index].s_fontWeight;
+                     }
+                 }
+                 break;
+    }
+
+    return enumString;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*****************************************************************************
+*  Method SaveFile:  Class Parser                                            *
+*----------------------------------------------------------------------------*
+*  This method will read a file and store its contents into the Shape Vector.*
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  PRE-CONDITIONS:                                                           *
+*   The following parameters require a defined value prior to calling the    *
+*   method:                                                                  *
+*         fileName  -  the name of the file that contains the Shape contents *
+*----------------------------------------------------------------------------*
+*  POST-CONDITIONS:                                                          *
+*   This method will modify the Shape & Vector to contain the contents of    *
+*   the file provided.                                                       *
+*****************************************************************************/
+void Parser::SaveFile()
+{
+
+        //enum class ShapeType { None, Line, Polyline, Polygon, Rectangle, Ellipse, Text, Circle, Square };
+
+    ofstream outFile;
+    Shape::ShapeType shapeName;
+    Shape* shapeType;
+
+    outFile.open("output.txt");
+
+    for(int index = 0 ; index < shapeVector.size() ; index++)
+    {
+        shapeName = shapeVector[index] -> getShape();
+
+        switch(int(shapeName))
+        {
+            // none
+            case 0: break;
+
+            // line
+            case 1: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO);
+                    outFile << '\n';
+                    break;
+
+            // polyline
+            case 2: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO);
+                    outFile << '\n';
+                    break;
+
+            // polygon
+            case 3: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+                    outFile << '\n';
+                    break;
+
+            // rectangle
+            case 4: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+                    break;
+
+            // ellipse
+            case 5: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+                    outFile << '\n';
+                    break;
+
+            // text
+            case 6: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, TEXT_INFO);
+                    break;
+
+            // circle
+            case 7: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+                    outFile << '\n';
+                    break;
+
+            // square
+            case 8: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+                    outFile << '\n';
+                    break;
+        }
+    }
+    outFile.close();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//***************************************************************************************************
+void Parser::OutputToFile(ofstream& fileName, Shape* shape, const Output& a, const Output& b, const Output& c, const Output& d)
+{
+    QPen tempPen;
+    QBrush tempBrush;
+    QFont tempFont;
+
+    const int SIZE_AR = 4;
+    int printAr[SIZE_AR] = {a, b, c ,d};
+
+    for(int index = 0 ; index < SIZE_AR ; index++)
+    {
+        switch(printAr[index])
+        {
+            case 0  : break;
+
+            case 1  : fileName << "ShapeId: "   << shape -> getID();
+                      fileName << '\n';
+                      fileName << "ShapeType: " << EnumToString(int(shape -> getShape()), convert::SHAPES);
+                      fileName << '\n';
+                      fileName << "ShapeDimensions: TBD";
+                      fileName << '\n';
+                      break;
+
+            case 2  : tempPen = shape -> getPen();
+                      fileName << "PenColor: "     << EnumToString( tempPen.color().value(), convert::COLOR);
+                      fileName << '\n';
+                      fileName << "PenWidth: "     << tempPen.width();
+                      fileName << '\n';
+                      fileName << "PenStyle: "     << EnumToString( tempPen.style(), convert::PEN_STYLE );
+                      fileName << '\n';
+                      fileName << "PenCapStyle: "  << EnumToString( tempPen.capStyle(), convert::PEN_CAP );
+                      fileName << '\n';
+                      fileName << "PenJoinStyle: " << EnumToString( tempPen.joinStyle(), convert::PEN_JOIN );
+                      fileName << '\n';
+                      break;
+
+            case 3  : tempBrush = shape -> getBrush();
+                      fileName << "BrushColor: " << EnumToString( tempBrush.color().value(), convert::COLOR );
+                      fileName << '\n';
+                      fileName << "BrushStyle: " << EnumToString( tempBrush.style(), convert::BRUSH_STYLE );
+                      fileName << '\n';
+                      break;
+
+            case 4  : tempFont = static_cast<Text*>(shape) -> getFont();
+                      fileName << "TextString: "    << static_cast<Text*>(shape) -> getText().toStdString();
+                      fileName << '\n';
+                      fileName << "TextColor: "     << EnumToString(shape ->getPen().color().value(), convert::COLOR );
+                      fileName << '\n';
+/*FIX HERE*/          fileName << "TextAlignment: ";
+                      fileName << '\n';
+                      fileName << "TextPointSize: "  << tempFont.pointSize();
+                      fileName << '\n';
+                      fileName << "TextFontFamily: " << tempFont.family().toStdString();
+                      fileName << '\n';
+                      fileName << "TextFontStyle: "  << EnumToString(tempFont.style(), convert::FONT_STYLE);
+                      fileName << '\n';
+                      fileName << "TextFontWeight: " << EnumToString(tempFont.weight(), convert::FONT_WEIGHT);
+                      break;
+        }
+
+    }
+
+}
 
 
 
@@ -368,39 +741,40 @@ void Parser::ReadPenProperties(ifstream& fileName, QPen& shapePen)
 
     if(identifier == "white")
     {
-      shapePen.setColor(Qt::white);
+      shapePen.setColor(QColorConstants::White);
     }
     else if(identifier == "black")
     {
-      shapePen.setColor(Qt::black);
+      shapePen.setColor(QColorConstants::Black);
     }
     else if(identifier == "red")
     {
-      shapePen.setColor(Qt::red);
+      shapePen.setColor(QColorConstants::Red);
     }
     else if(identifier == "green")
     {
-      shapePen.setColor(Qt::green);
+      shapePen.setColor(QColorConstants::Green);
+            //std::cerr<<shapePen.color().name().toStdString();
     }
     else if(identifier == "blue")
     {
-      shapePen.setColor(Qt::blue);
+      shapePen.setColor(QColorConstants::Blue);
     }
     else if(identifier == "cyan")
     {
-      shapePen.setColor(Qt::cyan);
+      shapePen.setColor(QColorConstants::Cyan);
     }
     else if(identifier == "magenta")
     {
-      shapePen.setColor(Qt::magenta);
+      shapePen.setColor(QColorConstants::Magenta);
     }
     else if(identifier == "yellow")
     {
-      shapePen.setColor(Qt::yellow);
+      shapePen.setColor(QColorConstants::Yellow);
     }
     else if(identifier == "gray")
     {
-      shapePen.setColor(Qt::gray);
+      shapePen.setColor(QColorConstants::Gray);
     }
 
 
@@ -568,7 +942,6 @@ void Parser::ReadBrushProperties(ifstream& fileName, QBrush& shapeBrush)
 void Parser::ReadTextProperties(ifstream& fileName, QString& text, QFont& textFont, Qt::AlignmentFlag& textAlignFlag, Qt::GlobalColor& textColor)
 {
     string identifier;
-    QString qTempString;
     int tempInt;
 
 
@@ -580,8 +953,7 @@ void Parser::ReadTextProperties(ifstream& fileName, QString& text, QFont& textFo
     // get text string
     getline(fileName, identifier);
 
-    text.fromStdString(identifier);
-
+    text = QString::fromStdString(identifier);
 
 
     // remove "TextColor: "
@@ -672,8 +1044,7 @@ void Parser::ReadTextProperties(ifstream& fileName, QString& text, QFont& textFo
 
     // get text font family
     getline(fileName, identifier);
-    qTempString.fromStdString(identifier);
-    textFont.setFamily(qTempString);
+    textFont.setFamily(QString::fromStdString(identifier));
 
 
 

@@ -10,6 +10,7 @@
 #include "rectangle.h"
 #include "ellipse.h"
 #include "text.h"
+#include "conversions.h"
 
 
 // vector includes
@@ -25,8 +26,19 @@
 using std::shared_ptr;
 using std::string;
 using std::ifstream;
+using std::ofstream;
 using MC_Vec::Vector;
 
+
+
+enum Output
+{
+    NONE,
+    SHAPE_INFO,
+    PEN_INFO,
+    BRUSH_INFO,
+    TEXT_INFO,
+};
 
 // class declaration
 class Parser
@@ -83,6 +95,25 @@ class Parser
     *****************************************************************************/
     void ReadShapeFile(const string fileName);
 
+    /*****************************************************************************
+    *  Method ReadShapeFile:  Class Parser                                       *
+    *----------------------------------------------------------------------------*
+    *  This method will read a file and store its contents into the Shape Vector.*
+    *                                                                            *
+    *----------------------------------------------------------------------------*
+    *  PRE-CONDITIONS:                                                           *
+    *   The following parameters require a defined value prior to calling the    *
+    *   method:                                                                  *
+    *         fileName  -  the name of the file that contains the Shape contents *
+    *----------------------------------------------------------------------------*
+    *  POST-CONDITIONS:                                                          *
+    *   This method will modify the Shape & Vector to contain the contents of    *
+    *   the file provided.                                                       *
+    *****************************************************************************/
+    void SaveFile();
+
+
+
   /*******************************************************************************
   * ACCESSORS                                                                    *
   *******************************************************************************/
@@ -100,6 +131,13 @@ class Parser
     *****************************************************************************/
     MC_Vec::Vector<Shape*> getShapeVector() const;
 
+protected:
+    int StringToEnum(const string& type);
+    string EnumToString(const int& enumTypeValue, const int& enumListValue);
+
+
+
+
 
   private:
   /*******************************************************************************
@@ -112,6 +150,7 @@ class Parser
 
 
 
+    void OutputToFile(ofstream& fileName, Shape* shape, const Output& a = NONE, const Output& b = NONE, const Output& c = NONE, const Output& d = NONE);
 
     void ReadDelimiter(ifstream& fileName, char delimiter);
 
