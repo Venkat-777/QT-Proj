@@ -1,29 +1,27 @@
-#include "Rectangle.h" 
-#include "Ellipse.h"
 
-Ellipse::Ellipse(QPaintDevice* device, int id)
-    : Shape(device, id, ShapeType::Ellipse), width { 0 }, length { 0 }, x { 0 }, y { 0 }
-{
-}
+#include "ellipse.h"
+#include <cmath>
 
-Ellipse::Ellipse(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0)
-    : Shape(device, id, ShapeType::Ellipse, pen, brush), width { width }, length { length }, x { x }, y { y }
-{
-}
 
-Ellipse::~Ellipse() 
-{
-}
+Ellipse::Ellipse(int id)
+    : Shape(id), x { 0 }, y { 0 }, width { 0 }, length { 0 }
+{ }
 
-void Ellipse::draw(QPaintDevice* device)
+Ellipse::Ellipse(int id, Vector<QPoint> points, int width, int length)
+    : Shape(id), x { points[0].x() }, y { points[0].y() }, width { width }, length { length }
+{ }
+
+
+Ellipse::~Ellipse() {}
+
+
+void Ellipse::draw(QPaintDevice* device, QPainter* painter)
 {
-    QPainter& painter = getQPainter();
-    
-    painter.begin(device);
-    painter.setPen(getPen());
-    painter.setBrush(getBrush());
-    painter.drawEllipse(x, y, width, length);
-    painter.end();
+    painter->begin(device);
+    painter->setPen(getPen());
+    painter->setBrush(getBrush());
+    painter->drawEllipse(x, y, width, length);
+    painter->end();
 }
 
 void Ellipse::move(const int x, const int y)
@@ -32,17 +30,15 @@ void Ellipse::move(const int x, const int y)
     this->y = y;
 }
 
-double Ellipse::area(float a, float b)
+double Ellipse::area()
 {
-   float Area;
-   Area = 3.142 * a * b ;
-    
-   return Area;
+
+   return 3.142 * width * length;
 }
 
-double Ellipse::perimeter(double radius)
+double Ellipse::perimeter()
 {
-    return 2 * 3.14 * radius;
+    return 2 * 3.142 * sqrt(((width * width) + (length * length) / 2));
 }
 
 void Ellipse::setX(int x)
@@ -69,14 +65,17 @@ int Ellipse::getX() const
 {
     return x;
 }
+
 int Ellipse::getY() const
 {
     return y;
 }
+
 int Ellipse::getWidth() const
 {
     return width;
 }
+
 int Ellipse::getLength() const
 {
     return length;
