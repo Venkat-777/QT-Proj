@@ -1,7 +1,7 @@
-#include "Line.h"
+#include "line.h"
 
 
-Line::Line(QPaintDevice* device, int id): Shape(device,id,ShapeType::Line)
+Line::Line(int id): Shape(id)
 {
     point1.setX(0);
     point1.setY(0);
@@ -9,28 +9,27 @@ Line::Line(QPaintDevice* device, int id): Shape(device,id,ShapeType::Line)
     point2.setX(0);
     point2.setY(0);
 }
-Line::Line(QPaintDevice* device,int id,QPen pen, QBrush brush, int x1,int x2,int y1,int y2): 
-      Shape(device, id, ShapeType::Line, pen, brush)
-{
-    point1.setX(x1);
-    point1.setY(y1);
 
-    point2.setX(x2);
-    point2.setY(y2);
-}
+Line::Line(int id, QPen pen, QBrush brush, int x1, int x2, int y1, int y2):
+    Shape(id, ShapeType::Line, pen, brush), point1(x1, y1), point2(x2, y2)
+{ }
+
+Line::Line(int id, Vector<QPoint> points)
+    : Shape(id), point1 (points[0].x(), points[0].y()), point2 (points[1].x(), points[1].y())
+{ }
+
 Line::~Line()
-{
+{ }
 
-}
-void Line::draw(QPaintDevice* device)
+void Line::draw(QPaintDevice* device, QPainter* painter)
 {
-    QPainter& painter = getQPainter();
-    painter.begin(device);
-    painter.setPen(getPen());
-    painter.setBrush(getBrush());
-
-    painter.drawLine(point1.x(),point1.y(),point2.x(),point2.y());
+    painter->begin(device);
+    painter->setPen(getPen());
+    painter->setBrush(getBrush());
+    painter->drawLine(point1.x(),point1.y(),point2.x(),point2.y());
+    painter->end();
 }
+
 void Line::move(const int translateX, const int translateY)
 {
     point1.setX(point1.x() + translateX);
@@ -38,6 +37,7 @@ void Line::move(const int translateX, const int translateY)
     point2.setX(point2.x() + translateX);
     point2.setY(point2.y() + translateY);
 }
+
 double Line::perimeter()
 {
     //Declaring variables
@@ -49,10 +49,12 @@ double Line::perimeter()
 
     return perimeter;
 }
+
 double Line::area()
 {
     return 0;
 }
+
 
 //Gets
 double Line::getX1()
@@ -72,20 +74,20 @@ double Line::getY2()
     return (point2.y());
 }
 
-//Sets
-void Line::setX1(double x1)
+
+// Sets
+void Line::setX(int value, int point)
 {
-    point1.setX(x1);
+    if (point == 1)
+        point1.setX(value);
+    else
+        point2.setX(value);
 }
-void Line::setY1(double y1)
+
+void Line::setY(int value, int point)
 {
-    point1.setY(y1);    
-}
-void Line::setX2(double x2)
-{
-    point2.setX(x2);
-}
-void Line::setY2(double y2)
-{
-    point2.setY(y2);
+    if (point == 1)
+        point1.setY(value);
+    else
+        point2.setY(value);
 }
