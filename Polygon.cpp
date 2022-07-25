@@ -1,11 +1,24 @@
-#include "polyline.h"
+#include "polygon.h"
 
-Polyline::Polyline(int id )
-  : Shape(id), pointCount { 0 }, points { } { }
+Polygon::Polygon(int id) : Shape(id), numOfPoints {}, points {}
+{}
 
+Polygon::Polygon(int id, QPen pen, QBrush brush, Vector<QPoint> points, int numOfPoints ) :
+    Shape(id, ShapeType::Polygon, pen, brush), numOfPoints { numOfPoints }
+{
+    QPoint point;
 
-Polyline::Polyline(int id, Vector<QPoint> points)
-    : Shape(id), pointCount { pointCount }
+    for (int i = 0; i < numOfPoints; i++)
+    {
+        point.setX(points[i].x());
+        point.setY(points[i].y());
+
+        this->points.push_back(point);
+    }
+}
+
+Polygon::Polygon(int id, Vector<QPoint> points)
+    : Shape(id)
 {
     QPoint point;
 
@@ -18,68 +31,60 @@ Polyline::Polyline(int id, Vector<QPoint> points)
     }
 }
 
-
-Polyline::~Polyline() { }
-
-
-void Polyline::draw(QPaintDevice* device, QPainter* painter)
+Polygon::~Polygon()
 {
-    QPoint qPoints[pointCount];
 
-    for (int i {0}; i < pointCount; ++i)
-        qPoints[i] = points[i];
+}
 
+void Polygon::draw(QPaintDevice* device, QPainter* painter)
+{
     painter->begin(device);
     painter->setPen(getPen());
     painter->setBrush(getBrush());
-    painter->drawPolyline(qPoints, pointCount);
-    painter->end();
-}
 
-
-void Polyline::move(const int newX, const int newY)
-{
-    for (int k = 0; k < pointCount; k++)
+    //Copying contents of vector to an array
+    QPointF pointsArray[numOfPoints];
+    for (int i = 0; i < numOfPoints; ++i)
     {
-        points[k].setX(points[k].x() + newX);
-        points[k].setY(points[k].y() + newY);
+        pointsArray[i].setX(points[i].x());
+        pointsArray[i].setY(points[i].y());
     }
+
+    painter->drawPolygon( pointsArray, numOfPoints);
 }
 
-
-double Polyline::perimeter()
+void Polygon::move(const int translateX, const int translateY)
 {
-  return -1;
+    for (int i = 0; i < numOfPoints; i++)
+    {
+        //I need to translate each x,y value
+        points[i].setX(points[i].x() + translateX);
+        points[i].setY(points[i].y() + translateY);
+    }
+
+
 }
 
-
-double Polyline::area()
+double Polygon::perimeter()
 {
-  return -1;
+    return -1;
 }
 
-
-int Polyline::getX(int pointNum) const
+double Polygon::area()
 {
-  return points[pointNum].x();
+    return -1;
 }
 
-int Polyline::getY(int pointNum) const
+void Polygon::setX(int x,int coordNum)
 {
-  return points[pointNum].y();
+    QPoint* point { &points[coordNum] };
+
+    point->setX(x);
 }
 
-
-void Polyline::setX(int value, int point)
+void Polygon::setY(int y,int coordNum)
 {
-    QPoint* qPoint { &points[point] };
+    QPoint* point { &points[coordNum] };
 
-    qPoint->setX(value);
-}
-
-void Polyline::setY(int value, int point)
-{
-    QPoint* qPoint { &points[point] };
-
-    qPoint->setY(value);
+    point->setY(y);
 }
