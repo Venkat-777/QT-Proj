@@ -643,21 +643,31 @@ void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
     ui->shapeName->setText(arg1);
     Parser read;
     read.ReadShapeFile("Shape.txt");
-    Vector<Shape *>vector;
-    vector = read.getShapeVector();
+    Vector<Shape*>vector = read.getShapeVector();
+    //vector = read.getShapeVector();
 
-    if (arg1 == "Rectangle"){
-        //Polygon polygon;
+    QString currentShape;
+    currentShape=ui->allShapes->currentText();
+
+    if (currentShape == "Polygon"){
+        ui->selectedShapes->addItem("Here are the Polygons");
+
         for (int i = 0; i != vector.size(); i++){
             if (vector[i]->getShape() == Shape::ShapeType::Polygon){
-                ui->selectedShapes->addItem((QString::number)(vector[i]->getID()));
-
-                ui->selectedShapes->addItem(/*(QIcon)":/img/rectangle.png",*/ (QString)"Rectangle");
-                ui->selectedShapes->addItem(/*(QIcon)":/img/ellipse.png",  */ (QString)"Ellipse");
-
-                //QObject::connect(ui->allShapes, &QComboBox::currentIndexChanged, this, );
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
             }
         }
-        //ui->selectedShapes->addItem(polygon.getShape(vector));
+
+    } else if (currentShape == "Rectangle")
+    {
+        ui->selectedShapes->addItem("Here are the Rectangle");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Rectangle){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+
     }
 }
