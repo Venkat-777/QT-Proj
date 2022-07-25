@@ -624,3 +624,40 @@ void ShapeWindow::changeTextFontFamily(QString fontFamily){}
 void ShapeWindow::changeTextFontStyle(QString fontStyle)  {}
 void ShapeWindow::changeTextFontWeight(QString fontWeight){}
 
+
+void ShapeWindow::on_pushButton_2_clicked()
+{
+    //ShapeManager::addShape();
+    ui->addOrDelete->setText(" is Added.");
+}
+
+
+void ShapeWindow::on_pushButton_clicked()
+{
+    ui->addOrDelete->setText(" is Deleted.");
+}
+
+
+void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
+{
+    ui->shapeName->setText(arg1);
+    Parser read;
+    read.ReadShapeFile("Shape.txt");
+    Vector<Shape *>vector;
+    vector = read.getShapeVector();
+
+    if (arg1 == "Rectangle"){
+        //Polygon polygon;
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Polygon){
+                ui->selectedShapes->addItem((QString::number)(vector[i]->getID()));
+
+                ui->selectedShapes->addItem(/*(QIcon)":/img/rectangle.png",*/ (QString)"Rectangle");
+                ui->selectedShapes->addItem(/*(QIcon)":/img/ellipse.png",  */ (QString)"Ellipse");
+
+                //QObject::connect(ui->allShapes, &QComboBox::currentIndexChanged, this, );
+            }
+        }
+        //ui->selectedShapes->addItem(polygon.getShape(vector));
+    }
+}
