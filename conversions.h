@@ -1,18 +1,26 @@
 #ifndef CONVERSIONS_H_
 #define CONVERSIONS_H_
 
+// shape includes
 #include "shape.h"
+
+// pre-processor directives
 #include <string>
 
+// using namespaces
 using std::string;
 
 
 
 
-
+// namespace
 namespace convert
 {
 
+/*******************************************************************************
+* ENUMERATED TYPES                                                             *
+*******************************************************************************/
+// DETERMINES WHICH ENUMERATED TYPE TO CONVERT TO STRING
 enum ListTypes
 {
     SHAPES,
@@ -26,6 +34,9 @@ enum ListTypes
     FONT_WEIGHT
 };
 
+
+
+// SHAPE ENUMERATION TYPES
 //******************************************************
 struct shapeConversion
 {
@@ -33,7 +44,8 @@ struct shapeConversion
     string           s_shapeType;
 };
 
-const shapeConversion shapeList[]
+const int NUM_SHAPES = 9;
+const shapeConversion shapeList[NUM_SHAPES]
 {
     {Shape::ShapeType::None,        "None"},
     {Shape::ShapeType::Line,        "Line"},
@@ -46,26 +58,34 @@ const shapeConversion shapeList[]
     {Shape::ShapeType::Square,      "Square"}
 };
 
+
+
+// COLOR ENUMERATION TYPES
 //******************************************************
 struct colorConversion
 {
-    int             e_color;
+    string          hex_color;
     string          s_color;
+    QColor          e_color;
 };
 
-const colorConversion colorList[]
+const int NUM_COLORS = 9;
+const colorConversion colorList[NUM_COLORS]
 {
-    {0xffffff,    "white"},
-    {0x000000,    "black"},
-    {0xff0000,      "red"},
-    {0x00ff00,    "green"},
-    {0x0000ff,     "blue"},
-    {0x00ffff,     "cyan"},
-    {0xff00ff,  "magenta"},
-    {0xffff00,   "yellow"},
-    {0xa0a0a4,     "gray"}
+    {"#ffffff",    "white",    QColorConstants::White},
+    {"#000000",    "black",    QColorConstants::Black},
+    {"#ff0000",      "red",    QColorConstants::Red},
+    {"#00ff00",    "green",    QColorConstants::Green},
+    {"#0000ff",     "blue",    QColorConstants::Blue},
+    {"#00ffff",     "cyan",    QColorConstants::Cyan},
+    {"#ff00ff",  "magenta",    QColorConstants::Magenta},
+    {"#ffff00",   "yellow",    QColorConstants::Yellow},
+    {"#a0a0a4",     "gray",    QColorConstants::Gray}
 };
 
+
+
+// PEN STYLE ENUMERATION TYPES
 //******************************************************
 struct penStyleConversion
 {
@@ -73,7 +93,8 @@ struct penStyleConversion
     string          s_penStyle;
 };
 
-const penStyleConversion penStyleList[]
+const int NUM_PEN_STYLES = 6;
+const penStyleConversion penStyleList[NUM_PEN_STYLES]
 {
     {Qt::PenStyle::NoPen,          "NoPen"},
     {Qt::PenStyle::SolidLine,      "SolidLine"},
@@ -83,6 +104,9 @@ const penStyleConversion penStyleList[]
     {Qt::PenStyle::DashDotDotLine, "DashDotDotLine"}
 };
 
+
+
+// PEN CAP STYLE ENUMERATION TYPES
 //******************************************************
 struct penCapStyleConversion
 {
@@ -90,13 +114,17 @@ struct penCapStyleConversion
     string          s_capStyle;
 };
 
-const penCapStyleConversion penCapStyleList[]
+const int NUM_CAP_STYLES = 3;
+const penCapStyleConversion penCapStyleList[NUM_CAP_STYLES]
 {
     {Qt::PenCapStyle::FlatCap,   "FlatCap"},
     {Qt::PenCapStyle::SquareCap, "SquareCap"},
     {Qt::PenCapStyle::RoundCap,  "RoundCap"}
 };
 
+
+
+// PEN JOIN STYLE ENUMERATION TYPES
 //******************************************************
 struct penJoinStyleConversion
 {
@@ -104,13 +132,17 @@ struct penJoinStyleConversion
     string           s_joinStyle;
 };
 
-const penJoinStyleConversion penJoinStyleList[]
+const int NUM_JOIN_STYLES = 3;
+const penJoinStyleConversion penJoinStyleList[NUM_JOIN_STYLES]
 {
     {Qt::PenJoinStyle::MiterJoin, "MiterJoin"},
     {Qt::PenJoinStyle::BevelJoin, "BevelJoin"},
     {Qt::PenJoinStyle::RoundJoin, "RoundJoin"}
 };
 
+
+
+// BRUSH STYLE ENUMERATION TYPES
 //******************************************************
 struct brushStyleConversion
 {
@@ -118,7 +150,8 @@ struct brushStyleConversion
     string          s_brushStyle;
 };
 
-const brushStyleConversion brushStyleList[]
+const int NUM_BRUSH_STYLES = 4;
+const brushStyleConversion brushStyleList[NUM_BRUSH_STYLES]
 {
     {Qt::BrushStyle::SolidPattern, "SolidPattern"},
     {Qt::BrushStyle::HorPattern,   "HorPattern"},
@@ -126,6 +159,9 @@ const brushStyleConversion brushStyleList[]
     {Qt::BrushStyle::NoBrush,      "NoBrush"}
 };
 
+
+
+// TEXT ALIGNMENT ENUMERATION TYPES
 //******************************************************
 struct alignmentFlagConversion
 {
@@ -133,7 +169,8 @@ struct alignmentFlagConversion
     string            s_fontAlignFlag;
 };
 
-const alignmentFlagConversion alignmentFlagList[]
+const int NUM_ALIGN_FLAGS = 5;
+const alignmentFlagConversion alignmentFlagList[NUM_ALIGN_FLAGS]
 {
     {Qt::AlignmentFlag::AlignLeft,    "AlignLeft"},
     {Qt::AlignmentFlag::AlignRight,   "AlignRight"},
@@ -142,6 +179,9 @@ const alignmentFlagConversion alignmentFlagList[]
     {Qt::AlignmentFlag::AlignCenter,  "AlignCenter"}
 };
 
+
+
+// TEXT FONT STYLE ENUMERATION TYPES
 //******************************************************
 struct fontStyleConversion
 {
@@ -149,13 +189,17 @@ struct fontStyleConversion
     string          s_fontStyle;
 };
 
-const fontStyleConversion fontStyleList[]
+const int NUM_FONT_STYLES = 3;
+const fontStyleConversion fontStyleList[NUM_FONT_STYLES]
 {
     {QFont::Style::StyleNormal,  "StyleNormal"},
     {QFont::Style::StyleItalic,  "StyleItalic"},
     {QFont::Style::StyleOblique, "StyleOblique"}
 };
 
+
+
+// TEXT FONT WEIGHT ENUMERATION TYPES
 //******************************************************
 struct fontWeightConversion
 {
@@ -163,13 +207,15 @@ struct fontWeightConversion
     string          s_fontWeight;
 };
 
-const fontWeightConversion fontWeightList[]
+const int NUM_FONT_WEIGHTS = 4;
+const fontWeightConversion fontWeightList[NUM_FONT_WEIGHTS]
 {
     {QFont::Weight::Thin,   "Thin"},
     {QFont::Weight::Light,  "Light"},
     {QFont::Weight::Normal, "Normal"},
     {QFont::Weight::Bold,   "Bold"},
 };
+
 
 } // namespace
 
