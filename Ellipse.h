@@ -1,19 +1,22 @@
-
 #ifndef ELLIPSE_H
 #define ELLIPSE_H
 
 #include "shape.h"
-#include "Rectangle.h"
+#include "vector.h"
+#include <QPoint>
+
+using namespace MC_Vec;
+
 
 class Ellipse : public Shape
 {
 public:
 
-    Ellipse(QPaintDevice* device = nullptr, int id = -1);
-    Ellipse(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0);
+    Ellipse(int id = -1);
+    Ellipse(int id, Vector<QPoint> points, int width, int length);
     ~Ellipse() override;
 
-    void draw(QPaintDevice* device) override;
+    void draw(QPaintDevice* device, QPainter* painter) override;
     void move(const int x, const int y) override;
     double area() override;
     double perimeter() override;
@@ -29,7 +32,12 @@ public:
     int getWidth() const;
     int getLength() const;
 
-private: 
-
-    int width, length, x , y;
+private:
+    int x;
+    int y;
+    int width;
+    int length;
 };
+
+
+#endif
