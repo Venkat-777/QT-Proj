@@ -36,6 +36,7 @@ public:
     int getLength();
     int getX();
     int getY();
+    Qt::AlignmentFlag getAlignment();
 
 private:
     int width;
