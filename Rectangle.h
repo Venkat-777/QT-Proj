@@ -1,16 +1,28 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+#include <QPoint>
+
 #include "shape.h"
+#include "vector.h"
+
+using namespace MC_Vec;
+
 
 class Rectangle : public Shape
 {
 public:
-    Rectangle(QPaintDevice* device = nullptr, int id = -1);
-    Rectangle(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0);
+    Rectangle(int id = -1);
+
+    Rectangle(int id,   int width,    int length,
+              QPen pen, QBrush brush, int x = 0, int y = 0 );
+
+    Rectangle(int id, Vector<QPoint> points, int length, int width);
+
+
     ~Rectangle() override;
 
-    void draw(QPaintDevice* device) override;
+    void draw(QPaintDevice* device, QPainter* painter) override;
     void move(const int x, const int y) override;
     double area() override;
     double perimeter() override;
@@ -29,3 +41,5 @@ public:
 private:
     int width, length, x , y;
 };
+
+#endif
