@@ -32,7 +32,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="allShapes">
        <item>
         <property name="text">
          <string>Shapes</string>
@@ -46,11 +46,6 @@
        <item>
         <property name="text">
          <string>Polyline</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Secdialog</string>
         </property>
        </item>
        <item>
@@ -78,7 +73,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="selectedShapes"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="addInfo">
@@ -223,12 +218,12 @@
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>320</x>
-     <y>105</y>
+     <x>862</x>
+     <y>145</y>
     </hint>
     <hint type="destinationlabel">
-     <x>357</x>
-     <y>196</y>
+     <x>912</x>
+     <y>332</y>
     </hint>
    </hints>
   </connection>
@@ -239,28 +234,44 @@
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>290</x>
-     <y>130</y>
+     <x>862</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>357</x>
-     <y>196</y>
+     <x>912</x>
+     <y>332</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>comboBox</sender>
+   <sender>allShapes</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>shapeName</receiver>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>272</x>
-     <y>44</y>
+     <x>862</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
-     <x>244</x>
-     <y>194</y>
+     <x>863</x>
+     <y>332</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>allShapes</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>selectedShapes</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>952</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>952</x>
+     <y>71</y>
     </hint>
    </hints>
   </connection>
