@@ -1,4 +1,4 @@
-#include "shapeManager.h"
+#include "shapemanager.h"
 
 ShapeManager::ShapeManager(QPaintDevice* device)
    : shapes {}, device { device }, painter { new QPainter } {}
@@ -64,7 +64,7 @@ void ShapeManager::drawShapes() const
 {
     for (Shape* shape : shapes)
     {
-        shape->draw(device);
+        shape->draw(device, painter);
     }
 }
 
@@ -89,3 +89,4 @@ void ShapeManager::sortShapes(bool (*compare)(Shape*, Shape*))
       std::swap(shapes[i], shapes[smallestIndex]);
     }
 }
+
