@@ -24,6 +24,8 @@ public:
 
     void setX(int value, int point);
     void setY(int value, int point);
+    
+    Vector<QPoint> getPointVector();
 
 private:
     int pointCount;
