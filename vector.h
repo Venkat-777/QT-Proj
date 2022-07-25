@@ -1,7 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <iostream>
+#include <memory> // not in git
 using std::move;
 
 namespace MC_Vec
@@ -13,13 +13,13 @@ class Vector
   public:
 
     /* Default Constructor */
-    Vector(); 
+    Vector();
 
     /* Overloaded Constructor */
-    Vector(int capacity); 
+    Vector(int capacity);
 
     /* Overloaded Constructor */
-    Vector(int capacity, const T& value); 
+    Vector(int capacity, const T& value);
 
     /* Copy Constructor */
     Vector(const Vector& source);
@@ -28,7 +28,7 @@ class Vector
     Vector(Vector&& source) noexcept;
 
     /* Destructor */
-    ~Vector(); 
+    ~Vector();
 
     /* Copy assignment operator*/
     const Vector& operator=(const Vector& rhs);
@@ -60,7 +60,9 @@ class Vector
 
     void push_back(T value);
 
-    iterator insert(iterator ptr, const T& value); 
+    void clear(int capacity = 4);
+
+    iterator insert(iterator ptr, const T& value);
 
     iterator erase(iterator ptr);
 
@@ -84,7 +86,7 @@ class Vector
  *   POST-CONDITIONS: All data members are set to a value of 0
  ********************************************************************/
 template <typename T>
-MC_Vec::Vector<T>::Vector() 
+MC_Vec::Vector<T>::Vector()
     : sizeV { 0 }, space { 0 }, elem { nullptr } {}
 
 
@@ -95,7 +97,7 @@ MC_Vec::Vector<T>::Vector()
  *-------------------------------------------------------------------
  *   PRE-CONDITIONS:
  *      The following parameter needs a defined argument
- * 
+ *
  *        space (int) : The initial capacity of the vector
  *-------------------------------------------------------------------
  *   POST-CONDITIONS:
@@ -117,7 +119,7 @@ MC_Vec::Vector<T>::Vector(int space)
  *-------------------------------------------------------------------
  *   PRE-CONDITIONS:
  *      The following parameters needs a defined argument
- * 
+ *
  *        space (int) : The initial size & capacity of the vector
  *        value (T&)  : A reference to a value of the specified type
  *-------------------------------------------------------------------
@@ -246,7 +248,7 @@ const MC_Vec::Vector<T>& MC_Vec::Vector<T>::operator=(const Vector& rhs)
  *-------------------------------------------------------------------
  *   POST-CONDITIONS:
  *      The temp vector on the right will no longer point to data.
- * 
+ *
  *      RETURNS: A vector with same values as the vector on the right.
  ********************************************************************/
 template <typename T>
@@ -270,7 +272,7 @@ MC_Vec::Vector<T>& MC_Vec::Vector<T>::operator=(Vector&& rhs) noexcept
  *   PRE-CONDITIONS:
  *     The following parameter needs a defined argument
  *          size (int) : The newsize of the vector
- * 
+ *
  *      The following parameter is optional - default = 0
  *          value (T&) : Reference to a value of the specified type
  *-------------------------------------------------------------------
@@ -290,7 +292,7 @@ void MC_Vec::Vector<T>::resize(int size, const T& value)
             elem[index] = 0;
         }
     }
-    else 
+    else
     {
         if (size > space)
         {
@@ -302,7 +304,7 @@ void MC_Vec::Vector<T>::resize(int size, const T& value)
             elem[index] = value;
         }
     }
-    
+
     sizeV = size;
 }
 
@@ -359,18 +361,45 @@ void MC_Vec::Vector<T>::reserve(int capacity)
 template <typename T>
 void MC_Vec::Vector<T>::push_back(T value)
 {
-    if (!sizeV) 
+    if (!sizeV)
     {
-        reserve(4);   
+        reserve(4);
     }
     else if (sizeV == space)
     {
         reserve(2 * sizeV);
     }
-    
+
     elem[sizeV] = value;
 
     ++sizeV;
+}
+
+
+/********************************************************************
+ * Method clear :  class Vector
+ *-------------------------------------------------------------------
+ *  Mutator: clears the vector and instatiates a new vector.
+ *-------------------------------------------------------------------
+ *   PRE-CONDITIONS:
+ *      The following parameter is optional
+ *          capacity (int) : capacity of the new vector.
+ *-------------------------------------------------------------------
+ *   POST-CONDITIONS:
+ *     All elements in the vector prior to calling this method will
+ *     be cleared. A new vector will be established with a capcity of
+ *     the size passed as an argument, or a default value of 4. The
+ *     size of the vector will be 0.
+ ********************************************************************/
+template <typename T>
+void MC_Vec::Vector<T>::clear(int capacity)
+{
+    delete[] elem;
+
+    elem = new T[capacity];
+
+    sizeV = 0;
+    space = capacity;
 }
 
 
@@ -381,7 +410,7 @@ void MC_Vec::Vector<T>::push_back(T value)
  *-------------------------------------------------------------------
  *   PRE-CONDITIONS:
  *      The following parameters needs a defined value
- * 
+ *
  *          ptr   (T*) : pointer to location to add the new element
  *          value (T&) : reference to the value to be inserted
  *-------------------------------------------------------------------
@@ -390,10 +419,10 @@ void MC_Vec::Vector<T>::push_back(T value)
  *      All proceeding elements will be moved to the right by 1.
  *      Size of the vector will increase by 1.
  *      Capacity of the vector will increase if needed.
- * 
+ *
  *     NOTE: This method verifies that ptr is a valid position.
  *           Nothing changes if the ptr points to invalid position.
- * 
+ *
  *     RETURNS: Pointer to location where element was added or null.
  ********************************************************************/
 template <typename T>
@@ -401,7 +430,7 @@ T* MC_Vec::Vector<T>::insert(iterator ptr, const T& value)
 {
     iterator ptr2;  // CALC & CALC - ptr that decrements from end()
     int      dif;   // CALC & CALC - offset from begin()
-    
+
     if (ptr >= begin() && ptr < end())
     {
         if (sizeV == space)
@@ -447,10 +476,10 @@ T* MC_Vec::Vector<T>::insert(iterator ptr, const T& value)
  *   POST-CONDITIONS:
  *      The following parameter needs a defined argument
  *          ptr (T*) : pointer to location to remove element.
- * 
+ *
  *     NOTE: This method verifies that ptr is a valid position.
  *           Nothing changes if the ptr points to invalid position.
- * 
+ *
  *     RETURNS: ptr to location where element was removed, or null.
  ********************************************************************/
 template <typename T>
