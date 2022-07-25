@@ -4,6 +4,12 @@
 #include <string>
 #include "vector.h"
 #include "shape.h"
+#include "rectangle.h"
+#include "ellipse.h"
+#include "polyline.h"
+#include "polygon.h"
+#include "line.h"
+#include "text.h"
 
 using namespace MC_Vec;
 using std::string;
