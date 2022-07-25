@@ -1,86 +1,34 @@
-#include "polyline.h"
+#ifndef POLYLINE_H
+#define POLYLINE_H
 
-Polyline::Polyline(int id )
-  : Shape(id), pointCount { 0 }, points { } { }
+#include "shape.h"
+#include "vector.h"
+#include <QPoint>
 
+using namespace MC_Vec;
 
-Polyline::Polyline(int id, Vector<QPoint> points)
-    : Shape(id), pointCount { pointCount }
+class Polyline : public Shape
 {
-    QPoint point;
+public:
+    Polyline(int id = -1);
+    Polyline(int id, Vector<QPoint> points);
+    ~Polyline() override;
 
-    for (QPoint* ptr {points.begin()}; ptr != points.end(); ++ptr)
-    {
-        point.setX(ptr->x());
-        point.setY(ptr->y());
+    void draw(QPaintDevice* device, QPainter* painter) override;
+    void move(const int newX, const int newY) override;
+    double perimeter() override;
+    double area() override;
 
-        this->points.push_back(point);
-    }
-}
+    int getX(int pointNum) const;
+    int getY(int pointNum) const;
+    Vector<QPoint> getPointVector();
 
+    void setX(int value, int point);
+    void setY(int value, int point);
 
-Polyline::~Polyline() { }
+private:
+    int pointCount;
+    Vector<QPoint> points;
+};
 
-
-void Polyline::draw(QPaintDevice* device, QPainter* painter)
-{
-    QPoint qPoints[pointCount];
-
-    for (int i {0}; i < pointCount; ++i)
-        qPoints[i] = points[i];
-
-    painter->begin(device);
-    painter->setPen(getPen());
-    painter->setBrush(getBrush());
-    painter->drawPolyline(qPoints, pointCount);
-    painter->end();
-}
-
-
-void Polyline::move(const int newX, const int newY)
-{
-    for (int k = 0; k < pointCount; k++)
-    {
-        points[k].setX(points[k].x() + newX);
-        points[k].setY(points[k].y() + newY);
-    }
-}
-
-
-double Polyline::perimeter()
-{
-  return -1;
-}
-
-
-double Polyline::area()
-{
-  return -1;
-}
-
-
-int Polyline::getX(int pointNum) const
-{
-  return points[pointNum].x();
-}
-
-int Polyline::getY(int pointNum) const
-{
-  return points[pointNum].y();
-}
-
-
-void Polyline::setX(int value, int point)
-{
-    QPoint* qPoint { &points[point] };
-
-    qPoint->setX(value);
-}
-
-void Polyline::setY(int value, int point)
-{
-    QPoint* qPoint { &points[point] };
-
-    qPoint->setY(value);
-}
-
+#endif
