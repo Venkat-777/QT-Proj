@@ -2,6 +2,7 @@
 #define SHAPEWINDOW_H
 
 #include <QMainWindow>
+#include "shapemanager.h"
 
 namespace Ui {
 class ShapeWindow;
@@ -70,6 +71,8 @@ public:
 
 private:
     Ui::ShapeWindow *ui;
+    // Canvas canvas (not yet defined!)
+    ShapeManager    shapeManager;
 };
 
 #endif // SHAPEWINDOW_H
