@@ -24,10 +24,9 @@ class Shape
     *     shape  (ShapeType)    : The type of shape                              *
     * ---------------------------------------------------------------------------*
     * POST-CONDITIONS:                                                           *
-    *     If arguments are provided, the shape will have instatiated a QPainter, *
-    *     an shape-id and shape-type will have been set.                         *
+    *     The ShapeType and the id will be set, all others will be zero.         *
     ******************************************************************************/
-    Shape(QPaintDevice* device = nullptr, int id = -1, ShapeType shape = ShapeType::None);
+//    Shape(int id = -1, ShapeType shape = ShapeType::None);
 
 
     /*****************************************************************************
@@ -40,17 +39,32 @@ class Shape
     *  PRE-CONDITIONS:                                                           *
     *   The following parameters need a defined argument                         *
     *                                                                            *
-    *     device (QPaintDivice) : The widget to do the paining on                *
     *     id     (int)          : The shapes id                                  *
     *     shape  (ShapeType)    : The type of shape                              *
     *     pen    (QPen)         : The pen to draw the outline of the shape       *
     *     brush  (QBrush)       : The brush to fill in the shape with            *
     * ---------------------------------------------------------------------------*
     * POST-CONDITIONS:                                                           *
-    *     If arguments are provided, the shape will have instatiated a QPainter, *
-    *     an shape-id and shape-type will have been set.                         *
+    * Sets the Shapes id, ShapeType, Pen & Brush                                 *
     ******************************************************************************/
-    Shape(QPaintDevice* device, int id, ShapeType shape, QPen pen, QBrush brush);
+    Shape(int id, ShapeType shape, QPen pen, QBrush brush);
+
+
+    /*****************************************************************************
+    * Constructor:  Class Shape                                                  *
+    * ---------------------------------------------------------------------------*
+    *   This constructor will set id of the shape, all other values to 0         *
+    *                                                                            *
+    *   Note: This is an abstract class, objects of shape cannot be created      *
+    * ---------------------------------------------------------------------------*
+    *  PRE-CONDITIONS:                                                           *
+    *   The following parameters need a defined argument                         *
+    *                                                                            *
+    *     id (int) : The shapes id                                               *
+    * ---------------------------------------------------------------------------*
+    * POST-CONDITIONS:  Sets the Shapes id, all other values to 0                *
+    ******************************************************************************/
+    Shape(int id);
 
 
     /*****************************************************************************
@@ -325,29 +339,14 @@ class Shape
 
     /*** Pure Virtual Methods - To be defined by inherited classes  ***/
 
-    virtual void draw(QPaintDevice* device) = 0;
+    virtual void draw(QPaintDevice* device, QPainter* painter) = 0;
     virtual void move(const int translateX, const int translateY) = 0;
     virtual double  perimeter() = 0;
     virtual double  area()      = 0;
     /*----------------------------------------------------------------*/
 
 
-  protected:
-    /******************************************************************************
-    * Method getQPainter:  Class Shape                                            *
-    * ----------------------------------------------------------------------------*
-    *  Accessor;  Gets and returns a reference to the shapes Qpainter             *
-    * ----------------------------------------------------------------------------*
-    *  PRE-CONDITIONS:  <none>                                                    *
-    * ----------------------------------------------------------------------------*
-    * POST-CONDITIONS: Nothing will be modified                                   *
-    *         RETURNS: A reference to the QPainter                                *
-    *******************************************************************************/
-    QPainter& getQPainter() { return *painter; }
-
-
   private:
-    QPainter* painter;  // pointer to a QPainter object
     ShapeType shape;    // the type of shape
     int       id;       // the shapes id
     QPen      pen;      // pen for drawing the outline of the shape
