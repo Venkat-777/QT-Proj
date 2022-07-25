@@ -73,6 +73,16 @@ private:
     Ui::ShapeWindow *ui;
     // Canvas canvas (not yet defined!)
     ShapeManager    shapeManager;
+    
+private slots:
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_clicked();
+
+
+    void on_comboBox_currentTextChanged(const QString &arg1);
+
 };
 
 #endif // SHAPEWINDOW_H
