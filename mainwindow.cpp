@@ -22,8 +22,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    ui->label->setText("Team Email: midnightcoder@gmail.com");
-    ui->label_2->setText("Team Phone Number: 949-098-5673");
+    ui->label->setText("Team Name: Midnight Coder");
+    ui->label2->setText("Team Email: midnightcoder@gmail.com");
+    ui->label_3->setText("Team Phone Number: 949-098-5673");
 }
 
 
