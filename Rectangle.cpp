@@ -1,28 +1,30 @@
-#include "Rectangle.h" 
+#include "rectangle.h"
 
-Rectangle::Rectangle(QPaintDevice* device, int id)
-    : Shape(device, id, ShapeType::Rectangle), width { 0 }, length { 0 }, x { 0 }, y { 0 }
+Rectangle::Rectangle(int id)
+    : Shape(id), width { 0 }, length { 0 }, x { 0 }, y { 0 }
+{ }
+
+Rectangle::Rectangle(int id, int width, int length, QPen pen, QBrush brush, int x, int y)
+    : Shape(id, ShapeType::Rectangle, pen, brush), width { width }, length { length }, x { x }, y { y }
+{ }
+
+
+Rectangle::Rectangle(int id, Vector<QPoint> points, int length, int width)
+    : Shape(id), width { width }, length { length }, x { points[0].x() }, y { points[0].y() }
+{  }
+
+
+Rectangle::~Rectangle()
 {
 }
 
-Rectangle::Rectangle(QPaintDevice* device, int id, int width, int length, QPen pen, QBrush brush, int x = 0, int y = 0)
-    : Shape(device, id, ShapeType::Rectangle, pen, brush), width { width }, length { length }, x { x }, y { y }
+void Rectangle::draw(QPaintDevice* device, QPainter* painter)
 {
-}
-
-Rectangle::~Rectangle() 
-{
-}
-
-void Rectangle::draw(QPaintDevice* device)
-{
-    QPainter& painter = getQPainter();
-    
-    painter.begin(device);
-    painter.setPen(getPen());
-    painter.setBrush(getBrush());
-    painter.drawRect(x, y, width, length);
-    painter.end();
+    painter->begin(device);
+    painter->setPen(getPen());
+    painter->setBrush(getBrush());
+    painter->drawRect(x, y, width, length);
+    painter->end();
 }
 
 void Rectangle::move(const int x, const int y)
