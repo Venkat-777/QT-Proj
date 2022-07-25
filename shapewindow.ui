@@ -131,6 +131,76 @@
      </item>
     </layout>
    </widget>
+   <widget class="QGroupBox" name="shapeEditor">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>10</y>
+      <width>310</width>
+      <height>530</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Shape Editor</string>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>45</y>
+       <width>21</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ID:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="shapeComboBox">
+     <property name="geometry">
+      <rect>
+       <x>101</x>
+       <y>40</y>
+       <width>191</width>
+       <height>24</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLCDNumber" name="idLCD">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>40</y>
+       <width>31</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="digitCount">
+      <number>2</number>
+     </property>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>271</width>
+       <height>421</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="shapeForm"/>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="pWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>120</width>
+      <height>80</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
