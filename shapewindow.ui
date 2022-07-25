@@ -6,125 +6,138 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>369</width>
-    <height>596</height>
+    <width>1008</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>ShapeWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QFormLayout" name="formLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="addRemoveInfo">
-      <property name="text">
-       <string>ADD / REMOVE FORM: </string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="comboBox">
-      <item>
+   <widget class="QWidget" name="formLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>10</y>
+      <width>352</width>
+      <height>491</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="addRemoveInfo">
        <property name="text">
-        <string>Shapes</string>
+        <string>ADD / REMOVE FORM: </string>
        </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Polygon</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Polyline</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Secdialog</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Rectangle</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Ellipse</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Line</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="existShapeInfo">
-      <property name="text">
-       <string>Exsiting Shape:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QComboBox" name="comboBox_2"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="deleteInfo">
-      <property name="text">
-       <string>Click this Button to DELETE this shape -&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>DELETE</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="addInfo">
-      <property name="text">
-       <string>Clike this Button to ADD this shape -&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="text">
-       <string>ADD</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="shapeName">
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <item>
         <property name="text">
-         <string>   Shape</string>
+         <string>Shapes</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="addOrDelete">
+       </item>
+       <item>
         <property name="text">
-         <string>ADD? DELETE?</string>
+         <string>Polygon</string>
         </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
+       </item>
+       <item>
+        <property name="text">
+         <string>Polyline</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Secdialog</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Rectangle</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Ellipse</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Line</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="existShapeInfo">
+       <property name="text">
+        <string>Exsiting Shape:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="comboBox_2"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="addInfo">
+       <property name="text">
+        <string>Clike this Button to ADD this shape -&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>ADD</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="deleteInfo">
+       <property name="text">
+        <string>Click this Button to DELETE this shape -&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>DELETE</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout"/>
+     </item>
+     <item row="4" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="shapeName">
+         <property name="text">
+          <string>   Shape</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="addOrDelete">
+         <property name="text">
+          <string>ADD? DELETE?</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>369</width>
+     <width>1008</width>
      <height>21</height>
     </rect>
    </property>
@@ -144,8 +157,8 @@
      <y>105</y>
     </hint>
     <hint type="destinationlabel">
-     <x>327</x>
-     <y>209</y>
+     <x>357</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
@@ -160,8 +173,8 @@
      <y>130</y>
     </hint>
     <hint type="destinationlabel">
-     <x>305</x>
-     <y>200</y>
+     <x>357</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
