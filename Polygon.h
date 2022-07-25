@@ -1,5 +1,5 @@
-#ifndef POLYGON_H
-#define POLYGON_H
+#ifndef POLYLINE_H
+#define POLYLINE_H
 
 #include "shape.h"
 #include "vector.h"
@@ -7,27 +7,28 @@
 
 using namespace MC_Vec;
 
-class Polygon : public Shape
+class Polyline : public Shape
 {
-private:
-    int numOfPoints;
-    Vector<QPoint> points;
-
 public:
-    Polygon(int id = -1);
-    Polygon(int id, Vector<QPoint> points);
-    Polygon(int id, QPen pen, QBrush brush, Vector<QPoint> points, int numOfpoints);
-    ~Polygon() override;
+    Polyline(int id = -1);
+    Polyline(int id, Vector<QPoint> points);
+    ~Polyline() override;
 
     void draw(QPaintDevice* device, QPainter* painter) override;
-    void move(const int translateX, const int translateY) override;
+    void move(const int newX, const int newY) override;
     double perimeter() override;
     double area() override;
 
+    int getX(int pointNum) const;
+    int getY(int pointNum) const;
     Vector<QPoint> getPointVector();
 
-    void setX(int x, int coordNum);
-    void setY(int y, int coordNum);
+    void setX(int value, int point);
+    void setY(int value, int point);
+
+private:
+    int pointCount;
+    Vector<QPoint> points;
 };
 
 #endif
