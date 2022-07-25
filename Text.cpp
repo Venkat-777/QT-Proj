@@ -97,3 +97,7 @@ int Text::getY()
 {
     return y;
 }
+Qt::AlignmentFlag Text::getAlignment()
+{
+    return flag;
+}
