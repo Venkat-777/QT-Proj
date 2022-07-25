@@ -1,4 +1,4 @@
-#include "polygon.h"
+#include "Polygon.h"
 
 Polygon::Polygon(int id) : Shape(id), numOfPoints {}, points {}
 {}
@@ -75,6 +75,11 @@ double Polygon::area()
     return -1;
 }
 
+Vector<QPoint> Polygon::getPointVector()
+{
+    return points;
+}
+
 void Polygon::setX(int x,int coordNum)
 {
     QPoint* point { &points[coordNum] };
@@ -88,3 +93,4 @@ void Polygon::setY(int y,int coordNum)
 
     point->setY(y);
 }
+
