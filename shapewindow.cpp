@@ -9,8 +9,8 @@
 #include <QSpinBox>
 #include <QIcon>
 
-ShapeWindow::ShapeWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::ShapeWindow)
+ShapeWindow::ShapeWindow(QWidget *parent) // update to pass our canvas widget as parent!!
+    : QMainWindow(parent), ui(new Ui::ShapeWindow), shapeManager(parent)
 {
     ui->setupUi(this);
 
@@ -623,3 +623,4 @@ void ShapeWindow::changeTextAllignment(QString allignment){}
 void ShapeWindow::changeTextFontFamily(QString fontFamily){}
 void ShapeWindow::changeTextFontStyle(QString fontStyle)  {}
 void ShapeWindow::changeTextFontWeight(QString fontWeight){}
+
