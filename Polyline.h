@@ -2,28 +2,32 @@
 #define POLYLINE_H
 
 #include "shape.h"
-const int SIZE = 50;
+#include "vector.h"
+#include <QPoint>
+
+using namespace MC_Vec;
 
 class Polyline : public Shape
 {
 public:
-    Polyline(QPaintDevice* device = nullptr, int id = -1);
-    Polyline(QPaintDevice* device, int id, QPen pen, QBrush brush, QPointF* points, int pointCount);
+    Polyline(int id = -1);
+    Polyline(int id, Vector<QPoint> points);
     ~Polyline() override;
-    
-    void draw(QPaintDevice* device) override;
+
+    void draw(QPaintDevice* device, QPainter* painter) override;
     void move(const int newX, const int newY) override;
     double perimeter() override;
     double area() override;
-    
-    void setNewCoords(int pointNum, int newX, int newY); 
-    
+
     int getX(int pointNum) const;
     int getY(int pointNum) const;
-    
+
+    void setX(int value, int point);
+    void setY(int value, int point);
+
 private:
     int pointCount;
-    QPointF points[SIZE];
+    Vector<QPoint> points;
 };
 
 #endif
