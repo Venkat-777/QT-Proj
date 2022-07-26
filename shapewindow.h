@@ -61,7 +61,7 @@ public:
 
 
     // change text settings
-    void changeText(QString);
+    void changeText();
     void changeTextPointSize(int);
     void changeTextColor(QString);
     void changeTextAllignment(QString);
