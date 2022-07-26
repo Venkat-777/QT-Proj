@@ -526,11 +526,54 @@ void ShapeWindow::changeTextFontFamily(QString fontFamily){}
 void ShapeWindow::changeTextFontStyle(QString fontStyle)  {}
 void ShapeWindow::changeTextFontWeight(QString fontWeight){}
 
+int biggestId(){
+    int id = 0;
+    return id;
+}
+
+
 void ShapeWindow::on_pushButton_2_clicked()
 {
+    Vector<Shape*>vector;
+    Vector<QPoint>shapeP;
+    QPoint points;
+    points.setX(10);
+    points.setX(10);
+    shapeP.push_back(points);
     QString currentShape;
     currentShape=ui->allShapes->currentText();
-    //shapeManager.addShape(/*Place Holder*/);
+    if (currentShape == "Rectangle"){
+        int id = biggestId() + 1;
+        Rectangle add(id);
+        vector.push_back(&add);
+        shapeManager.addShape(&add);
+    } else if (currentShape == "Line"){
+        int id = biggestId() + 1;
+        Line add(id);
+        vector.push_back(&add);
+        shapeManager.addShape(&add);
+    } else if (currentShape == "Ellipse"){
+        int id = biggestId() + 1;
+        Ellipse add(id);
+        vector.push_back(&add);
+        shapeManager.addShape(&add);
+    } else if (currentShape == "Polygon"){
+        int id = biggestId() + 1;
+        Polygon add(id);
+        vector.push_back(&add);
+        shapeManager.addShape(&add);
+    } else if (currentShape == "Polyline"){
+        int id = biggestId() + 1;
+        Polyline add(id);
+        vector.push_back(&add);
+        shapeManager.addShape(&add);
+    } else if (currentShape == "Text"){
+        int id = biggestId() + 1;
+        Text add(id);
+        vector.push_back(&add);
+        shapeManager.addShape(&add);
+    }
+
     ui->addOrDelete->setText(" is Added.");
 }
 
@@ -620,5 +663,3 @@ void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
         }
     }
 }
-
-
