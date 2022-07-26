@@ -1,10 +1,6 @@
 #include "shapewindow.h"
 #include "ui_shapewindow.h"
 
-#include "shape.h"
-#include "Polygon.h"
-#include "vector.h"
-
 #include <QHBoxLayout>
 #include <QString>
 #include <QLabel>
@@ -12,38 +8,50 @@
 #include <QComboBox>
 #include <QSpinBox>
 #include <QIcon>
-#include <vector>
 
 
 ShapeWindow::ShapeWindow(QWidget *parent) // update to pass our canvas widget as parent!!
-    : QMainWindow(parent), ui(new Ui::ShapeWindow), shapeManager(parent)
+    : QMainWindow(parent), ui(new Ui::ShapeWindow), shapeManager(this)
 {
     ui->setupUi(this);
 
-    // Placeholders until we get the actual shapes
-    ui->shapeComboBox->addItem(/*(QIcon)":/img/rectangle.png",*/ (QString)"Rectangle");
-    ui->shapeComboBox->addItem(/*(QIcon)":/img/ellipse.png",  */ (QString)"Ellipse");
-    ui->shapeComboBox->addItem(/*(QIcon)":/img/polygon.png",  */ (QString)"Polygon");
-    ui->shapeComboBox->addItem(/*(QIcon)":/img/polyline.png", */ (QString)"Polyline");
-    ui->shapeComboBox->addItem(/*(QIcon)":/img/line.png",     */ (QString)"Line");
-    ui->shapeComboBox->addItem(/*(QIcon)":/img/text.png",     */ (QString)"Text");
+    shapeManager.ReadShapeFile("V:/QT Workspace/MidnightCoder/shapes.txt");
 
-    // connection to signal the selected shape
-    QObject::connect(ui->shapeComboBox, &QComboBox::currentIndexChanged,
-                     this,              &ShapeWindow::getSelectedShape);
+//    for (auto shape : shapeManager.getShapes())
+//    {
+//        qDebug() << shape->getID();
+//    }
+
+//    // Placeholders until we get the actual shapes
+//    ui->shapeComboBox->addItem(/*(QIcon)":/img/rectangle.png",*/ (QString)"Rectangle");
+//    ui->shapeComboBox->addItem(/*(QIcon)":/img/ellipse.png",  */ (QString)"Ellipse");
+//    ui->shapeComboBox->addItem(/*(QIcon)":/img/polygon.png",  */ (QString)"Polygon");
+//    ui->shapeComboBox->addItem(/*(QIcon)":/img/polyline.png", */ (QString)"Polyline");
+//    ui->shapeComboBox->addItem(/*(QIcon)":/img/line.png",     */ (QString)"Line");
+//    ui->shapeComboBox->addItem(/*(QIcon)":/img/text.png",     */ (QString)"Text");
+
+//    // connection to signal the selected shape
+//    QObject::connect(ui->shapeComboBox, &QComboBox::currentIndexChanged,
+//                     this,              &ShapeWindow::getSelectedShape);
 
     // update to set with the id of the first shape
-    ui->idLCD->display(2);
-    ui->idLCD->setPalette(Qt::black);
+//    ui->idLCD->display(2);
+//    ui->idLCD->setPalette(Qt::black);
 
-    // initialize with first shape
-    displayRectangleForm();
+//    // initialize with first shape
+//    displayRectangleForm();
 }
 
 
 ShapeWindow::~ShapeWindow()
 {
     delete ui;
+}
+
+
+void ShapeWindow::paintEvent(QPaintEvent* event)
+{
+    shapeManager.drawShapes();
 }
 
 
@@ -525,141 +533,3 @@ void ShapeWindow::changeTextAllignment(QString allignment){}
 void ShapeWindow::changeTextFontFamily(QString fontFamily){}
 void ShapeWindow::changeTextFontStyle(QString fontStyle)  {}
 void ShapeWindow::changeTextFontWeight(QString fontWeight){}
-
-int biggestId(){
-    int id = 0;
-    return id;
-}
-
-
-void ShapeWindow::on_pushButton_2_clicked()
-{
-    Vector<Shape*>vector;
-    Vector<QPoint>shapeP;
-    QPoint points;
-    points.setX(10);
-    points.setX(10);
-    shapeP.push_back(points);
-    QString currentShape;
-    currentShape=ui->allShapes->currentText();
-    if (currentShape == "Rectangle"){
-        int id = biggestId() + 1;
-        Rectangle add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
-    } else if (currentShape == "Line"){
-        int id = biggestId() + 1;
-        Line add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
-    } else if (currentShape == "Ellipse"){
-        int id = biggestId() + 1;
-        Ellipse add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
-    } else if (currentShape == "Polygon"){
-        int id = biggestId() + 1;
-        Polygon add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
-    } else if (currentShape == "Polyline"){
-        int id = biggestId() + 1;
-        Polyline add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
-    } else if (currentShape == "Text"){
-        int id = biggestId() + 1;
-        Text add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
-    }
-
-    ui->addOrDelete->setText(" is Added.");
-}
-
-
-void ShapeWindow::on_pushButton_clicked()
-{
-    QMessageBox::StandardButton reply =
-                QMessageBox::question(this, "Delete", "Are you sure you want to delete?"/*OPTIONAL: , QMessageBox::YES | QMessageBox::NO*/);
-        if (reply == QMessageBox::Yes){
-            int currentId = 0;
-            currentId=ui->selectedShapes->currentIndex();
-            shapeManager.removeShape(currentId);
-            ui->addOrDelete->setText(" is Deleted.");
-        }
-}
-
-
-void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
-{
-    ui->shapeName->setText(arg1);
-    shapeManager.ReadShapeFile("Shape.txt");
-    //read.ReadShapeFile("Shape.txt");
-    Vector<Shape*>vector /* = PLACE HOLDER*/;
-    //vector = read.getShapeVector();
-
-    QString currentShape;
-    currentShape=ui->allShapes->currentText();
-
-    if (currentShape == "Polygon"){
-        ui->selectedShapes->addItem("Here are the Polygons");
-
-        for (int i = 0; i != vector.size(); i++){
-            if (vector[i]->getShape() == Shape::ShapeType::Polygon){
-                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
-            }
-        }
-
-    }   else if (currentShape == "Ellipse")
-    {
-        ui->selectedShapes->addItem("Here are the Ellipse");
-        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
-
-        for (int i = 0; i != vector.size(); i++){
-            if (vector[i]->getShape() == Shape::ShapeType::Ellipse){
-                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
-            }
-        }
-    }   else if (currentShape == "Line")
-    {
-        ui->selectedShapes->addItem("Here are the Line");
-        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
-
-        for (int i = 0; i != vector.size(); i++){
-            if (vector[i]->getShape() == Shape::ShapeType::Line){
-                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
-            }
-        }
-    }   else if (currentShape == "Polyline")
-    {
-        ui->selectedShapes->addItem("Here are the Polyline");
-        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
-
-        for (int i = 0; i != vector.size(); i++){
-            if (vector[i]->getShape() == Shape::ShapeType::Polyline){
-                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
-            }
-        }
-    }   else if (currentShape == "Rectangle")
-    {
-        ui->selectedShapes->addItem("Here are the Rectangle");
-        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
-
-        for (int i = 0; i != vector.size(); i++){
-            if (vector[i]->getShape() == Shape::ShapeType::Rectangle){
-                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
-            }
-        }
-    }   else if (currentShape == "Text")
-    {
-        ui->selectedShapes->addItem("Here are the Text");
-        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
-
-        for (int i = 0; i != vector.size(); i++){
-            if (vector[i]->getShape() == Shape::ShapeType::Text){
-                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
-            }
-        }
-    }
-}
