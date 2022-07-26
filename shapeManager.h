@@ -1,16 +1,16 @@
-#ifndef SORTSHAPES_H
-#define SORTSHAPES_H
+#ifndef SHAPEMANAGER_H
+#define SHAPEMANAGER_H
 
 // enumeration conversion database
 #include "conversions.h"
 
 // shape includes
 #include "shape.h"
-#include "Line.h"
-#include "Polyline.h"
-#include "Polygon.h"
-#include "Rectangle.h"
-#include "Ellipse.h"
+#include "line.h"
+#include "polyline.h"
+#include "polygon.h"
+#include "rectangle.h"
+#include "ellipse.h"
 #include "text.h"
 
 // vector includes
@@ -22,11 +22,10 @@
 #include <fstream>
 
 // using namespaces
-using std::shared_ptr;
 using std::string;
 using std::ifstream;
 using std::ofstream;
-using MC_Vec::Vector;
+using namespace MC_Vec;
 
 
 /*******************************************************************************
@@ -65,7 +64,7 @@ class ShapeManager
 
   /*******************************************************
   * PARSER PARSER PARSER PARSER PARSER PARSER PARSER
-  ********************************************************
+  ********************************************************/
     /*****************************************************************************
     * Method ReadShapeFile: Class Parser                                         *
     *----------------------------------------------------------------------------*
@@ -85,7 +84,7 @@ class ShapeManager
 
   /*******************************************************
   * SERIALIZER SERIALIZER SERIALIZER SERIALIZER SERIALIZER
-  ********************************************************
+  ********************************************************/
     /*****************************************************************************
     * Method SaveFile:  Class Parser                                             *
     *----------------------------------------------------------------------------*
@@ -108,14 +107,14 @@ class ShapeManager
   private:
     QPaintDevice*  device;
     QPainter*      painter;
+    Vector<Shape*> shapes;
+    Shape*         currentShape;
 
-    Shape* currentShape;                // PROC & PROC - a single shape
-    MC_Vec::Vector<Shape*> shapeVector; // PROC & PROC - a vector containing all
-                                        //               shapes read from input file
+
 
  /*******************************************************
   * PARSER PARSER PARSER PARSER PARSER PARSER PARSER
-  *******************************************************
+  *******************************************************/
     /*****************************************************************************
     * Method ReadDelimiter:  Class Parser                                        *
     *----------------------------------------------------------------------------*
@@ -221,7 +220,7 @@ class ShapeManager
 
   /*******************************************************
   * SERIALIZER SERIALIZER SERIALIZER SERIALIZER SERIALIZER
-  ********************************************************
+  ********************************************************/
     /*****************************************************************************
     * Method OutputToFile:  Class Parser                                         *
     *----------------------------------------------------------------------------*
@@ -280,8 +279,7 @@ class ShapeManager
     *   provided.                                                                *
     *****************************************************************************/
     string EnumToString(const int& enumTypeValue, const int& enumListValue);
-
 };
 
 
-#endif // SORTSHAPES_H
+#endif // SHAPEMANAGER_H
