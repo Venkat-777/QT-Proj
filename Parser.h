@@ -18,6 +18,7 @@
 #include "vector.h"
 
 // pre-processor directives
+#include <iostream>
 #include <string>
 #include <fstream>
 

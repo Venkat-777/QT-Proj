@@ -800,7 +800,59 @@ void Parser::OutputToFile(ofstream& fileName, Shape* shape, const Output& a, con
             // print shape information to file
             case 1  : fileName << "ShapeId: "   << shape -> getID() << '\n';
                       fileName << "ShapeType: " << EnumToString(int(shape -> getShape()), convert::SHAPES) << '\n';
-/*FIX HERE*/          fileName << "ShapeDimensions: TBD" << '\n';
+                      fileName << "ShapeDimensions: ";
+                      if(shape -> getShape() == Shape::ShapeType::Line)
+                      {
+                          fileName << static_cast<Line*>(shape) -> getX1() << ", " << static_cast<Line*>(shape) -> getY1() << ", "
+                                   << static_cast<Line*>(shape) -> getX2() << ", " << static_cast<Line*>(shape) -> getY2();
+                      }
+                      if(shape -> getShape() == Shape::ShapeType::Polyline)
+                      {
+                          Vector<QPoint> tempPoints = static_cast<Polyline*>(shape) -> getPointVector();
+                          for(int i = 0 ; i < tempPoints.size() ; i++)
+                          {
+                              fileName << tempPoints[i].x() << ", " << tempPoints[i].y();
+                              if(i != tempPoints.size() - 1)
+                                  fileName << ", ";
+                          }
+                      }
+                      if(shape -> getShape() == Shape::ShapeType::Polygon)
+                      {
+                          Vector<QPoint> tempPoints = static_cast<Polygon*>(shape) -> getPointVector();
+                          for(int i = 0 ; i < tempPoints.size() ; i++)
+                          {
+                              fileName << tempPoints[i].x() << ", " << tempPoints[i].y();
+                              if(i != tempPoints.size() - 1)
+                                  fileName << ", ";
+                          }
+
+                      }
+                      if(shape -> getShape() == Shape::ShapeType::Rectangle)
+                      {
+                          fileName << static_cast<Rectangle*>(shape) -> getX()      << ", " << static_cast<Rectangle*>(shape) -> getY() << ", "
+                                   << static_cast<Rectangle*>(shape) -> getLength() << ", " << static_cast<Rectangle*>(shape) -> getWidth();
+                      }
+                      if(shape -> getShape() == Shape::ShapeType::Ellipse)
+                      {
+                          fileName << static_cast<Ellipse*>(shape) -> getX()      << ", " << static_cast<Ellipse*>(shape) -> getY() << ", "
+                                   << static_cast<Ellipse*>(shape) -> getWidth()  << ", " << static_cast<Ellipse*>(shape) -> getLength();
+                      }
+                      if(shape -> getShape() == Shape::ShapeType::Text)
+                      {
+                          fileName << static_cast<Text*>(shape) -> getX()      << ", " << static_cast<Text*>(shape) -> getY() << ", "
+                                   << static_cast<Text*>(shape) -> getLength() << ", " << static_cast<Text*>(shape) -> getWidth();
+                      }
+                      if(shape -> getShape() == Shape::ShapeType::Circle)
+                      {
+                          fileName << static_cast<Ellipse*>(shape) -> getX()      << ", " << static_cast<Ellipse*>(shape) -> getY() << ", "
+                                   << static_cast<Ellipse*>(shape) -> getLength();
+                      }
+                      if(shape -> getShape() == Shape::ShapeType::Square)
+                      {
+                          fileName << static_cast<Rectangle*>(shape) -> getX()      << ", " << static_cast<Rectangle*>(shape) -> getY() << ", "
+                                   << static_cast<Rectangle*>(shape) -> getLength();
+                      }
+                      fileName << '\n';
                       break;
 
             // prints pen information to file
@@ -820,11 +872,11 @@ void Parser::OutputToFile(ofstream& fileName, Shape* shape, const Output& a, con
             case 4  : tempFont = static_cast<Text*>(shape) -> getFont();
                       fileName << "TextString: "     << static_cast<Text*>(shape) -> getText().toStdString()           << '\n';
                       fileName << "TextColor: "      << QColorToString(shape -> getPen().color().name().toStdString()) << '\n';
-/*FIX HERE*/          fileName << "TextAlignment: "  << '\n';
-                      fileName << "TextPointSize: "  << tempFont.pointSize() << '\n';
-                      fileName << "TextFontFamily: " << tempFont.family().toStdString() << '\n';
-                      fileName << "TextFontStyle: "  << EnumToString(tempFont.style(), convert::FONT_STYLE)   << '\n';
-                      fileName << "TextFontWeight: " << EnumToString(tempFont.weight(), convert::FONT_WEIGHT) << '\n';
+                      fileName << "TextAlignment: "  << EnumToString(static_cast<Text*>(shape) -> getAlignment(), convert::ALIGNMENT_FLAG) << '\n';
+                      fileName << "TextPointSize: "  << static_cast<Text*>(shape) -> getFont().pointSize() << '\n';
+                      fileName << "TextFontFamily: " << static_cast<Text*>(shape) -> getFont().family().toStdString() << '\n';
+                      fileName << "TextFontStyle: "  << EnumToString(static_cast<Text*>(shape) -> getFont().style(), convert::FONT_STYLE)   << '\n';
+                      fileName << "TextFontWeight: " << EnumToString(static_cast<Text*>(shape) -> getFont().weight(), convert::FONT_WEIGHT);
                       break;
 
         } // END SWITCH
