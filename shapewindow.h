@@ -2,7 +2,7 @@
 #define SHAPEWINDOW_H
 
 #include <QMainWindow>
-#include "shapemanager.h"
+#include "shapeManager.h"
 
 namespace Ui {
 class ShapeWindow;
