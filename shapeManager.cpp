@@ -1,7 +1,7 @@
 #include "shapemanager.h"
 
 ShapeManager::ShapeManager(QPaintDevice* device)
-   : shapes {}, device { device }, painter { new QPainter } {}
+   : device { device }, painter { new QPainter }, shapes{}, currentShape {nullptr} {}
 
 
 
@@ -95,8 +95,7 @@ void ShapeManager::sortShapes(bool (*compare)(Shape*, Shape*))
 
 /*******************************************************
  * PARSER PARSER PARSER PARSER PARSER PARSER [begin]
- *******************************************************
-
+ *******************************************************/
 /*****************************************************************************
 * Method ReadShapeFile: Class ShapeManager                                   *
 *----------------------------------------------------------------------------*
@@ -112,7 +111,7 @@ void ShapeManager::sortShapes(bool (*compare)(Shape*, Shape*))
 *   This method will update the shape vector to the contents of the file     *
 *   provided.                                                                *
 *****************************************************************************/
-void Parser::ReadShapeFile(const string fileName)
+void ShapeManager::ReadShapeFile(const string fileName)
 {
     /*************************************************************************
     * variables                                                              *
@@ -261,7 +260,7 @@ void Parser::ReadShapeFile(const string fileName)
 
 
         // store created shape into the vector
-        shapeVector.push_back(currentShape);
+        shapes.push_back(currentShape);
 
         // ignore empty line between shapes in the input file
         inFile.ignore(1000, '\n');
@@ -296,7 +295,7 @@ void Parser::ReadShapeFile(const string fileName)
 *  POST-CONDITIONS:                                                          *
 *   Advances the file marker in the input file.                              *
 *****************************************************************************/
-void Parser::ReadDelimiter(ifstream& fileName, char delimiter)
+void ShapeManager::ReadDelimiter(ifstream& fileName, char delimiter)
 {
     // ignore everything prior and including the delimiter
     fileName.ignore(1000, delimiter);
@@ -328,7 +327,7 @@ void Parser::ReadDelimiter(ifstream& fileName, char delimiter)
 *          dimA          -  updated to length/width/minor/major/radius dim   *
 *          dimB          -  updated to length/width/minor/major/radius dim   *
 *****************************************************************************/
-void Parser::ReadDimensions(ifstream& fileName, const Shape::ShapeType& shapeType, Vector<QPoint>& definePoints, int& dimA, int& dimB)
+void ShapeManager::ReadDimensions(ifstream& fileName, const Shape::ShapeType& shapeType, Vector<QPoint>& definePoints, int& dimA, int& dimB)
 {
     /*************************************************************************
     * variables                                                              *
@@ -447,7 +446,7 @@ void Parser::ReadDimensions(ifstream& fileName, const Shape::ShapeType& shapeTyp
 *   This method will update the following parameters:                        *
 *         shapePen -   the properties of the pen                             *
 *****************************************************************************/
-void Parser::ReadPenProperties(ifstream& fileName, QPen& shapePen)
+void ShapeManager::ReadPenProperties(ifstream& fileName, QPen& shapePen)
 {
     /*************************************************************************
     * variables                                                              *
@@ -549,7 +548,7 @@ void Parser::ReadPenProperties(ifstream& fileName, QPen& shapePen)
 *   This method will update the following parameters:                        *
 *         shapeBrush -   the properties of the brush                         *
 *****************************************************************************/
-void Parser::ReadBrushProperties(ifstream& fileName, QBrush& shapeBrush)
+void ShapeManager::ReadBrushProperties(ifstream& fileName, QBrush& shapeBrush)
 {
     /*************************************************************************
     * variables                                                              *
@@ -614,7 +613,7 @@ void Parser::ReadBrushProperties(ifstream& fileName, QBrush& shapeBrush)
 *         textFont      - the text font properties                           *
 *         textAlignFlag - the text alignment properties                      *
 *****************************************************************************/
-void Parser::ReadTextProperties(ifstream& fileName, QPen& shapePen, QString& text, QFont& textFont, Qt::AlignmentFlag& textAlignFlag)
+void ShapeManager::ReadTextProperties(ifstream& fileName, QPen& shapePen, QString& text, QFont& textFont, Qt::AlignmentFlag& textAlignFlag)
 {
     /*************************************************************************
     * variables                                                              *
@@ -719,14 +718,10 @@ void Parser::ReadTextProperties(ifstream& fileName, QPen& shapePen, QString& tex
 
 /*******************************************************
  * PARSER PARSER PARSER PARSER PARSER PARSER [end]
- *******************************************************
-
-
-
-
+ *******************************************************/
 /*******************************************************
 * SERIALIZER SERIALIZER SERIALIZER SERIALIZER [begin]
-********************************************************
+********************************************************/
 /*****************************************************************************
 * Method SaveFile:  Class ShapeManager                                       *
 *----------------------------------------------------------------------------*
@@ -742,7 +737,7 @@ void Parser::ReadTextProperties(ifstream& fileName, QPen& shapePen, QString& tex
 *  POST-CONDITIONS:                                                          *
 *   This method will create an output file.                                  *
 *****************************************************************************/
-void Parser::SaveFile(const string& fileName)
+void ShapeManager::SaveFile(const string& fileName)
 {
     /*************************************************************************
     * variables                                                              *
@@ -756,10 +751,10 @@ void Parser::SaveFile(const string& fileName)
     outFile.open(fileName);
 
     // parse through shape vector and write it to output file
-    for(int index = 0 ; index < shapeVector.size() ; index++)
+    for(int index = 0 ; index < shapes.size() ; index++)
     {
         // get the current shape
-        shapeType = shapeVector[index] -> getShape();
+        shapeType = shapes[index] -> getShape();
 
         // determine which shape and contents to write to file
         // typecast enumerated type to an integer
@@ -769,41 +764,41 @@ void Parser::SaveFile(const string& fileName)
             case 0: break;
 
             // line
-            case 1: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO);
+            case 1: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO);
                     outFile << '\n';
                     break;
 
             // polyline
-            case 2: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO);
+            case 2: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO);
                     outFile << '\n';
                     break;
 
             // polygon
-            case 3: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+            case 3: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
                     outFile << '\n';
                     break;
 
             // rectangle
-            case 4: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+            case 4: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
                     outFile << '\n';
                     break;
 
             // ellipse
-            case 5: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+            case 5: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
                     outFile << '\n';
                     break;
 
             // text
-            case 6: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, TEXT_INFO);
+            case 6: OutputToFile(outFile, shapes[index], SHAPE_INFO, TEXT_INFO);
                     break;
 
             // circle
-            case 7: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+            case 7: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
                     outFile << '\n';
                     break;
 
             // square
-            case 8: OutputToFile(outFile, shapeVector[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
+            case 8: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
                     outFile << '\n';
                     break;
 
@@ -834,7 +829,7 @@ void Parser::SaveFile(const string& fileName)
 *  POST-CONDITIONS:                                                          *
 *   This method will create an output file.                                  *
 *****************************************************************************/
-void Parser::OutputToFile(ofstream& fileName, Shape* shape, const Output& a, const Output& b, const Output& c, const Output& d)
+void ShapeManager::OutputToFile(ofstream& fileName, Shape* shape, const Output& a, const Output& b, const Output& c, const Output& d)
 {
     /*************************************************************************
     * CONSTANTS                                                              *
@@ -970,7 +965,7 @@ void Parser::OutputToFile(ofstream& fileName, Shape* shape, const Output& a, con
 *  POST-CONDITIONS:                                                          *
 *   This method returns a string that corresponds to the QColor passed in.   *
 *****************************************************************************/
-string Parser::QColorToString(const string& qcolor)
+string ShapeManager::QColorToString(const string& qcolor)
 {
     /*************************************************************************
     * variables                                                              *
@@ -1016,7 +1011,7 @@ string Parser::QColorToString(const string& qcolor)
 *   This method will return the corresponding string of the enumerated type  *
 *   provided.                                                                *
 *****************************************************************************/
-string Parser::EnumToString(const int& enumTypeValue, const int& enumListValue)
+string ShapeManager::EnumToString(const int& enumTypeValue, const int& enumListValue)
 {
     /*************************************************************************
     * variables                                                              *
@@ -1120,7 +1115,7 @@ string Parser::EnumToString(const int& enumTypeValue, const int& enumListValue)
 
 /*******************************************************
 * SERIALIZER SERIALIZER SERIALIZER SERIALIZER [end]
-********************************************************
+********************************************************/
 
 
 
