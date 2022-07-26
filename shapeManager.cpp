@@ -1,4 +1,4 @@
-#include "shapemanager.h"
+#include "shapeManager.h"
 
 ShapeManager::ShapeManager(QPaintDevice* device)
    : device { device }, painter { new QPainter }, shapes{}, currentShape {nullptr} {}
