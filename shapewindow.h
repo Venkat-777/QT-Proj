@@ -2,7 +2,8 @@
 #define SHAPEWINDOW_H
 
 #include <QMainWindow>
-#include "shapeManager.h"
+#include "shapemanager.h"
+
 
 namespace Ui {
 class ShapeWindow;
@@ -15,6 +16,8 @@ class ShapeWindow : public QMainWindow
 public:
     explicit ShapeWindow(QWidget *parent = nullptr);
     ~ShapeWindow();
+
+    void paintEvent(QPaintEvent* event);
 
     // Gets the text of selected shape from main combo box
     void getSelectedShape();
@@ -71,19 +74,7 @@ public:
 
 private:
     Ui::ShapeWindow *ui;
-    // Canvas canvas (not yet defined!)
-    ShapeManager    shapeManager;
-    
-private slots:
-
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_clicked();
-
-
-    //void on_comboBox_currentTextChanged(const QString &arg1);
-
-    void on_allShapes_currentTextChanged(const QString &arg1);
+    ShapeManager shapeManager;
 };
 
 #endif // SHAPEWINDOW_H
