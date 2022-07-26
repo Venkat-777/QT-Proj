@@ -528,14 +528,23 @@ void ShapeWindow::changeTextFontWeight(QString fontWeight){}
 
 void ShapeWindow::on_pushButton_2_clicked()
 {
-    //ShapeManager::addShape();
+    QString currentShape;
+    currentShape=ui->allShapes->currentText();
+    //shapeManager.addShape(/*Place Holder*/);
     ui->addOrDelete->setText(" is Added.");
 }
 
 
 void ShapeWindow::on_pushButton_clicked()
 {
-    ui->addOrDelete->setText(" is Deleted.");
+    QMessageBox::StandardButton reply =
+                QMessageBox::question(this, "Delete", "Are you sure you want to delete?"/*OPTIONAL: , QMessageBox::YES | QMessageBox::NO*/);
+        if (reply == QMessageBox::Yes){
+            int currentId = 0;
+            currentId=ui->selectedShapes->currentIndex();
+            shapeManager.removeShape(currentId);
+            ui->addOrDelete->setText(" is Deleted.");
+        }
 }
 
 
@@ -611,4 +620,5 @@ void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
         }
     }
 }
+
 
