@@ -512,7 +512,7 @@ void ShapeWindow::changeBrushStyle(QString color){}
 
 
 // Change Text settings
-void ShapeWindow::changeText(QString text){}
+void ShapeWindow::changeText(){}
 void ShapeWindow::changeTextPointSize(int pointSize) {}
 void ShapeWindow::changeTextColor(QString color)     {}
 void ShapeWindow::changeTextAllignment(QString allignment){}
