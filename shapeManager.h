@@ -6,11 +6,11 @@
 
 // shape includes
 #include "shape.h"
-#include "Line.h"
-#include "Polyline.h"
-#include "Polygon.h"
-#include "Rectangle.h"
-#include "Ellipse.h"
+#include "line.h"
+#include "polyline.h"
+#include "polygon.h"
+#include "rectangle.h"
+#include "ellipse.h"
 #include "text.h"
 
 // vector includes
@@ -51,6 +51,8 @@ class ShapeManager
 
     ShapeManager& operator=(const ShapeManager&) = delete;
     ShapeManager& operator=(ShapeManager&&)      = delete;
+
+    Vector<Shape*>& getShapes() { return shapes; }
 
     Shape* getShape(int id) const;
 
