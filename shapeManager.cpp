@@ -1,4 +1,4 @@
-#include "shapeManager.h"
+#include "shapemanager.h"
 
 ShapeManager::ShapeManager(QPaintDevice* device)
    : device { device }, painter { new QPainter }, shapes{}, currentShape {nullptr} {}
@@ -45,36 +45,18 @@ void ShapeManager::removeShape(int id)
     Shape** sp   { shapes.begin() };
     Shape* shape { nullptr };
 
-    try
+    while (sp != shapes.end())
     {
-        if (shapes.size() == 0)
-        {
-            throw "Error: Shapes is Empty.";
-        }
-        else
-        {
-            while (sp != shapes.end())
-            {
-                shape = *sp;
+        shape = *sp;
 
-                if (shape->getID() == id)
-                {
-                    shapes.erase(sp);
-                }
-
-                ++sp;
-            }
+        if (shape->getID() == id)
+        {
+            shapes.erase(sp);
         }
-    }
-    catch (string errorMsg)
-    {
-        ofstream fout;
-        fout.open("ErrorLog.txt");
-        fout << errorMsg;
-        fout.close();
+
+        ++sp;
     }
 }
-
 
 
 
