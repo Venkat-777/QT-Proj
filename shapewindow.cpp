@@ -1,6 +1,10 @@
 #include "shapewindow.h"
 #include "ui_shapewindow.h"
 
+#include "shape.h"
+#include "Polygon.h"
+#include "vector.h"
+
 #include <QHBoxLayout>
 #include <QString>
 #include <QLabel>
@@ -8,6 +12,8 @@
 #include <QComboBox>
 #include <QSpinBox>
 #include <QIcon>
+#include <vector>
+
 
 ShapeWindow::ShapeWindow(QWidget *parent) // update to pass our canvas widget as parent!!
     : QMainWindow(parent), ui(new Ui::ShapeWindow), shapeManager(parent)
@@ -519,3 +525,90 @@ void ShapeWindow::changeTextAllignment(QString allignment){}
 void ShapeWindow::changeTextFontFamily(QString fontFamily){}
 void ShapeWindow::changeTextFontStyle(QString fontStyle)  {}
 void ShapeWindow::changeTextFontWeight(QString fontWeight){}
+
+void ShapeWindow::on_pushButton_2_clicked()
+{
+    //ShapeManager::addShape();
+    ui->addOrDelete->setText(" is Added.");
+}
+
+
+void ShapeWindow::on_pushButton_clicked()
+{
+    ui->addOrDelete->setText(" is Deleted.");
+}
+
+
+void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
+{
+    ui->shapeName->setText(arg1);
+    shapeManager.ReadShapeFile("Shape.txt");
+    //read.ReadShapeFile("Shape.txt");
+    Vector<Shape*>vector /* = PLACE HOLDER*/;
+    //vector = read.getShapeVector();
+
+    QString currentShape;
+    currentShape=ui->allShapes->currentText();
+
+    if (currentShape == "Polygon"){
+        ui->selectedShapes->addItem("Here are the Polygons");
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Polygon){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+
+    }   else if (currentShape == "Ellipse")
+    {
+        ui->selectedShapes->addItem("Here are the Ellipse");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Ellipse){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }   else if (currentShape == "Line")
+    {
+        ui->selectedShapes->addItem("Here are the Line");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Line){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }   else if (currentShape == "Polyline")
+    {
+        ui->selectedShapes->addItem("Here are the Polyline");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Polyline){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }   else if (currentShape == "Rectangle")
+    {
+        ui->selectedShapes->addItem("Here are the Rectangle");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Rectangle){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }   else if (currentShape == "Text")
+    {
+        ui->selectedShapes->addItem("Here are the Text");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Text){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }
+}
+
