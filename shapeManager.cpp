@@ -45,18 +45,36 @@ void ShapeManager::removeShape(int id)
     Shape** sp   { shapes.begin() };
     Shape* shape { nullptr };
 
-    while (sp != shapes.end())
+    try
     {
-        shape = *sp;
-
-        if (shape->getID() == id)
+        if (shapes.size() == 0)
         {
-            shapes.erase(sp);
+            throw "Error: Shapes is Empty.";
         }
+        else
+        {
+            while (sp != shapes.end())
+            {
+                shape = *sp;
 
-        ++sp;
+                if (shape->getID() == id)
+                {
+                    shapes.erase(sp);
+                }
+
+                ++sp;
+            }
+        }
+    }
+    catch (string errorMsg)
+    {
+        ofstream fout;
+        fout.open("ErrorLog.txt");
+        fout << errorMsg;
+        fout.close();
     }
 }
+
 
 
 
