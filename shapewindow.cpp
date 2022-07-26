@@ -658,7 +658,37 @@ void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
             }
         }
 
-    } else if (currentShape == "Rectangle")
+    }   else if (currentShape == "Ellipse")
+    {
+        ui->selectedShapes->addItem("Here are the Ellipse");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Ellipse){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }   else if (currentShape == "Line")
+    {
+        ui->selectedShapes->addItem("Here are the Line");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Line){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }   else if (currentShape == "Polyline")
+    {
+        ui->selectedShapes->addItem("Here are the Polyline");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
+
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Polyline){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
+    }   else if (currentShape == "Rectangle")
     {
         ui->selectedShapes->addItem("Here are the Rectangle");
         //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
@@ -668,6 +698,15 @@ void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
                 ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
             }
         }
+    }   else if (currentShape == "Text")
+    {
+        ui->selectedShapes->addItem("Here are the Text");
+        //ui->selectedShapes->addItem(QString::number(vector[1]->getID()));
 
+        for (int i = 0; i != vector.size(); i++){
+            if (vector[i]->getShape() == Shape::ShapeType::Text){
+                ui->selectedShapes->addItem(QString::number(vector[i]->getID()));
+            }
+        }
     }
 }
