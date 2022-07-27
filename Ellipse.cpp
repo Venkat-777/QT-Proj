@@ -80,3 +80,5 @@ int Ellipse::getLength() const
 {
     return length;
 }
+
+void ShapeManager::drawId(int id, int x, int y){}
