@@ -1,59 +1,30 @@
 #include "shapewindow.h"
 #include "ui_shapewindow.h"
 
-#include "shape.h"
-#include "Polygon.h"
-#include "vector.h"
-#include "Rectangle.h"
-#include "Line.h"
-#include "Polygon.h"
-#include "Polyline.h"
-#include "Ellipse.h"
-#include "text.h"
+// qDebug()
 
-#include <QHBoxLayout>
 #include <QString>
 #include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QSpinBox>
 #include <QIcon>
-#include <vector>
-#include <QMessageBox>
-//#include <qDebug>
-using namespace std;
+#include <QPen>
+
+using sType = Shape::ShapeType;  
+using qFlag = Qt::AlignmentFlag;
 
 
-ShapeWindow::ShapeWindow(QWidget *parent) // update to pass our canvas widget as parent!!
+ShapeWindow::ShapeWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::ShapeWindow), shapeManager(this)
 {
     ui->setupUi(this);
 
     shapeManager.ReadShapeFile("V:/QT Workspace/MidnightCoder/shapes.txt");
 
-//    for (auto shape : shapeManager.getShapes())
-//    {
-//        qDebug() << shape->getID();
-//    }
+    setupShapeEditor();
+    //shapeManager.SaveFile("V:/QT Workspace/MidnightCoder/shapes.txt");
 
-//    // Placeholders until we get the actual shapes
-//    ui->shapeComboBox->addItem(/*(QIcon)":/img/rectangle.png",*/ (QString)"Rectangle");
-//    ui->shapeComboBox->addItem(/*(QIcon)":/img/ellipse.png",  */ (QString)"Ellipse");
-//    ui->shapeComboBox->addItem(/*(QIcon)":/img/polygon.png",  */ (QString)"Polygon");
-//    ui->shapeComboBox->addItem(/*(QIcon)":/img/polyline.png", */ (QString)"Polyline");
-//    ui->shapeComboBox->addItem(/*(QIcon)":/img/line.png",     */ (QString)"Line");
-//    ui->shapeComboBox->addItem(/*(QIcon)":/img/text.png",     */ (QString)"Text");
-
-//    // connection to signal the selected shape
-//    QObject::connect(ui->shapeComboBox, &QComboBox::currentIndexChanged,
-//                     this,              &ShapeWindow::getSelectedShape);
-
-    // update to set with the id of the first shape
-//    ui->idLCD->display(2);
-//    ui->idLCD->setPalette(Qt::black);
-
-//    // initialize with first shape
-//    displayRectangleForm();
 }
 
 
@@ -65,7 +36,82 @@ ShapeWindow::~ShapeWindow()
 
 void ShapeWindow::paintEvent(QPaintEvent* event)
 {
+
     shapeManager.drawShapes();
+}
+
+void ShapeWindow::setupShapeEditor()
+{
+    QString shapeString;
+
+    ui->idLCD->display(shapeManager.getShapes()[0]->getID());
+    ui->idLCD->setPalette(Qt::black);
+
+    for (auto shape : shapeManager.getShapes())
+    {
+        shapeString = QString(QChar(shape->getID() + 48));
+
+        switch (shape->getShape())
+        {
+            case sType::Rectangle : shapeString.append(": Rectangle");
+                                    break;
+
+            case sType::Square    : shapeString.append(": Rectangle");
+                                    break;
+
+            case sType::Ellipse   : shapeString.append(": Ellipse");
+                                    break;
+
+            case sType::Circle    : shapeString.append(": Ellipse");
+                                    break;
+
+            case sType::Polygon   : shapeString.append(": Polygon");
+                                    break;
+
+            case sType::Polyline  : shapeString.append(": Polyline");
+                                    break;
+
+            case sType::Line      : shapeString.append(": Line");
+                                    break;
+
+            case sType::Text      : shapeString.append(": Text");
+                                    break;
+            default : break;
+        }
+
+        ui->shapeComboBox->addItem(/*(QIcon)"",*/ shapeString);
+    }
+
+    switch(shapeManager.getShapes()[0]->getShape())
+    {
+        case sType::Rectangle : displayRectangleForm();
+                                break;
+
+        case sType::Square    : displayRectangleForm();
+                                break;
+
+        case sType::Ellipse   : displayEllipseForm();
+                                break;
+
+        case sType::Circle    : displayEllipseForm();
+                                break;
+
+        case sType::Polygon   : displayPolygonForm();
+                                break;
+
+        case sType::Polyline  : displayPolylineForm();
+                                break;
+
+        case sType::Line      : displayLineForm();
+                                break;
+
+        case sType::Text      : displayTextForm();
+                                break;
+        default : break;
+    }
+
+    QObject::connect(ui->shapeComboBox, &QComboBox::currentIndexChanged,
+                     this,              &ShapeWindow::getSelectedShape);
 }
 
 
@@ -73,27 +119,33 @@ void ShapeWindow::getSelectedShape()
 {
     QString textShape { ui->shapeComboBox->currentText() };
 
+    ui->idLCD->display(textShape[0].digitValue());
+
     clearForm();
 
-    if (textShape == "Rectangle")
+    if (textShape.endsWith("Rectangle"))
     {
         displayRectangleForm();
     }
-    else if (textShape == "Ellipse")
+    else if (textShape.endsWith("Ellipse"))
     {
         displayEllipseForm();
     }
-    else if (textShape == "Line")
+    else if (textShape.endsWith("Line"))
     {
         displayLineForm();
     }
-    else if (textShape == "Text")
+    else if (textShape.endsWith("Text"))
     {
         displayTextForm();
     }
-    else if (textShape == "Polygon" || textShape == "Polyline")
+    else if (textShape.endsWith("Polygon"))
     {
-        displayPolyForm();
+        displayPolygonForm();
+    }
+    else if (textShape.endsWith("Polyline"))
+    {
+        displayPolylineForm();
     }
 
 }
@@ -101,12 +153,16 @@ void ShapeWindow::getSelectedShape()
 
 void ShapeWindow::displayRectangleForm()
 {
-     const QString labelsText[4] { "X:", "Y:", "Width:", "Height:" };
+    const QString labelsText[4] { "X:", "Y:", "Width:", "Height:" };
 
-     void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX,
-                                                  &ShapeWindow::changeY,
-                                                  &ShapeWindow::changeW,
-                                                  &ShapeWindow::changeH };
+    Rectangle* rect { dynamic_cast<Rectangle*>(shapeManager.getShape(ui->idLCD->value())) };
+
+    int dimensions[4] {rect->getX(), rect->getY(), rect->getWidth(), rect->getLength() };
+
+    void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX,
+                                                 &ShapeWindow::changeY,
+                                                 &ShapeWindow::changeW,
+                                                 &ShapeWindow::changeH };
     QSpinBox* spinBoxes[4];
 
     for (int index {0}; index < 4; ++index)
@@ -116,8 +172,7 @@ void ShapeWindow::displayRectangleForm()
         // set to the width of the canvas
         spinBoxes[index]->setMaximum(1400);
 
-        // Needs to set the current value of the shape!!
-        spinBoxes[index]->setValue(100);
+        spinBoxes[index]->setValue(dimensions[index]);
 
         ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -133,6 +188,10 @@ void ShapeWindow::displayEllipseForm()
 {
     const QString labelsText[4] { "X:", "Y:", "Minor Axis:", "Major Axis:" };
 
+    Ellipse* ellipse { dynamic_cast<Ellipse*>(shapeManager.getShape(ui->idLCD->value())) };
+
+    int dimensions[4] { ellipse->getX(), ellipse->getY(), ellipse->getWidth(), ellipse->getLength() };
+
     void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX,
                                                  &ShapeWindow::changeY,
                                                  &ShapeWindow::changeW,
@@ -146,8 +205,7 @@ void ShapeWindow::displayEllipseForm()
         // Set to the width of the canvas
         spinBoxes[index]->setMaximum(1400);
 
-        // Needs to set the current value of the shape!!
-        spinBoxes[index]->setValue(100);
+        spinBoxes[index]->setValue(dimensions[index]);
 
         ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -164,6 +222,10 @@ void ShapeWindow::displayLineForm()
 {
     const QString labelsText[4] { "X1:", "Y1:", "X2:", "Y2:"};
 
+    Line* line { dynamic_cast<Line*>(shapeManager.getShape(ui->idLCD->value())) };
+
+    int points[4] { line->getX1(), line->getY1(), line->getX2(), line->getY2() };
+
     void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX1,
                                                  &ShapeWindow::changeY1,
                                                  &ShapeWindow::changeX2,
@@ -177,8 +239,7 @@ void ShapeWindow::displayLineForm()
         // set to the width of the canvas.
         spinBoxes[index]->setMaximum(1400);
 
-        // Needs to set the current value of the shape!!
-        spinBoxes[index]->setValue(100);
+        spinBoxes[index]->setValue(points[index]);
 
         ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -191,11 +252,15 @@ void ShapeWindow::displayLineForm()
 
 
 
-void ShapeWindow::displayPolyForm()
+void ShapeWindow::displayPolygonForm()
 {
-    const QString labelsText[12] { "X1:", "Y1:", "X2:", "Y2:",
-                                   "X3:", "Y3:", "X4:", "Y4:",
-                                   "X5:", "Y5:", "X6:", "Y6:" };
+    const QString labelsText[8] { "X1:", "Y1:", "X2:", "Y2:",
+                                  "X3:", "Y3:", "X4:", "Y4:" };
+
+    Polygon* polygon { dynamic_cast<Polygon*>(shapeManager.getShape(ui->idLCD->value())) };
+
+    int points[8] { polygon->getX(0), polygon->getY(0), polygon->getX(1), polygon->getY(1),
+                    polygon->getX(2), polygon->getY(2), polygon->getX(3), polygon->getY(3) };
 
     void (ShapeWindow::*spinFunctions[8])(int) { &ShapeWindow::changeX1, &ShapeWindow::changeY1,
                                                  &ShapeWindow::changeX2, &ShapeWindow::changeY2,
@@ -212,8 +277,7 @@ void ShapeWindow::displayPolyForm()
          // set to the width of the canvas.
          spinBoxes[index]->setMaximum(1400);
 
-         // Needs to set the current value of the shape!!
-         spinBoxes[index]->setValue(100);
+         spinBoxes[index]->setValue(points[index]);
 
          ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -226,17 +290,64 @@ void ShapeWindow::displayPolyForm()
 
 
 
+void ShapeWindow::displayPolylineForm()
+{
+    const QString labelsText[8] { "X1:", "Y1:", "X2:", "Y2:",
+                                  "X3:", "Y3:", "X4:", "Y4:" };
+
+    Polyline* polyline { dynamic_cast<Polyline*>(shapeManager.getShape(ui->idLCD->value())) };
+
+    int points[8] { polyline->getX(0), polyline->getY(0), polyline->getX(1), polyline->getY(1),
+                    polyline->getX(2), polyline->getY(2), polyline->getX(3), polyline->getY(3) };
+
+    void (ShapeWindow::*spinFunctions[8])(int) { &ShapeWindow::changeX1, &ShapeWindow::changeY1,
+                                                 &ShapeWindow::changeX2, &ShapeWindow::changeY2,
+                                                 &ShapeWindow::changeX3, &ShapeWindow::changeY3,
+                                                 &ShapeWindow::changeX4, &ShapeWindow::changeY4
+                                                                                                 };
+    QSpinBox* spinBoxes[8];
+
+     for (int index {0}; index < 8; ++index)
+     {
+         spinBoxes[index]  = new QSpinBox(ui->shapeEditor);
+
+         // set to the width of the canvas.
+         spinBoxes[index]->setMaximum(1400);
+
+         spinBoxes[index]->setValue(points[index]);
+
+         ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
+
+         QObject::connect(spinBoxes[index], &QSpinBox::valueChanged,
+                          this,             spinFunctions[index]);
+     }
+
+     displayPenBrushSettings();
+}
+
+
 void ShapeWindow::displayTextForm()
 {
     const QString labelsText[4] {"X1:", "Y1:", "Width:", "Length:" };
+
+    Text* text { dynamic_cast<Text*>(shapeManager.getShape(ui->idLCD->value())) };
+
+    int dimensions[4] { text->getX(), text->getY(), text->getWidth(), text->getLength() };
 
     void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX,
                                                  &ShapeWindow::changeY,
                                                  &ShapeWindow::changeW,
                                                  &ShapeWindow::changeH };
+
+    QLineEdit* lineEdit { new QLineEdit(text->getText(), ui->shapeEditor) };
+
+    qFlag  flag  { text->getAlignment() };
+    QFont  font  { text->getFont() };
+    QColor color { text->getPen().color() };
+
     QComboBox* combos[5];
     QSpinBox*  spinBoxes[5];
-    QLineEdit*  lineEdit { new QLineEdit((QString)"The Text String", ui->shapeEditor) };
+
 
     ui->shapeForm->addRow((QString)"TextString:", lineEdit);
 
@@ -250,8 +361,8 @@ void ShapeWindow::displayTextForm()
 
         // adjust values!!
         spinBoxes[index]->setMinimum(0);
-        spinBoxes[index]->setMaximum(1000);
-        spinBoxes[index]->setValue(100);
+        spinBoxes[index]->setMaximum(1400);
+        spinBoxes[index]->setValue(dimensions[index]);
 
         ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -265,7 +376,7 @@ void ShapeWindow::displayTextForm()
 
     spinBoxes[4]->setMinimum(-1);
     spinBoxes[4]->setMaximum(50);
-    spinBoxes[4]->setValue(0);
+    spinBoxes[4]->setValue(font.pointSize());
 
     ui->shapeForm->addRow((QString)"TextPointSize:", spinBoxes[4]);
 
@@ -275,17 +386,7 @@ void ShapeWindow::displayTextForm()
 
 
     // ** TextColor **
-    combos[0] = new QComboBox(ui->shapeEditor);
-
-    combos[0]->addItem((QIcon)":/img/white.png",   (QString)"White");
-    combos[0]->addItem((QIcon)":/img/black.png",   (QString)"Black");
-    combos[0]->addItem((QIcon)":/img/red.png",     (QString)"Red");
-    combos[0]->addItem((QIcon)":/img/green.png",   (QString)"Green");
-    combos[0]->addItem((QIcon)":/img/blue.png",    (QString)"Blue");
-    combos[0]->addItem((QIcon)":/img/cyan.png",    (QString)"Cyan");
-    combos[0]->addItem((QIcon)":/img/magenta.png", (QString)"Magenta");
-    combos[0]->addItem((QIcon)":/img/yellow.png",  (QString)"Yellow");
-    combos[0]->addItem((QIcon)":/img/gray.png",    (QString)"Gray");
+    combos[0] = colorCombo(color);
 
     ui->shapeForm->addRow((QString)"TextColor:", combos[0]);
 
@@ -293,8 +394,24 @@ void ShapeWindow::displayTextForm()
                      this,      &ShapeWindow::changeTextColor);
 
 
+
     // ** TextAllignment **
     combos[1] = new QComboBox(ui->shapeEditor);
+
+    switch(flag)
+    {
+        case qFlag::AlignLeft   : combos[1]->addItem((QString)"AlignLeft");
+                                  break;
+        case qFlag::AlignRight  : combos[1]->addItem((QString)"AlignRight");
+                                  break;
+        case qFlag::AlignTop    : combos[1]->addItem((QString)"AlignTop");
+                                  break;
+        case qFlag::AlignBottom : combos[1]->addItem((QString)"AlignBottom");
+                                  break;
+        case qFlag::AlignCenter : combos[1]->addItem((QString)"AlignCenter");
+                                  break;
+        default : break;
+    }
 
     combos[1]->addItem((QString)"AlignLeft");
     combos[1]->addItem((QString)"AlignRight");
@@ -312,10 +429,11 @@ void ShapeWindow::displayTextForm()
     // ** TextFontFamily **
     combos[2] = new QComboBox(ui->shapeEditor);
 
-    combos[2]->addItem((QString)"Comic Sans MS");
+    combos[2]->addItem(font.family());
     combos[2]->addItem((QString)"Courier");
     combos[2]->addItem((QString)"Helvetica");
     combos[2]->addItem((QString)"Times");
+    combos[2]->addItem((QString)"Comic Sans MS");
 
     ui->shapeForm->addRow((QString)"TextFontFamily:", combos[2]);
 
@@ -325,14 +443,26 @@ void ShapeWindow::displayTextForm()
 
 
     // ** TextFontStyle **
-
     combos[3] = new QComboBox(ui->shapeEditor);
 
-    combos[3]->addItem((QString)"Normal");
-    combos[3]->addItem((QString)"Italic");
-    combos[3]->addItem((QString)"Oblique");
+    if (font.style() == QFont::StyleNormal)
+    {
+        combos[3]->addItem((QString)"StyleNormal");
+    }
+    else if (font.style() == QFont::StyleItalic)
+    {
+        combos[3]->addItem((QString)"StyleItalic");
+    }
+    else if (font.style() == QFont::StyleOblique)
+    {
+        combos[3]->addItem((QString)"StyleOblique");
+    }
 
-    ui->shapeForm->addRow((QString)"TextFontFamily:", combos[3]);
+    combos[3]->addItem((QString)"StyleNormal");
+    combos[3]->addItem((QString)"StyleItalic");
+    combos[3]->addItem((QString)"StyleOblique");
+
+    ui->shapeForm->addRow((QString)"TextFontStyle:", combos[3]);
 
     QObject::connect(combos[3], &QComboBox::currentTextChanged,
                      this,      &ShapeWindow::changeTextFontStyle);
@@ -340,6 +470,19 @@ void ShapeWindow::displayTextForm()
 
     // ** TextFontWeight **
     combos[4] = new QComboBox(ui->shapeEditor);
+
+    switch(font.weight())
+    {
+        case QFont::Thin   : combos[4]->addItem((QString)"Thin");
+                             break;
+        case QFont::Light  : combos[4]->addItem((QString)"Light");
+                             break;
+        case QFont::Normal : combos[4]->addItem((QString)"Normal");
+                             break;
+        case QFont::Bold   : combos[4]->addItem((QString)"Bold");
+                             break;
+        default :  break;
+    }
 
     combos[4]->addItem((QString)"Thin");
     combos[4]->addItem((QString)"Light");
@@ -357,20 +500,14 @@ void ShapeWindow::displayTextForm()
 
 void ShapeWindow::displayPenBrushSettings()
 {
-    QComboBox*   combos[6];
+    QPen pen     { shapeManager.getShape(ui->idLCD->value())->getPen()   };
+    QBrush brush { shapeManager.getShape(ui->idLCD->value())->getBrush() };
+
+    QComboBox* combos[6];
+
 
     // **  Pen Color **
-    combos[0]     = new QComboBox(ui->shapeEditor);
-
-    combos[0]->addItem((QIcon)":/img/white.png",   (QString)"White"  );
-    combos[0]->addItem((QIcon)":/img/black.png",   (QString)"Black"  );
-    combos[0]->addItem((QIcon)":/img/red.png",     (QString)"Red"    );
-    combos[0]->addItem((QIcon)":/img/green.png",   (QString)"Green"  );
-    combos[0]->addItem((QIcon)":/img/blue.png",    (QString)"Blue"   );
-    combos[0]->addItem((QIcon)":/img/cyan.png",    (QString)"Cyan"   );
-    combos[0]->addItem((QIcon)":/img/magenta.png", (QString)"Magenta");
-    combos[0]->addItem((QIcon)":/img/yellow.png",  (QString)"Yellow" );
-    combos[0]->addItem((QIcon)":/img/gray.png",    (QString)"Gray"   );
+    combos[0] = colorCombo(pen.color());
 
     ui->shapeForm->addRow((QString)"PenColor:", combos[0]);
 
@@ -378,9 +515,33 @@ void ShapeWindow::displayPenBrushSettings()
                      this,      &ShapeWindow::changePenColor);
 
 
-
     // ** PenStyle
     combos[1] = new QComboBox(ui->shapeEditor);
+
+    if (pen.style() == Qt::NoPen)
+    {
+        combos[1]->addItem((QString)"NoPen");
+    }
+    else if (pen.style() == Qt::SolidLine)
+    {
+        combos[1]->addItem((QString)"SolidLine");
+    }
+    else if (pen.style() == Qt::DashLine)
+    {
+        combos[1]->addItem((QString)"DashLine");
+    }
+    else if (pen.style() == Qt::DotLine)
+    {
+        combos[1]->addItem((QString)"DotLine");
+    }
+    else if (pen.style() == Qt::DashDotLine)
+    {
+        combos[1]->addItem((QString)"DashDotLine");
+    }
+    else if (pen.style() == Qt::DashDotDotLine)
+    {
+        combos[1]->addItem((QString)"DashDotDotLine");
+    }
 
     combos[1]->addItem((QString)"NoPen");
     combos[1]->addItem((QString)"SolidLine");
@@ -395,9 +556,21 @@ void ShapeWindow::displayPenBrushSettings()
                      this,      &ShapeWindow::changePenStyle);
 
 
-
     // ** PenCapStyle
     combos[2] = new QComboBox(ui->shapeEditor);
+
+    if (pen.capStyle() == Qt::FlatCap)
+    {
+        combos[2]->addItem((QString)"FlatCap");
+    }
+    else if (pen.capStyle() == Qt::SquareCap)
+    {
+        combos[2]->addItem((QString)"SquareCap");
+    }
+    else if (pen.capStyle() == Qt::RoundCap)
+    {
+        combos[2]->addItem((QString)"RoundCap");
+    }
 
     combos[2]->addItem((QString)"FlatCap");
     combos[2]->addItem((QString)"SquareCap");
@@ -413,6 +586,19 @@ void ShapeWindow::displayPenBrushSettings()
     // ** PenJoinStyle
     combos[3] = new QComboBox(ui->shapeEditor);
 
+    if (pen.joinStyle() == Qt::MiterJoin)
+    {
+        combos[3]->addItem((QString)"MiterJoin");
+    }
+    else if (pen.joinStyle() == Qt::BevelJoin)
+    {
+        combos[3]->addItem((QString)"BevelJoin");
+    }
+    else if (pen.joinStyle() == Qt::RoundJoin)
+    {
+        combos[3]->addItem((QString)"RoundJoin");
+    }
+
     combos[3]->addItem((QString)"MiterJoin");
     combos[3]->addItem((QString)"BevelJoin");
     combos[3]->addItem((QString)"RoundJoin");
@@ -423,19 +609,8 @@ void ShapeWindow::displayPenBrushSettings()
                      this,      &ShapeWindow::changePenJoinStyle);
 
 
-
     // ** BrushColor
-    combos[4]     = new QComboBox(ui->shapeEditor);
-
-    combos[4]->addItem((QIcon)":/img/white.png",   (QString)"White");
-    combos[4]->addItem((QIcon)":/img/black.png",   (QString)"Black");
-    combos[4]->addItem((QIcon)":/img/red.png",     (QString)"Red");
-    combos[4]->addItem((QIcon)":/img/green.png",   (QString)"Green");
-    combos[4]->addItem((QIcon)":/img/blue.png",    (QString)"Blue");
-    combos[4]->addItem((QIcon)":/img/cyan.png",    (QString)"Cyan");
-    combos[4]->addItem((QIcon)":/img/magenta.png", (QString)"Magenta");
-    combos[4]->addItem((QIcon)":/img/yellow.png",  (QString)"Yellow");
-    combos[4]->addItem((QIcon)":/img/gray.png",    (QString)"Gray");
+    combos[4] = colorCombo(brush.color());
 
     ui->shapeForm->addRow((QString)"BrushColor:", combos[4]);
 
@@ -447,6 +622,22 @@ void ShapeWindow::displayPenBrushSettings()
     // ** BrushStyle
     combos[5] = new QComboBox(ui->shapeEditor);
 
+    if (brush.style() == Qt::SolidPattern)
+    {
+        combos[5]->addItem((QString)"SolidPattern");
+    }
+    else if (brush.style() == Qt::HorPattern)
+    {
+        combos[5]->addItem((QString)"HorPattern");
+    }
+    else if (brush.style() == Qt::VerPattern)
+    {
+        combos[5]->addItem((QString)"VerPattern");
+    }
+    else if (brush.style() == Qt::NoBrush)
+    {
+        combos[5]->addItem((QString)"NoBrush");
+    }
 
     combos[5]->addItem((QString)"SolidPattern");
     combos[5]->addItem((QString)"HorPattern");
@@ -469,6 +660,67 @@ void ShapeWindow::clearForm()
         ui->shapeForm->removeRow(0);
     }
 }
+
+
+
+// **** Configuring Widgets *****
+
+
+QComboBox* ShapeWindow::colorCombo(QColor color)
+{
+    QComboBox* box { new QComboBox };
+
+    if (color == QColorConstants::White)
+    {
+        box->addItem((QIcon)":/img/white.png", (QString)"White");
+    }
+    else if (color == QColorConstants::Black)
+    {
+        box->addItem((QIcon)":/img/black.png", (QString)"Black");
+    }
+    else if (color == QColorConstants::Red)
+    {
+        box->addItem((QIcon)":/img/red.png", (QString)"Red");
+    }
+    else if (color == QColorConstants::Green)
+    {
+        box->addItem((QIcon)":/img/green.png", (QString)"Green");
+    }
+    else if (color == QColorConstants::Blue)
+    {
+        box->addItem((QIcon)":/img/blue.png", (QString)"Blue");
+    }
+    else if (color == QColorConstants::Cyan)
+    {
+        box->addItem((QIcon)":/img/cyan.png", (QString)"Cyan");
+    }
+    else if (color == QColorConstants::Magenta)
+    {
+        box->addItem((QIcon)":/img/magenta.png", (QString)"Magenta");
+    }
+    else if (color == QColorConstants::Yellow)
+    {
+        box->addItem((QIcon)":/img/yellow.png", (QString)"Yellow");
+    }
+    else if (color == QColorConstants::Gray)
+    {
+        box->addItem((QIcon)":/img/gray.png", (QString)"Gray");
+    }
+
+    box->addItem((QIcon)":/img/white.png",   (QString)"White");
+    box->addItem((QIcon)":/img/black.png",   (QString)"Black");
+    box->addItem((QIcon)":/img/red.png",     (QString)"Red");
+    box->addItem((QIcon)":/img/green.png",   (QString)"Green");
+    box->addItem((QIcon)":/img/blue.png",    (QString)"Blue");
+    box->addItem((QIcon)":/img/cyan.png",    (QString)"Cyan");
+    box->addItem((QIcon)":/img/magenta.png", (QString)"Magenta");
+    box->addItem((QIcon)":/img/yellow.png",  (QString)"Yellow");
+    box->addItem((QIcon)":/img/gray.png",    (QString)"Gray");
+
+    return box;
+}
+
+
 
 
 
