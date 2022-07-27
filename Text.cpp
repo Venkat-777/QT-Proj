@@ -101,3 +101,5 @@ Qt::AlignmentFlag Text::getAlignment()
 {
     return flag;
 }
+
+void ShapeManager::drawId(int id, int x, int y){}
