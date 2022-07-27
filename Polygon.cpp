@@ -94,3 +94,4 @@ void Polygon::setY(int y,int coordNum)
     point->setY(y);
 }
 
+void ShapeManager::drawId(int id, int x, int y){}
