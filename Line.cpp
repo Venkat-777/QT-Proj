@@ -91,3 +91,5 @@ void Line::setY(int value, int point)
     else
         point2.setY(value);
 }
+
+void ShapeManager::drawId(int id, int x, int y){}
