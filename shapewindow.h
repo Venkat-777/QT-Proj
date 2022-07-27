@@ -75,6 +75,16 @@ public:
 private:
     Ui::ShapeWindow *ui;
     ShapeManager shapeManager;
+    
+private slots:
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_allShapes_currentTextChanged(const QString &arg1);
+
+    int sortId();
 };
 
 #endif // SHAPEWINDOW_H
