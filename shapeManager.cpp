@@ -62,6 +62,10 @@ void ShapeManager::removeShape(int id)
 
 void ShapeManager::drawShapes() const
 {
+    painter->begin(device);
+    painter->fillRect(10, 10, 1500, 830, Qt::white);
+    painter->end();
+
     for (Shape* shape : shapes)
     {
         shape->draw(device, painter);
@@ -88,17 +92,6 @@ void ShapeManager::sortShapes(bool (*compare)(Shape*, Shape*))
 
       std::swap(shapes[i], shapes[smallestIndex]);
     }
-}
-
-void ShapeManager::drawId(int id, int x, int y);
-{
-    Qstring id1 = Qstring::number(id);
-    QPen pen;
-    painter->setPen(pen);
-    painter.begin();
-    painter.drawText(x, y - 15, id1);
-    painter.end();
-    
 }
 
 
@@ -226,7 +219,7 @@ void ShapeManager::ReadShapeFile(const string fileName)
             ReadPenProperties(inFile, shapePen);
             ReadBrushProperties(inFile, shapeBrush);
 
-            currentShape = new Rectangle(shapeID, definePoints, defineLength, defineWidth);
+            currentShape = new Rectangle(shapeID, definePoints, defineLength, defineLength);
             currentShape -> setShape(Shape::ShapeType::Square);
             currentShape -> setPen(shapePen);
             currentShape -> setBrush(shapeBrush);
@@ -261,7 +254,7 @@ void ShapeManager::ReadShapeFile(const string fileName)
           ReadDimensions(inFile, Shape::ShapeType::Text, definePoints, defineLength, defineWidth);
           ReadTextProperties(inFile, shapePen, text, textFont, textAlignFlag);
 
-          currentShape = new Text(shapeID, definePoints, defineLength, defineWidth, text, textFont, textAlignFlag);
+          currentShape = new Text(shapeID, definePoints, defineWidth, defineLength, text, textFont, textAlignFlag);
           currentShape -> setShape(Shape::ShapeType::Text);
           currentShape -> setPen(shapePen);
         }
@@ -914,7 +907,7 @@ void ShapeManager::OutputToFile(ofstream& fileName, Shape* shape, const Output& 
                       if(shape -> getShape() == Shape::ShapeType::Text)
                       {
                           fileName << static_cast<Text*>(shape) -> getX()      << ", " << static_cast<Text*>(shape) -> getY() << ", "
-                                   << static_cast<Text*>(shape) -> getLength() << ", " << static_cast<Text*>(shape) -> getWidth();
+                                   << static_cast<Text*>(shape) -> getWidth() << ", " << static_cast<Text*>(shape) -> getLength();
                       }
                       if(shape -> getShape() == Shape::ShapeType::Circle)
                       {
@@ -1125,6 +1118,7 @@ string ShapeManager::EnumToString(const int& enumTypeValue, const int& enumListV
 /*******************************************************
 * SERIALIZER SERIALIZER SERIALIZER SERIALIZER [end]
 ********************************************************/
+
 
 
 
