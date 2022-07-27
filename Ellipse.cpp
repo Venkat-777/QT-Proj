@@ -1,7 +1,7 @@
 
 #include "ellipse.h"
 #include <cmath>
-
+//
 
 Ellipse::Ellipse(int id)
     : Shape(id), x { 0 }, y { 0 }, width { 0 }, length { 0 }
