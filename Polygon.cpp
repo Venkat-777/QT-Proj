@@ -1,4 +1,4 @@
-#include "Polygon.h"
+#include "polygon.h"
 
 Polygon::Polygon(int id) : Shape(id), numOfPoints {}, points {}
 {}
@@ -18,7 +18,7 @@ Polygon::Polygon(int id, QPen pen, QBrush brush, Vector<QPoint> points, int numO
 }
 
 Polygon::Polygon(int id, Vector<QPoint> points)
-    : Shape(id)
+    : Shape(id), numOfPoints { points.size() }
 {
     QPoint point;
 
@@ -43,14 +43,16 @@ void Polygon::draw(QPaintDevice* device, QPainter* painter)
     painter->setBrush(getBrush());
 
     //Copying contents of vector to an array
-    QPointF pointsArray[numOfPoints];
+    QPoint pointsArray[numOfPoints];
+
     for (int i = 0; i < numOfPoints; ++i)
     {
-        pointsArray[i].setX(points[i].x());
-        pointsArray[i].setY(points[i].y());
+        pointsArray[i] = points[i];
     }
 
-    painter->drawPolygon( pointsArray, numOfPoints);
+    painter->drawPolygon(pointsArray, numOfPoints);
+
+    painter->end();
 }
 
 void Polygon::move(const int translateX, const int translateY)
@@ -80,6 +82,16 @@ Vector<QPoint> Polygon::getPointVector()
     return points;
 }
 
+int Polygon::getX(int point) const
+{
+    return points[point].x();
+}
+
+int Polygon::getY(int point) const
+{
+    return points[point].y();
+}
+
 void Polygon::setX(int x,int coordNum)
 {
     QPoint* point { &points[coordNum] };
@@ -93,5 +105,3 @@ void Polygon::setY(int y,int coordNum)
 
     point->setY(y);
 }
-
-void ShapeManager::drawId(int id, int x, int y){}
