@@ -2,6 +2,7 @@
 #define SHAPEWINDOW_H
 
 #include <QMainWindow>
+#include <QComboBox>
 #include "shapemanager.h"
 
 
@@ -19,7 +20,8 @@ public:
 
     void paintEvent(QPaintEvent* event);
 
-    // Gets the text of selected shape from main combo box
+    void setupShapeEditor();
+
     void getSelectedShape();
 
     // Forms for each shape
@@ -27,7 +29,8 @@ public:
     void displayLineForm();
     void displayTextForm();
     void displayEllipseForm();
-    void displayPolyForm();
+    void displayPolygonForm();
+    void displayPolylineForm();
 
     // Pen & Brush settings added to form
     void displayPenBrushSettings();
@@ -62,7 +65,6 @@ public:
     void changeBrushColor(QString);
     void changeBrushStyle(QString);
 
-
     // change text settings
     void changeText();
     void changeTextPointSize(int);
@@ -72,11 +74,10 @@ public:
     void changeTextFontStyle(QString);
     void changeTextFontWeight(QString);
 
-private:
-    Ui::ShapeWindow *ui;
-    ShapeManager shapeManager;
+  protected:
+    QComboBox* colorCombo(QColor color);
     
-private slots:
+  private slots:
 
     void on_pushButton_2_clicked();
 
@@ -85,6 +86,13 @@ private slots:
     void on_allShapes_currentTextChanged(const QString &arg1);
 
     int sortId();
+
+private:
+    Ui::ShapeWindow *ui;
+    ShapeManager shapeManager;
 };
 
 #endif // SHAPEWINDOW_H
+    
+
+
