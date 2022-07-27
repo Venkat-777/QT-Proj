@@ -1,8 +1,6 @@
 #include "shapewindow.h"
 #include "ui_shapewindow.h"
 
-// qDebug()
-
 #include <QString>
 #include <QLabel>
 #include <QLineEdit>
@@ -23,8 +21,6 @@ ShapeWindow::ShapeWindow(QWidget *parent)
     shapeManager.ReadShapeFile("V:/QT Workspace/MidnightCoder/shapes.txt");
 
     setupShapeEditor();
-    //shapeManager.SaveFile("V:/QT Workspace/MidnightCoder/shapes.txt");
-
 }
 
 
@@ -36,9 +32,9 @@ ShapeWindow::~ShapeWindow()
 
 void ShapeWindow::paintEvent(QPaintEvent* event)
 {
-
     shapeManager.drawShapes();
 }
+
 
 void ShapeWindow::setupShapeEditor()
 {
@@ -287,7 +283,6 @@ void ShapeWindow::displayPolygonForm()
 
      displayPenBrushSettings();
 }
-
 
 
 void ShapeWindow::displayPolylineForm()
