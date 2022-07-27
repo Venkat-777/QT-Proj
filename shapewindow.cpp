@@ -831,36 +831,42 @@ void ShapeWindow::on_pushButton_2_clicked()
         Rectangle* add = new Rectangle(id);
         vector.push_back(add);
         shapeManager.addShape(add);
+        setupShapeEditor();
     } else if (currentShape == "Line"){
         int id = sortId() + 1;
         //Line add(id);
         Line* add = new Line(id);
         vector.push_back(add);
         shapeManager.addShape(add);
+        setupShapeEditor();
     } else if (currentShape == "Ellipse"){
         int id = sortId() + 1;
         //Ellipse add(id);
         Ellipse* add = new Ellipse(id);
         vector.push_back(add);
         shapeManager.addShape(add);
+        setupShapeEditor();
     } else if (currentShape == "Polygon"){
         int id = sortId() + 1;
         //Polygon add(id);
         Polygon* add = new Polygon(id);
         vector.push_back(add);
         shapeManager.addShape(add);
+        setupShapeEditor();
     } else if (currentShape == "Polyline"){
         int id = sortId() + 1;
         //Polyline add(id);
         Polyline* add = new Polyline(id);
         vector.push_back(add);
         shapeManager.addShape(add);
+        setupShapeEditor();
     } else if (currentShape == "Text"){
         int id = sortId() + 1;
         //Text add(id);
         Text* add = new Text(id);
         vector.push_back(add);
         shapeManager.addShape(add);
+        setupShapeEditor();
     }
 
     ui->addOrDelete->setText(" is Added.");
