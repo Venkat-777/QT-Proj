@@ -90,7 +90,16 @@ void ShapeManager::sortShapes(bool (*compare)(Shape*, Shape*))
     }
 }
 
-
+void ShapeManager::drawId(int id, int x, int y);
+{
+    Qstring id1 = Qstring::number(id);
+    QPen pen;
+    painter->setPen(pen);
+    painter.begin();
+    painter.drawText(x, y - 15, id1);
+    painter.end();
+    
+}
 
 
 /*******************************************************
