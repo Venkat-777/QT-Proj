@@ -25,14 +25,17 @@ public:
     double area() override;
 
     // Gets
-    double getX1();
-    double getY1();
-    double getX2();
-    double getY2();
+    int getX1();
+    int getY1();
+    int getX2();
+    int getY2();
 
     // Sets
     void setX(int value, int point);
     void setY(int value, int point);
+};
+
+#endif
 };
 
 #endif
