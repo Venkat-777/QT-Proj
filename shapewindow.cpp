@@ -822,34 +822,45 @@ void ShapeWindow::on_pushButton_2_clicked()
     currentShape=ui->allShapes->currentText();
     if (currentShape == "Rectangle"){
         int id = sortId() + 1;
-        Rectangle add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
+
+//        Vector<QPoint> pointSet;
+//        QPoint points;
+//        points.setX(10);
+//        points.setY(10);
+//        pointSet.push_back(points);
+        Rectangle* add = new Rectangle(id);
+        vector.push_back(add);
+        shapeManager.addShape(add);
     } else if (currentShape == "Line"){
         int id = sortId() + 1;
-        Line add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
+        //Line add(id);
+        Line* add = new Line(id);
+        vector.push_back(add);
+        shapeManager.addShape(add);
     } else if (currentShape == "Ellipse"){
         int id = sortId() + 1;
-        Ellipse add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
+        //Ellipse add(id);
+        Ellipse* add = new Ellipse(id);
+        vector.push_back(add);
+        shapeManager.addShape(add);
     } else if (currentShape == "Polygon"){
         int id = sortId() + 1;
-        Polygon add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
+        //Polygon add(id);
+        Polygon* add = new Polygon(id);
+        vector.push_back(add);
+        shapeManager.addShape(add);
     } else if (currentShape == "Polyline"){
         int id = sortId() + 1;
-        Polyline add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
+        //Polyline add(id);
+        Polyline* add = new Polyline(id);
+        vector.push_back(add);
+        shapeManager.addShape(add);
     } else if (currentShape == "Text"){
         int id = sortId() + 1;
-        Text add(id);
-        vector.push_back(&add);
-        shapeManager.addShape(&add);
+        //Text add(id);
+        Text* add = new Text(id);
+        vector.push_back(add);
+        shapeManager.addShape(add);
     }
 
     ui->addOrDelete->setText(" is Added.");
@@ -878,6 +889,7 @@ void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
     currentShape=ui->allShapes->currentText();
 
     if (currentShape == "Polygon"){
+        ui->selectedShapes->addItem("Here are the Polygon");
         for (int i = 0; i != shapeManager.getShapes().size(); i++){
             if (shapeManager.getShapes()[i]->getShape() == Shape::ShapeType::Polygon){
                 ui->selectedShapes->addItem(QString::number(shapeManager.getShapes()[i]->getID()));
