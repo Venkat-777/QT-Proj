@@ -36,6 +36,3 @@ public:
 };
 
 #endif
-};
-
-#endif
