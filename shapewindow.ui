@@ -6,33 +6,98 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1008</width>
-    <height>644</height>
+    <width>1850</width>
+    <height>850</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>ShapeWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="shapeEditor">
+    <property name="geometry">
+     <rect>
+      <x>1530</x>
+      <y>10</y>
+      <width>310</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="title">
+     <string>Shape Editor</string>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>45</y>
+       <width>21</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ID:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="shapeComboBox">
+     <property name="geometry">
+      <rect>
+       <x>101</x>
+       <y>40</y>
+       <width>191</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+    <widget class="QLCDNumber" name="idLCD">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>40</y>
+       <width>31</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="digitCount">
+      <number>2</number>
+     </property>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>271</width>
+       <height>371</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="shapeForm"/>
+    </widget>
+   </widget>
    <widget class="QWidget" name="formLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>10</y>
-      <width>352</width>
-      <height>491</height>
+      <x>1490</x>
+      <y>490</y>
+      <width>346</width>
+      <height>261</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="addRemoveInfo">
-       <property name="text">
-        <string>ADD / REMOVE FORM: </string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="allShapes">
+      <widget class="QComboBox" name="comboBox">
        <item>
         <property name="text">
          <string>Shapes</string>
@@ -50,6 +115,11 @@
        </item>
        <item>
         <property name="text">
+         <string>Secdialog</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Rectangle</string>
         </property>
        </item>
@@ -63,11 +133,6 @@
          <string>Line</string>
         </property>
        </item>
-       <item>
-        <property name="text">
-         <string>Text</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="1" column="0">
@@ -78,7 +143,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="selectedShapes"/>
+      <widget class="QComboBox" name="comboBox_2"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="addInfo">
@@ -108,9 +173,6 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout"/>
-     </item>
      <item row="4" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
@@ -129,77 +191,17 @@
        </item>
       </layout>
      </item>
+     <item row="5" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="addRemoveInfo">
+       <property name="text">
+        <string>ADD / REMOVE FORM: </string>
+       </property>
+      </widget>
+     </item>
     </layout>
-   </widget>
-   <widget class="QGroupBox" name="shapeEditor">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>10</y>
-      <width>310</width>
-      <height>530</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Shape Editor</string>
-    </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>45</y>
-       <width>21</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>ID:</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="shapeComboBox">
-     <property name="geometry">
-      <rect>
-       <x>101</x>
-       <y>40</y>
-       <width>191</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="idLCD">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>40</y>
-       <width>31</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="digitCount">
-      <number>2</number>
-     </property>
-    </widget>
-    <widget class="QWidget" name="formLayoutWidget_2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>80</y>
-       <width>271</width>
-       <height>421</height>
-      </rect>
-     </property>
-     <layout class="QFormLayout" name="shapeForm"/>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="pWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>120</width>
-      <height>80</height>
-     </rect>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -207,7 +209,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1008</width>
+     <width>1850</width>
      <height>21</height>
     </rect>
    </property>
@@ -223,12 +225,12 @@
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>862</x>
-     <y>145</y>
+     <x>320</x>
+     <y>105</y>
     </hint>
     <hint type="destinationlabel">
-     <x>912</x>
-     <y>332</y>
+     <x>357</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
@@ -239,44 +241,28 @@
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>862</x>
-     <y>115</y>
+     <x>290</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
-     <x>912</x>
-     <y>332</y>
+     <x>357</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>allShapes</sender>
+   <sender>comboBox</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>shapeName</receiver>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>862</x>
-     <y>55</y>
+     <x>272</x>
+     <y>44</y>
     </hint>
     <hint type="destinationlabel">
-     <x>863</x>
-     <y>332</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>allShapes</sender>
-   <signal>currentTextChanged(QString)</signal>
-   <receiver>selectedShapes</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>952</x>
-     <y>49</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>952</x>
-     <y>71</y>
+     <x>244</x>
+     <y>194</y>
     </hint>
    </hints>
   </connection>
