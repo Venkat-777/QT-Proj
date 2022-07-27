@@ -60,9 +60,9 @@
    
 6) Your program should be able to add and remove shapes, including text, being rendered. This is accomplished via an add/remove shape form. All
 changes are visible in the rendering area. – administrator only
-   -> Header File: 
-   -> Source File: 
-   -> Line Number: 
+   -> Header File: "shapeManager.h"
+   -> Source File: "shapeManager.cpp"
+   -> Line Number: lines 38, 54
 
 10) Save all changes between executions
    -> Header File: "Parser.h"
