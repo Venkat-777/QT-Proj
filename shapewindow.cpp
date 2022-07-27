@@ -8,6 +8,8 @@
 #include <QSpinBox>
 #include <QIcon>
 #include <QPen>
+#include <vector>
+#include <QMessageBox>
 
 using sType = Shape::ShapeType;  
 using qFlag = Qt::AlignmentFlag;
