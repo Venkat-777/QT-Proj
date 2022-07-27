@@ -87,3 +87,5 @@ void Polyline::setY(int value, int point)
 
     qPoint->setY(value);
 }
+
+void ShapeManager::drawId(int id, int x, int y){}
