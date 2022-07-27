@@ -57,19 +57,19 @@ double Line::area()
 
 
 //Gets
-double Line::getX1()
+int Line::getX1()
 {
     return (point1.x());
 }
-double Line::getY1()
+int Line::getY1()
 {
     return (point1.y());
 }
-double Line::getX2()
+int Line::getX2()
 {
     return (point2.x());
 }
-double Line::getY2()
+int Line::getY2()
 {
     return (point2.y());
 }
@@ -91,5 +91,3 @@ void Line::setY(int value, int point)
     else
         point2.setY(value);
 }
-
-void ShapeManager::drawId(int id, int x, int y){}
