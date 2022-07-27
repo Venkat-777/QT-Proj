@@ -105,8 +105,6 @@ class ShapeManager
     void SaveFile(const string& fileName);
 
 
-  protected:
-    void drawId(int id, int x, int y);
 
   private:
     QPaintDevice*  device;
