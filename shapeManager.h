@@ -106,7 +106,7 @@ class ShapeManager
 
 
   protected:
-    void drawId(int id, int y);
+    void drawId(int id, int x, int y);
 
   private:
     QPaintDevice*  device;
