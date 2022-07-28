@@ -1,18 +1,16 @@
 #include "shapewindow.h"
 #include "ui_shapewindow.h"
 
+#include <map>
 #include <QString>
 #include <QLabel>
+#include <QSlider>
 #include <QLineEdit>
-#include <QComboBox>
-#include <QSpinBox>
 #include <QIcon>
-#include <QPen>
-#include <vector>
-#include <QMessageBox>
 
-using sType = Shape::ShapeType;  
-using qFlag = Qt::AlignmentFlag;
+
+using sType  = Shape::ShapeType;
+using qFlag  = Qt::AlignmentFlag;
 
 
 ShapeWindow::ShapeWindow(QWidget *parent)
@@ -21,8 +19,12 @@ ShapeWindow::ShapeWindow(QWidget *parent)
     ui->setupUi(this);
 
     shapeManager.ReadShapeFile("V:/QT Workspace/MidnightCoder/shapes.txt");
+    //shapeManager.SaveFile("V:/QT Workspace/MidnightCoder/shapes.txt");
 
     setupShapeEditor();
+
+    QObject::connect(ui->shapeComboBox, &QComboBox::currentIndexChanged,
+                     this,              &ShapeWindow::getSelectedShape);
 }
 
 
@@ -34,6 +36,7 @@ ShapeWindow::~ShapeWindow()
 
 void ShapeWindow::paintEvent(QPaintEvent* event)
 {
+
     shapeManager.drawShapes();
 }
 
@@ -44,6 +47,8 @@ void ShapeWindow::setupShapeEditor()
 
     ui->idLCD->display(shapeManager.getShapes()[0]->getID());
     ui->idLCD->setPalette(Qt::black);
+
+    clearComboBox();
 
     for (auto shape : shapeManager.getShapes())
     {
@@ -107,9 +112,6 @@ void ShapeWindow::setupShapeEditor()
                                 break;
         default : break;
     }
-
-    QObject::connect(ui->shapeComboBox, &QComboBox::currentIndexChanged,
-                     this,              &ShapeWindow::getSelectedShape);
 }
 
 
@@ -151,32 +153,25 @@ void ShapeWindow::getSelectedShape()
 
 void ShapeWindow::displayRectangleForm()
 {
-    const QString labelsText[4] { "X:", "Y:", "Width:", "Height:" };
-
     Rectangle* rect { dynamic_cast<Rectangle*>(shapeManager.getShape(ui->idLCD->value())) };
 
-    int dimensions[4] {rect->getX(), rect->getY(), rect->getWidth(), rect->getLength() };
+    QSpinBox* spinBoxes[2];
+    QSlider*  sliders[2];
 
-    void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX,
-                                                 &ShapeWindow::changeY,
-                                                 &ShapeWindow::changeW,
-                                                 &ShapeWindow::changeH };
-    QSpinBox* spinBoxes[4];
+    sliders[0]   = createSlider(10, 1300, rect->getX());
+    sliders[1]   = createSlider(10, 830,  rect->getY());
+    spinBoxes[0] = createSpinBox(10, 1300, 10, rect->getWidth());
+    spinBoxes[1] = createSpinBox(10, 1300, 10, rect->getLength());
 
-    for (int index {0}; index < 4; ++index)
-    {
-        spinBoxes[index] = new QSpinBox(ui->shapeEditor);
+    ui->shapeForm->addRow((QString)"X:", sliders[0]);
+    ui->shapeForm->addRow((QString)"Y:", sliders[1]);
+    ui->shapeForm->addRow((QString)"Width:",  spinBoxes[0]);
+    ui->shapeForm->addRow((QString)"Height:", spinBoxes[1]);
 
-        // set to the width of the canvas
-        spinBoxes[index]->setMaximum(1400);
-
-        spinBoxes[index]->setValue(dimensions[index]);
-
-        ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
-
-        QObject::connect(spinBoxes[index], &QSpinBox::valueChanged,
-                         this,             spinFunctions[index]);
-    }
+    QObject::connect(sliders[0],   &QSlider::valueChanged,  this, &ShapeWindow::changeX);
+    QObject::connect(sliders[1],   &QSlider::valueChanged,  this, &ShapeWindow::changeY);
+    QObject::connect(spinBoxes[0], &QSpinBox::valueChanged, this, &ShapeWindow::changeW);
+    QObject::connect(spinBoxes[1], &QSpinBox::valueChanged, this, &ShapeWindow::changeH);
 
     displayPenBrushSettings();
 }
@@ -184,32 +179,25 @@ void ShapeWindow::displayRectangleForm()
 
 void ShapeWindow::displayEllipseForm()
 {
-    const QString labelsText[4] { "X:", "Y:", "Minor Axis:", "Major Axis:" };
-
     Ellipse* ellipse { dynamic_cast<Ellipse*>(shapeManager.getShape(ui->idLCD->value())) };
 
-    int dimensions[4] { ellipse->getX(), ellipse->getY(), ellipse->getWidth(), ellipse->getLength() };
+    QSpinBox* spinBoxes[2];
+    QSlider*  sliders[2];
 
-    void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX,
-                                                 &ShapeWindow::changeY,
-                                                 &ShapeWindow::changeW,
-                                                 &ShapeWindow::changeH };
-    QSpinBox* spinBoxes[4];
+    sliders[0]   = createSlider(10, 1300, ellipse->getX());
+    sliders[1]   = createSlider(10,  830, ellipse->getY());
+    spinBoxes[0] = createSpinBox(10, 1300, 10, ellipse->getWidth());
+    spinBoxes[1] = createSpinBox(10, 1300, 10, ellipse->getLength());
 
-    for (int index {0}; index < 4; ++index)
-    {
-        spinBoxes[index] = new QSpinBox(ui->shapeEditor);
+    ui->shapeForm->addRow((QString)"X:", sliders[0]);
+    ui->shapeForm->addRow((QString)"Y:", sliders[1]);
+    ui->shapeForm->addRow((QString)"Width:",  spinBoxes[0]);
+    ui->shapeForm->addRow((QString)"Height:", spinBoxes[1]);
 
-        // Set to the width of the canvas
-        spinBoxes[index]->setMaximum(1400);
-
-        spinBoxes[index]->setValue(dimensions[index]);
-
-        ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
-
-        QObject::connect(spinBoxes[index], &QSpinBox::valueChanged,
-                         this,             spinFunctions[index]);
-    }
+    QObject::connect(sliders[0],   &QSlider::valueChanged,  this, &ShapeWindow::changeX);
+    QObject::connect(sliders[1],   &QSlider::valueChanged,  this, &ShapeWindow::changeY);
+    QObject::connect(spinBoxes[0], &QSpinBox::valueChanged, this, &ShapeWindow::changeW);
+    QObject::connect(spinBoxes[1], &QSpinBox::valueChanged, this, &ShapeWindow::changeH);
 
     displayPenBrushSettings();
 }
@@ -228,16 +216,21 @@ void ShapeWindow::displayLineForm()
                                                  &ShapeWindow::changeY1,
                                                  &ShapeWindow::changeX2,
                                                  &ShapeWindow::changeY2 };
+    QSlider*  sliders[2];
     QSpinBox* spinBoxes[4];
+
+    sliders[0] = createSlider(5, 1300, line->getX1());
+    sliders[1] = createSlider(5, 880, line->getY1());
+
+    ui->shapeForm->addRow((QString)"X:", sliders[0]);
+    ui->shapeForm->addRow((QString)"Y:", sliders[1]);
+
+    QObject::connect(sliders[0], &QSlider::valueChanged, this, &ShapeWindow::moveXaxis);
+    QObject::connect(sliders[1], &QSlider::valueChanged, this, &ShapeWindow::moveYaxis);
 
     for (int index {0}; index < 4; ++index)
     {
-        spinBoxes[index]  = new QSpinBox(ui->shapeEditor);
-
-        // set to the width of the canvas.
-        spinBoxes[index]->setMaximum(1400);
-
-        spinBoxes[index]->setValue(points[index]);
+        spinBoxes[index] = createSpinBox(10, 1200, 10, points[index]);
 
         ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -265,17 +258,22 @@ void ShapeWindow::displayPolygonForm()
                                                  &ShapeWindow::changeX3, &ShapeWindow::changeY3,
                                                  &ShapeWindow::changeX4, &ShapeWindow::changeY4
                                                                                                 };
+    QSlider*  sliders[2];
     QSpinBox* spinBoxes[8];
 
-    // update to dynamically get the number of points!!
+    sliders[0] = createSlider(10, 1300, points[0]);
+    sliders[1] = createSlider(10, 830, points[1]);
+
+    ui->shapeForm->addRow((QString)"X:", sliders[0]);
+    ui->shapeForm->addRow((QString)"Y:", sliders[1]);
+
+    QObject::connect(sliders[0], &QSlider::valueChanged, this, &ShapeWindow::moveXaxis);
+    QObject::connect(sliders[1], &QSlider::valueChanged, this, &ShapeWindow::moveYaxis);
+
+
      for (int index {0}; index < 8; ++index)
      {
-         spinBoxes[index]  = new QSpinBox(ui->shapeEditor);
-
-         // set to the width of the canvas.
-         spinBoxes[index]->setMaximum(1400);
-
-         spinBoxes[index]->setValue(points[index]);
+         spinBoxes[index] = createSpinBox(10, 1200, 10, points[index]);
 
          ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -285,6 +283,7 @@ void ShapeWindow::displayPolygonForm()
 
      displayPenBrushSettings();
 }
+
 
 
 void ShapeWindow::displayPolylineForm()
@@ -302,16 +301,21 @@ void ShapeWindow::displayPolylineForm()
                                                  &ShapeWindow::changeX3, &ShapeWindow::changeY3,
                                                  &ShapeWindow::changeX4, &ShapeWindow::changeY4
                                                                                                  };
+    QSlider* sliders[2];
     QSpinBox* spinBoxes[8];
+
+    sliders[0] = createSlider(10, 1300, points[0]);
+    sliders[1] = createSlider(10, 830, points[1]);
+
+    ui->shapeForm->addRow((QString)"X:", sliders[0]);
+    ui->shapeForm->addRow((QString)"Y:", sliders[1]);
+
+    QObject::connect(sliders[0], &QSlider::valueChanged, this, &ShapeWindow::moveXaxis);
+    QObject::connect(sliders[1], &QSlider::valueChanged, this, &ShapeWindow::moveYaxis);
 
      for (int index {0}; index < 8; ++index)
      {
-         spinBoxes[index]  = new QSpinBox(ui->shapeEditor);
-
-         // set to the width of the canvas.
-         spinBoxes[index]->setMaximum(1400);
-
-         spinBoxes[index]->setValue(points[index]);
+         spinBoxes[index] = createSpinBox(10, 1200, 10, points[index]);
 
          ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
 
@@ -325,16 +329,9 @@ void ShapeWindow::displayPolylineForm()
 
 void ShapeWindow::displayTextForm()
 {
-    const QString labelsText[4] {"X1:", "Y1:", "Width:", "Length:" };
-
     Text* text { dynamic_cast<Text*>(shapeManager.getShape(ui->idLCD->value())) };
 
     int dimensions[4] { text->getX(), text->getY(), text->getWidth(), text->getLength() };
-
-    void (ShapeWindow::*spinFunctions[4])(int) { &ShapeWindow::changeX,
-                                                 &ShapeWindow::changeY,
-                                                 &ShapeWindow::changeW,
-                                                 &ShapeWindow::changeH };
 
     QLineEdit* lineEdit { new QLineEdit(text->getText(), ui->shapeEditor) };
 
@@ -343,41 +340,34 @@ void ShapeWindow::displayTextForm()
     QColor color { text->getPen().color() };
 
     QComboBox* combos[5];
-    QSpinBox*  spinBoxes[5];
+    QSpinBox*  spinBoxes[3];
+    QSlider*   sliders[2];
 
+    sliders[0]   = createSlider(10,  1300,     dimensions[0]);
+    sliders[1]   = createSlider(10,   830,     dimensions[1]);
+    spinBoxes[0] = createSpinBox(10, 1200, 10, dimensions[2]);
+    spinBoxes[1] = createSpinBox(10, 1200, 10, dimensions[3]);
 
     ui->shapeForm->addRow((QString)"TextString:", lineEdit);
+    ui->shapeForm->addRow((QString)"X:",          sliders[0]);
+    ui->shapeForm->addRow((QString)"Y:",          sliders[1]);
+    ui->shapeForm->addRow((QString)"Width:",      spinBoxes[0]);
+    ui->shapeForm->addRow((QString)"Length:",     spinBoxes[1]);
 
-    QObject::connect(lineEdit, &QLineEdit::editingFinished, this, &ShapeWindow::changeText);
+    QObject::connect(lineEdit,     &QLineEdit::textEdited,  this, &ShapeWindow::changeText);
+    QObject::connect(sliders[0],   &QSlider::valueChanged,  this, &ShapeWindow::changeX   );
+    QObject::connect(sliders[1],   &QSlider::valueChanged,  this, &ShapeWindow::changeY   );
+    QObject::connect(spinBoxes[0], &QSpinBox::valueChanged, this, &ShapeWindow::changeW   );
+    QObject::connect(spinBoxes[1], &QSpinBox::valueChanged, this, &ShapeWindow::changeH   );
 
 
-    // ** Text Dimensions & position **
-    for (int index {0}; index < 4; ++index)
-    {
-        spinBoxes[index] = new QSpinBox(ui->shapeEditor);
-
-        // adjust values!!
-        spinBoxes[index]->setMinimum(0);
-        spinBoxes[index]->setMaximum(1400);
-        spinBoxes[index]->setValue(dimensions[index]);
-
-        ui->shapeForm->addRow(labelsText[index], spinBoxes[index]);
-
-        QObject::connect(spinBoxes[index], &QSpinBox::valueChanged,
-                         this,             spinFunctions[index]);
-
-    }
 
     // ** TextPointSize **
-    spinBoxes[4]  = new QSpinBox(ui->shapeEditor);
+    spinBoxes[2] = createSpinBox(-1, 50, 1, font.pointSize());
 
-    spinBoxes[4]->setMinimum(-1);
-    spinBoxes[4]->setMaximum(50);
-    spinBoxes[4]->setValue(font.pointSize());
+    ui->shapeForm->addRow((QString)"TextPointSize:", spinBoxes[2]);
 
-    ui->shapeForm->addRow((QString)"TextPointSize:", spinBoxes[4]);
-
-    QObject::connect(spinBoxes[4], &QSpinBox::valueChanged,
+    QObject::connect(spinBoxes[2], &QSpinBox::valueChanged,
                      this,         &ShapeWindow::changeTextPointSize);
 
 
@@ -388,7 +378,7 @@ void ShapeWindow::displayTextForm()
     ui->shapeForm->addRow((QString)"TextColor:", combos[0]);
 
     QObject::connect(combos[0], &QComboBox::currentTextChanged,
-                     this,      &ShapeWindow::changeTextColor);
+                     this,      &ShapeWindow::changePenColor);
 
 
 
@@ -444,20 +434,20 @@ void ShapeWindow::displayTextForm()
 
     if (font.style() == QFont::StyleNormal)
     {
-        combos[3]->addItem((QString)"StyleNormal");
+        combos[3]->addItem((QString)"Normal");
     }
     else if (font.style() == QFont::StyleItalic)
     {
-        combos[3]->addItem((QString)"StyleItalic");
+        combos[3]->addItem((QString)"Italic");
     }
     else if (font.style() == QFont::StyleOblique)
     {
-        combos[3]->addItem((QString)"StyleOblique");
+        combos[3]->addItem((QString)"Oblique");
     }
 
-    combos[3]->addItem((QString)"StyleNormal");
-    combos[3]->addItem((QString)"StyleItalic");
-    combos[3]->addItem((QString)"StyleOblique");
+    combos[3]->addItem((QString)"Normal");
+    combos[3]->addItem((QString)"Italic");
+    combos[3]->addItem((QString)"Oblique");
 
     ui->shapeForm->addRow((QString)"TextFontStyle:", combos[3]);
 
@@ -497,10 +487,20 @@ void ShapeWindow::displayTextForm()
 
 void ShapeWindow::displayPenBrushSettings()
 {
-    QPen pen     { shapeManager.getShape(ui->idLCD->value())->getPen()   };
-    QBrush brush { shapeManager.getShape(ui->idLCD->value())->getBrush() };
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    QPen pen     { shape->getPen()   };
+    QBrush brush { shape->getBrush() };
 
+    QSpinBox*  spinBox;
     QComboBox* combos[6];
+
+
+    // ** Pen Width **
+    spinBox = createSpinBox(1, 15, 1, shape->getPen().width());
+
+    ui->shapeForm->addRow((QString)"PenWidth:", spinBox);
+
+    QObject::connect(spinBox, &QSpinBox::valueChanged, this, &ShapeWindow::changePenWidth);
 
 
     // **  Pen Color **
@@ -606,48 +606,62 @@ void ShapeWindow::displayPenBrushSettings()
                      this,      &ShapeWindow::changePenJoinStyle);
 
 
-    // ** BrushColor
-    combos[4] = colorCombo(brush.color());
+    // **** Brush Settings *****
 
-    ui->shapeForm->addRow((QString)"BrushColor:", combos[4]);
-
-    QObject::connect(combos[4], &QComboBox::currentTextChanged,
-                     this,      &ShapeWindow::changeBrushColor);
-
-
-
-    // ** BrushStyle
-    combos[5] = new QComboBox(ui->shapeEditor);
-
-    if (brush.style() == Qt::SolidPattern)
+    if (   shape->getShape() != sType::Line
+        && shape->getShape() != sType::Polyline)
     {
+
+        // ** BrushColor **
+        combos[4] = colorCombo(brush.color());
+
+        ui->shapeForm->addRow((QString)"BrushColor:", combos[4]);
+
+        QObject::connect(combos[4], &QComboBox::currentTextChanged,
+                         this,      &ShapeWindow::changeBrushColor);
+
+
+
+        // ** BrushStyle **
+        combos[5] = new QComboBox(ui->shapeEditor);
+
+        if (brush.style() == Qt::SolidPattern)
+        {
+            combos[5]->addItem((QString)"SolidPattern");
+        }
+        else if (brush.style() == Qt::HorPattern)
+        {
+            combos[5]->addItem((QString)"HorPattern");
+        }
+        else if (brush.style() == Qt::VerPattern)
+        {
+            combos[5]->addItem((QString)"VerPattern");
+        }
+        else if (brush.style() == Qt::NoBrush)
+        {
+            combos[5]->addItem((QString)"NoBrush");
+        }
+
         combos[5]->addItem((QString)"SolidPattern");
-    }
-    else if (brush.style() == Qt::HorPattern)
-    {
         combos[5]->addItem((QString)"HorPattern");
-    }
-    else if (brush.style() == Qt::VerPattern)
-    {
         combos[5]->addItem((QString)"VerPattern");
-    }
-    else if (brush.style() == Qt::NoBrush)
-    {
         combos[5]->addItem((QString)"NoBrush");
+
+        ui->shapeForm->addRow((QString)"BrushStyle:", combos[5]);
+
+        QObject::connect(combos[5], &QComboBox::currentTextChanged,
+                         this,      &ShapeWindow::changeBrushStyle);
     }
-
-    combos[5]->addItem((QString)"SolidPattern");
-    combos[5]->addItem((QString)"HorPattern");
-    combos[5]->addItem((QString)"VerPattern");
-    combos[5]->addItem((QString)"NoBrush");
-
-    ui->shapeForm->addRow((QString)"BrushStyle:", combos[5]);
-
-    QObject::connect(combos[5], &QComboBox::currentTextChanged,
-                     this,      &ShapeWindow::changeBrushColor);
 }
 
 
+void ShapeWindow::clearComboBox()
+{
+    while (ui->shapeComboBox->count())
+    {
+        ui->shapeComboBox->removeItem(0);
+    }
+}
 
 
 void ShapeWindow::clearForm()
@@ -661,7 +675,6 @@ void ShapeWindow::clearForm()
 
 
 // **** Configuring Widgets *****
-
 
 QComboBox* ShapeWindow::colorCombo(QColor color)
 {
@@ -718,6 +731,31 @@ QComboBox* ShapeWindow::colorCombo(QColor color)
 }
 
 
+// ** SpinBox **
+QSpinBox* ShapeWindow::createSpinBox(int min, int max, int step, int value)
+{
+    QSpinBox* spinBox = new QSpinBox(ui->shapeEditor);
+
+    spinBox->setMinimum(min);
+    spinBox->setMaximum(max);
+    spinBox->setSingleStep(step);
+    spinBox->setValue(value);
+
+    return spinBox;
+}
+
+
+// ** Slider **
+QSlider* ShapeWindow::createSlider(int min, int max, int position)
+{
+    QSlider* slider = { new QSlider(Qt::Horizontal, ui->shapeEditor) };
+
+    slider->setRange(min, max);
+
+    slider->setSliderPosition(position);
+
+    return slider;
+}
 
 
 
@@ -726,76 +764,553 @@ QComboBox* ShapeWindow::colorCombo(QColor color)
 // *****  RESPONDING TO SIGNALS *****
 
 
-// Change X, Y, Width & Height  (Rectangle, Ellips, & Text)
+void ShapeWindow::moveXaxis(int x)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    if (shape->getShape() == sType::Polygon)
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->move(x - polygon->getX(0), 0);
+    }
+    else if (shape->getShape() == sType::Polyline)
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->move(x - polyline->getX(0), 0);
+    }
+    else
+    {
+        Line* line { dynamic_cast<Line*>(shape) };
+
+        line->move(x - line->getX1(), 0);
+    }
+
+    update();
+}
+
+
+void ShapeWindow::moveYaxis(int y)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    if (shape->getShape() == sType::Polygon)
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->move(0, y - polygon->getY(0));
+    }
+    else if (shape->getShape() == sType::Polyline)
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->move(0, y - polyline->getY(0));
+    }
+    else
+    {
+        Line* line { dynamic_cast<Line*>(shape) };
+
+        line->move(0, y - line->getY1());
+    }
+
+    update();
+}
+
+
+
+// **** Change X, Y, Width & Height  (Rectangle, Ellips, & Text) ****
+
 void ShapeWindow::changeX(int x)
 {
-//     int id = ui->idLCD->value();
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
 
-    // get the shape...
-    // set x
-    // update()
+    if (type == sType::Rectangle || type == sType::Square)
+    {
+        Rectangle* rect { dynamic_cast<Rectangle*>(shape) };
+
+        rect->setX(x);
+    }
+    else if (type == sType::Ellipse || type == sType::Circle)
+    {
+        Ellipse* ellipse { dynamic_cast<Ellipse*>(shape) };
+
+        ellipse->setX(x);
+    }
+    else
+    {
+        Text* text { dynamic_cast<Text*>(shape) };
+
+        text->setX(x);
+    }
+
+    update();
 }
+
 
 void ShapeWindow::changeY(int y)
 {
-//     int id = ui->idLCD->value();
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
 
-    // get the shape
-    // set y
-    // update()
+    if (type == sType::Rectangle || type == sType::Square)
+    {
+        Rectangle* rect { dynamic_cast<Rectangle*>(shape) };
+
+        rect->setY(y);
+    }
+    else if (type == sType::Ellipse || type == sType::Circle)
+    {
+        Ellipse* ellipse { dynamic_cast<Ellipse*>(shape) };
+
+        ellipse->setY(y);
+    }
+    else
+    {
+        Text* text { dynamic_cast<Text*>(shape) };
+
+        text->setY(y);
+    }
+
+    update();
 }
+
 
 void ShapeWindow::changeW(int w)
 {
-//     int id = ui->idLCD->value();
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
 
-    // get the shape
-    // set width
-    // update()
+    if (type == sType::Rectangle || type == sType::Square)
+    {
+        Rectangle* rect { dynamic_cast<Rectangle*>(shape) };
+
+        rect->setWidth(w);
+    }
+    else if (type == sType::Ellipse || type == sType::Circle)
+    {
+        Ellipse* ellipse { dynamic_cast<Ellipse*>(shape) };
+
+        ellipse->setWidth(w);
+    }
+    else
+    {
+        Text* text { dynamic_cast<Text*>(shape) };
+
+        text->setWidth(w);
+    }
+
+    update();
 }
+
 
 void ShapeWindow::changeH(int h)
 {
-//     int id = ui->idLCD->value();
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
 
-    // get the shape
-    // set height/length
-    // update()
+    if (type == sType::Rectangle || type == sType::Square)
+    {
+        Rectangle* rect { dynamic_cast<Rectangle*>(shape) };
+
+        rect->setLength(h);
+    }
+    else if (type == sType::Ellipse || type == sType::Circle)
+    {
+        Ellipse* ellipse { dynamic_cast<Ellipse*>(shape) };
+
+        ellipse->setLength(h);
+    }
+    else
+    {
+        Text* text { dynamic_cast<Text*>(shape) };
+
+        text->setLength(h);
+    }
+
+    update();
+}
+
+
+// **** Change coordinates for line, Polyline, & Polygon  ****
+
+void ShapeWindow::changeX1(int x1)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Line)
+    {
+        Line* line { dynamic_cast<Line*>(shape) };
+
+        line->setX(x1, 0);
+    }
+    else if (type == sType::Polyline)
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setX(x1, 0);
+    }
+    else
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setX(x1, 0);
+    }
+
+    update();
+}
+
+
+void ShapeWindow::changeY1(int y1)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Line)
+    {
+        Line* line { dynamic_cast<Line*>(shape) };
+
+        line->setY(y1, 0);
+    }
+    else if (type == sType::Polyline)
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setY(y1, 0);
+    }
+    else
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setY(y1, 0);
+    }
+
+    update();
+}
+
+
+void ShapeWindow::changeX2(int x2)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Line)
+    {
+        Line* line { dynamic_cast<Line*>(shape) };
+
+        line->setX(x2, 1);
+    }
+    else if (type == sType::Polyline)
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setX(x2, 1);
+    }
+    else
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setX(x2, 1);
+    }
+
+    update();
+}
+
+
+void ShapeWindow::changeY2(int y2)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Line)
+    {
+        Line* line { dynamic_cast<Line*>(shape) };
+
+        line->setY(y2, 1);
+    }
+    else if (type == sType::Polyline)
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setY(y2, 1);
+    }
+    else
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setY(y2, 1);
+    }
+
+    update();
+}
+
+
+//  **** Polygon & Polyline  ****
+
+void ShapeWindow::changeX3(int x3)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Polygon)
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setX(x3, 2);
+    }
+    else
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setX(x3, 2);
+    }
+
+    update();
+}
+
+
+void ShapeWindow::changeY3(int y3)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Polygon)
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setY(y3, 2);
+    }
+    else
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setY(y3, 2);
+    }
+
+    update();
+}
+
+
+void ShapeWindow::changeX4(int x4)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Polygon)
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setX(x4, 3);
+    }
+    else
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setX(x4, 3);
+    }
+
+    update();
+}
+
+
+void ShapeWindow::changeY4(int y4)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    sType  type  { shape->getShape() };
+
+    if (type == sType::Polygon)
+    {
+        Polygon* polygon { dynamic_cast<Polygon*>(shape) };
+
+        polygon->setY(y4, 3);
+    }
+    else
+    {
+        Polyline* polyline { dynamic_cast<Polyline*>(shape) };
+
+        polyline->setY(y4, 3);
+    }
+
+    update();
+}
+
+
+ // **** Change Pen & Brush settings ****
+
+void ShapeWindow::changePenWidth(int width)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    shape->setPenWidth(width);
+
+    update();
+}
+
+
+void ShapeWindow::changePenColor(QString color)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    shape->setPenColor(QColor(color));
+
+    update();
+}
+
+
+void ShapeWindow::changePenStyle(QString penStyle)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    std::map<QString, Qt::PenStyle> map { {"SolidLine",      Qt::SolidLine     },
+                                          {"DashLine",       Qt::DashLine      },
+                                          {"DotLine",        Qt::DotLine       },
+                                          {"DashDotLine",    Qt::DashDotLine   },
+                                          {"DashDotDotLine", Qt::DashDotDotLine} };
+    shape->setPenStyle(map[penStyle]);
+
+    update();
+}
+
+
+void ShapeWindow::changePenCapStyle(QString capStyle)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    std::map<QString, Qt::PenCapStyle> map { {"FlatCap",   Qt::FlatCap   },
+                                             {"SquareCap", Qt::SquareCap },
+                                             {"RoundCap",  Qt::RoundCap  } };
+
+    shape->setPenCapStyle(map[capStyle]);
+
+    update();
+}
+
+
+void ShapeWindow::changePenJoinStyle(QString joinStyle)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    std::map<QString, Qt::PenJoinStyle> map  { {"MiterJoin", Qt::MiterJoin},
+                                               {"BevelJoin", Qt::BevelJoin},
+                                               {"RoundJoin", Qt::RoundJoin} };
+    shape->setPenJoinStyle(map[joinStyle]);
+
+    update();
+}
+
+
+void ShapeWindow::changeBrushColor(QString color)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    shape->setBrushColor(QColor(color));
+
+    update();
+}
+
+
+void ShapeWindow::changeBrushStyle(QString style)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+
+    std::map<QString, Qt::BrushStyle> map { {"SolidPattern", Qt::SolidPattern},
+                                            {"HorPattern",   Qt::HorPattern  },
+                                            {"VerPattern",   Qt::VerPattern  },
+                                            {"NoBrush",      Qt::NoBrush     } };
+    shape->setBrushStyle(map[style]);
+
+    update();
 }
 
 
 
 
-// Change coordinates for line, Polyline, & Polygon
-void ShapeWindow::changeX1(int x1){}
-void ShapeWindow::changeY1(int y1){}
-void ShapeWindow::changeX2(int x2){}
-void ShapeWindow::changeY2(int y2){}
-void ShapeWindow::changeX3(int x3){}
-void ShapeWindow::changeY3(int y3){}
-void ShapeWindow::changeX4(int x4){}
-void ShapeWindow::changeY4(int y4){}
+// ****  Change Text settings  ****
+
+void ShapeWindow::changeText(QString txt)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    Text*  text  { dynamic_cast<Text*>(shape)                };
+
+    text->setText(txt);
+
+    update();
+}
 
 
+void ShapeWindow::changeTextPointSize(int pointSize)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    Text*  text  { dynamic_cast<Text*>(shape)                };
 
- // Change Pen & Brush settings
-void ShapeWindow::changePenColor(QString color) {}
-void ShapeWindow::changePenStyle(QString penStyle){}
-void ShapeWindow::changePenCapStyle(QString capStyle){}
-void ShapeWindow::changePenJoinStyle(QString joinStyle){}
-void ShapeWindow::changeBrushColor(QString color){}
-void ShapeWindow::changeBrushStyle(QString color){}
+    text->getFont().setPointSize(pointSize);
+
+    update();
+}
 
 
+// changed by pen.
+//void ShapeWindow::changeTextColor(QString color){}
 
-// Change Text settings
-void ShapeWindow::changeText(){}
-void ShapeWindow::changeTextPointSize(int pointSize) {}
-void ShapeWindow::changeTextColor(QString color)     {}
-void ShapeWindow::changeTextAllignment(QString allignment){}
-void ShapeWindow::changeTextFontFamily(QString fontFamily){}
-void ShapeWindow::changeTextFontStyle(QString fontStyle)  {}
-void ShapeWindow::changeTextFontWeight(QString fontWeight){}
+
+void ShapeWindow::changeTextAllignment(QString alignment)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    Text*  text  { dynamic_cast<Text*>(shape)                };
+
+    std::map <QString, qFlag> map { {"AlignLeft",   qFlag::AlignLeft  },
+                                    {"AlignRight",  qFlag::AlignRight },
+                                    {"AlignTop",    qFlag::AlignTop   },
+                                    {"AlignBottom", qFlag::AlignBottom},
+                                    {"AlignCenter", qFlag::AlignCenter} };
+    text->setFlag(map[alignment]);
+
+    update();
+}
+
+
+void ShapeWindow::changeTextFontFamily(QString fontFamily)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    Text*  text  { dynamic_cast<Text*>(shape)                };
+
+    text->getFont().setFamily(fontFamily);
+
+    update();
+}
+
+
+void ShapeWindow::changeTextFontStyle(QString fontStyle)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    Text*  text  { dynamic_cast<Text*>(shape)                };
+
+    std::map<QString, QFont::Style> map { {"Normal",  QFont::Style::StyleNormal },
+                                          {"Italic",  QFont::Style::StyleItalic },
+                                          {"Oblique", QFont::Style::StyleOblique} };
+
+    text->getFont().setStyle(map[fontStyle]);
+
+    update();
+}
+
+
+void ShapeWindow::changeTextFontWeight(QString fontWeight)
+{
+    Shape* shape { shapeManager.getShape(ui->idLCD->value()) };
+    Text*  text  { dynamic_cast<Text*>(shape)                };
+
+    std::map<QString, QFont::Weight> map { {"Thin",   QFont::Weight::Thin  },
+                                           {"Light",  QFont::Weight::Light },
+                                           {"Normal", QFont::Weight::Normal},
+                                           {"Bold",   QFont::Weight::Bold  } };
+
+    text->getFont().setWeight(map[fontWeight]);
+
+    update();
+}
 
 int ShapeWindow::sortId(){
     int id = 0;
