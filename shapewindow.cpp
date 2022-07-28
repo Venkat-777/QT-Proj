@@ -1342,11 +1342,14 @@ void ShapeWindow::on_pushButton_2_clicked()
 
 
     if (currentShape == "Rectangle"){
-        int id = shapeManager.getShapes().size() + 1;
+        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
+
+        int id = shapeManager.getShapes()[0]->getID() + 1;
         // add new rectangle
         Rectangle* add = new Rectangle(id, 10, 10, QPen(), QBrush(), 15, 15);
         //vector.push_back(add);
         shapeManager.addShape(add);
+        ui->shapeComboBox->addItem(QString::number(id) + ": Rectangle");
         //shapeManager.drawShapes();
         //clearComboBox();
         //setupShapeEditor();
@@ -1356,7 +1359,8 @@ void ShapeWindow::on_pushButton_2_clicked()
         Line* add = new Line(id, QPen(), QBrush(), 10, 10, 15, 15);
         //vector.push_back(add);
         shapeManager.addShape(add);
-        update();
+        ui->shapeComboBox->addItem(QString::number(id) + ": Line");
+        //update();
         //shapeManager.drawShapes();
         //clearComboBox();
         //setupShapeEditor();
@@ -1366,6 +1370,7 @@ void ShapeWindow::on_pushButton_2_clicked()
         Ellipse* add = new Ellipse(id, pointSet, 10, 10);
         //vector.push_back(add);
         shapeManager.addShape(add);
+        ui->shapeComboBox->addItem(QString::number(id) + ": Ellipse");
         //shapeManager.drawShapes();
         //clearComboBox();
         //setupShapeEditor();
@@ -1375,6 +1380,7 @@ void ShapeWindow::on_pushButton_2_clicked()
         Polygon* add = new Polygon(id, QPen(), QBrush(), pointSet, 5);
         //vector.push_back(add);
         shapeManager.addShape(add);
+        ui->shapeComboBox->addItem(QString::number(id) + ": Polygon");
         //shapeManager.drawShapes();
         //clearComboBox();
         //setupShapeEditor();
@@ -1384,6 +1390,7 @@ void ShapeWindow::on_pushButton_2_clicked()
         Polyline* add = new Polyline(id, pointSet);
         //vector.push_back(add);
         shapeManager.addShape(add);
+        ui->shapeComboBox->addItem(QString::number(id) + ": Polyline");
         //shapeManager.drawShapes();
         //clearComboBox();
         //setupShapeEditor();
@@ -1393,14 +1400,17 @@ void ShapeWindow::on_pushButton_2_clicked()
         QFont font;
         font.setWeight(QFont::Weight::Thin);
         font.setStyle(QFont::Style::StyleNormal);
+        //font.setFamilies();
+        //font.set
         Text* add = new Text(id, pointSet, 10, 10, "Default Text", font, Qt::AlignmentFlag::AlignCenter);
         //vector.push_back(add);
         shapeManager.addShape(add);
+        ui->shapeComboBox->addItem(QString::number(id) + ": Text");
         //shapeManager.drawShapes();
         //clearComboBox();
         //setupShapeEditor();
     }
-    setupShapeEditor();
+    //setupShapeEditor();
     ui->addOrDelete->setText(" is Added.");
 }
 
@@ -1412,9 +1422,18 @@ void ShapeWindow::on_pushButton_clicked()
         if (reply == QMessageBox::Yes){
             QString ids = ui->selectedShapes->currentText();
             int currentId = 0;
-            currentId = ids.toInt()/**/;
+            currentId = ids.toInt();
             shapeManager.removeShape(currentId);
             ui->addOrDelete->setText(" is Deleted.");
+            //getSelectedShape();
+            QString targetID;
+            for (int i = 0; i < (ui->shapeComboBox->count()); i++){
+                targetID = ui->shapeComboBox->itemText(i);
+                if (targetID[0] == QString::number(currentId)){
+
+                    ui->shapeComboBox->removeItem(i);
+                }
+            }
         }
 }
 
@@ -1429,49 +1448,49 @@ void ShapeWindow::on_allShapes_currentTextChanged(const QString &arg1)
 
     if (currentShape == "Polygon"){
         ui->selectedShapes->addItem("Here are the Polygon");
-        for (int i = 0; i != shapeManager.getShapes().size(); i++){
-            if (shapeManager.getShapes()[i]->getShape() == Shape::ShapeType::Polygon){
-                ui->selectedShapes->addItem(QString::number(shapeManager.getShapes()[i]->getID()));
+        for (auto shape : shapeManager.getShapes()){
+            if (shape->getShape() == Shape::ShapeType::Polygon){
+                ui->selectedShapes->addItem(QString::number(shape->getID()));
             }
         }
     }   else if (currentShape == "Ellipse")
     {
         ui->selectedShapes->addItem("Here are the Ellipse");
-        for (int i = 0; i != shapeManager.getShapes().size(); i++){
-            if (shapeManager.getShapes()[i]->getShape() == Shape::ShapeType::Ellipse){
-                ui->selectedShapes->addItem(QString::number(shapeManager.getShapes()[i]->getID()));
+        for (auto shape : shapeManager.getShapes()){
+            if (shape->getShape() == Shape::ShapeType::Ellipse || shape->getShape() == Shape::ShapeType::Circle){
+                ui->selectedShapes->addItem(QString::number(shape->getID()));
             }
         }
     }   else if (currentShape == "Line")
     {
         ui->selectedShapes->addItem("Here are the Line");
-        for (int i = 0; i != shapeManager.getShapes().size(); i++){
-            if (shapeManager.getShapes()[i]->getShape() == Shape::ShapeType::Line){
-                ui->selectedShapes->addItem(QString::number(shapeManager.getShapes()[i]->getID()));
+        for (auto shape : shapeManager.getShapes()){
+            if (shape->getShape() == Shape::ShapeType::Line){
+                ui->selectedShapes->addItem(QString::number(shape->getID()));
             }
         }
     }   else if (currentShape == "Polyline")
     {
         ui->selectedShapes->addItem("Here are the Polyline");
-        for (int i = 0; i != shapeManager.getShapes().size(); i++){
-            if (shapeManager.getShapes()[i]->getShape() == Shape::ShapeType::Polyline){
-                ui->selectedShapes->addItem(QString::number(shapeManager.getShapes()[i]->getID()));
+        for (auto shape : shapeManager.getShapes()){
+            if (shape->getShape() == Shape::ShapeType::Polyline){
+                ui->selectedShapes->addItem(QString::number(shape->getID()));
             }
         }
     }   else if (currentShape == "Rectangle")
     {
         ui->selectedShapes->addItem("Here are the Rectangle");
-        for (int i = 0; i != shapeManager.getShapes().size(); i++){
-            if (shapeManager.getShapes()[i]->getShape() == Shape::ShapeType::Rectangle){
-                ui->selectedShapes->addItem(QString::number(shapeManager.getShapes()[i]->getID()));
+        for (auto shape : shapeManager.getShapes()){
+            if (shape->getShape() == Shape::ShapeType::Rectangle || shape->getShape() == Shape::ShapeType::Square){
+                ui->selectedShapes->addItem(QString::number(shape->getID()));
             }
         }
     }   else if (currentShape == "Text")
     {
         ui->selectedShapes->addItem("Here are the Text");
-        for (int i = 0; i != shapeManager.getShapes().size(); i++){
-            if (shapeManager.getShapes()[i]->getShape() == Shape::ShapeType::Text){
-                ui->selectedShapes->addItem(QString::number(shapeManager.getShapes()[i]->getID()));
+        for (auto shape : shapeManager.getShapes()){
+            if (shape->getShape() == Shape::ShapeType::Text){
+                ui->selectedShapes->addItem(QString::number(shape->getID()));
             }
         }
     }
