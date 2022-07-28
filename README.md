@@ -78,11 +78,12 @@ Individual Project Requirements
 5) Your program should be able to move shapes, including text, being rendered. This is accomplished via a move shape form. All changes are visible
    in the rendering area. – administrator only
    
-	a) Header File: 
+	a) Header File: "shape.h"
 	
-	b) Source File: 
+	b) Source File: "shape.cpp"
    
-	c) Line Number: 
+	c) Line Number: line 343
+	- pure virtual function, redefined differently in each derived class
    
 6) Your program should be able to add and remove shapes, including text, being rendered. This is accomplished via an add/remove shape form. All
 changes are visible in the rendering area. – administrator only
