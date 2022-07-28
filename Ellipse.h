@@ -14,7 +14,7 @@ public:
 
     Ellipse(int id = -1);
     Ellipse(int id, Vector<QPoint> points, int width, int length);
-    Ellipse(int id, int x, int y, int width, int length, QPen pen, QBrush brush);    
+    Ellipse(int id, int x, int y, int width, int length, QPen pen, QBrush brush);
     ~Ellipse() override;
 
     void draw(QPaintDevice* device, QPainter* painter) override;
