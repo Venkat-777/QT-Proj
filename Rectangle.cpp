@@ -79,4 +79,3 @@ int Rectangle::getLength() const
 {
     return length;
 }
-
