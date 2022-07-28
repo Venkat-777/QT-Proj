@@ -4,8 +4,8 @@ Polyline::Polyline(int id )
   : Shape(id), pointCount { 0 }, points { } { }
 
 
-Polyline::Polyline(int id, Vector<QPoint> points)
-    : Shape(id), pointCount { pointCount }
+Polyline::Polyline(int id, Vector<QPoint> points,QPen pen, QBrush brush)
+    : Shape(id, Shape::ShapeType::Polyline, pen, brush), pointCount { 0 }
 {
     QPoint point;
 
