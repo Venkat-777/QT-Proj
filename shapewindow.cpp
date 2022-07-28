@@ -7,6 +7,8 @@
 #include <QSlider>
 #include <QLineEdit>
 #include <QIcon>
+#include <vector>
+#include <QMessageBox>
 
 
 using sType  = Shape::ShapeType;
