@@ -185,7 +185,7 @@ void ShapeManager::ReadShapeFile(const string fileName)
           ReadDimensions(inFile, Shape::ShapeType::Polyline, definePoints, defineLength, defineWidth);
           ReadPenProperties(inFile, shapePen);
 
-          currentShape = new Polyline(shapeID, definePoints);
+          currentShape = new Polyline(shapeID, definePoints,QPen(),QBrush());
           currentShape -> setShape(Shape::ShapeType::Polyline);
           currentShape -> setPen(shapePen);
 
