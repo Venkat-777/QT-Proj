@@ -55,13 +55,12 @@ void Polygon::draw(QPaintDevice* device, QPainter* painter)
     painter->end();
 }
 
-void Polygon::move(const int translateX, const int translateY)
+void Polygon::move(const int x, const int y)
 {
     for (int i = 0; i < numOfPoints; i++)
     {
-        //I need to translate each x,y value
-        points[i].setX(points[i].x() + translateX);
-        points[i].setY(points[i].y() + translateY);
+        points[i].setX(points[i].x() + x);
+        points[i].setY(points[i].y() + y);
     }
 
 
@@ -85,6 +84,11 @@ Vector<QPoint> Polygon::getPointVector()
 int Polygon::getX(int point) const
 {
     return points[point].x();
+}
+
+int Polygon::getNumPoints() const
+{
+    return numOfPoints;
 }
 
 int Polygon::getY(int point) const
