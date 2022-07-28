@@ -6,11 +6,11 @@
 
 // shape includes
 #include "shape.h"
-#include "line.h"
-#include "polyline.h"
-#include "polygon.h"
-#include "rectangle.h"
-#include "ellipse.h"
+#include "Line.h"
+#include "Polyline.h"
+#include "Polygon.h"
+#include "Rectangle.h"
+#include "Ellipse.h"
 #include "text.h"
 
 // vector includes
