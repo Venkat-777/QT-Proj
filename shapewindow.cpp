@@ -1461,33 +1461,31 @@ void ShapeWindow::on_pushButton_clicked()
             shapeManager.removeShape(currentId);
 
             QString targetID;
-            int SHIT = 0;
-            for (int i = 0; i < (ui->shapeComboBox->count()); i++){
-                 targetID = ui->shapeComboBox->itemText(i);
-                 if (targetID[0] != QString::number(currentId) && targetID[1] == ':'){
-                     SHIT ++;
-                 } else if (targetID[2] == ':' && targetID[0] == '1' && targetID[1] != QString::number(currentId - 10)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '2' && targetID[1] != QString::number(currentId - 20)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '3' && targetID[1] != QString::number(currentId - 30)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '4' && targetID[1] != QString::number(currentId - 40)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '5' && targetID[1] != QString::number(currentId - 50)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '6' && targetID[1] != QString::number(currentId - 60)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '7' && targetID[1] != QString::number(currentId - 70)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '8' && targetID[1] != QString::number(currentId - 80)){
-                     SHIT++;
-                 } else if (targetID[2] == ':' && targetID[0] == '9' && targetID[1] != QString::number(currentId - 90)){
-                     SHIT++;
-                 }
-        }
-        ui->shapeComboBox->removeItem(SHIT - 5);
-        ui->addOrDelete->setText(QString::number(SHIT));
+
+            int targetNum = 0;
+            int colonIndex = 0;
+            for (int i = 0; i < (ui->shapeComboBox->count()); i++) {
+                targetID = ui->shapeComboBox->itemText(i);
+
+                for (int i = 0; i < targetID.length(); i++) {
+                    if (targetID.at(i) == ':') {
+                        colonIndex = i;
+                        break;
+                    }
+                }
+
+                targetNum = targetID.mid(0,colonIndex).toInt();
+
+                std::cout << "\nTarget Num: " << targetNum << std::endl;
+
+                if (targetNum == currentId) {
+                    ui->shapeComboBox->removeItem(i);
+                    std::cout << "\nRemoved Index " << i << std::endl;
+                    break;
+                }
+            }
+
+        ui->addOrDelete->setText("is Deleted");
       }
 }
 
