@@ -1,7 +1,7 @@
 
-#include "ellipse.h"
+#include "Ellipse.h"
 #include <cmath>
-//
+
 
 Ellipse::Ellipse(int id)
     : Shape(id), x { 0 }, y { 0 }, width { 0 }, length { 0 }
@@ -12,8 +12,8 @@ Ellipse::Ellipse(int id, Vector<QPoint> points, int width, int length)
 { }
 
 Ellipse::Ellipse(int id, int x, int y, int width, int length, QPen pen, QBrush brush)
-    : Shape(id, Shape::ShapeType::Ellipse, pen, brush), x {x}, y {y}, width {width}, length {length}
-{ }
+    : Shape(id, Shape::ShapeType::Ellipse, pen, brush), x {x}, y {y}, width {width}, length {length} {}
+
 
 Ellipse::~Ellipse() {}
 
@@ -83,5 +83,3 @@ int Ellipse::getLength() const
 {
     return length;
 }
-
-void ShapeManager::drawId(int id, int x, int y){}
