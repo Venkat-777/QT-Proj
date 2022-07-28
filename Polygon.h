@@ -20,13 +20,15 @@ public:
     ~Polygon() override;
 
     void draw(QPaintDevice* device, QPainter* painter) override;
-    void move(const int translateX, const int translateY) override;
+    void move(const int x, const int y) override;
     double perimeter() override;
     double area() override;
 
-    int getX() const;
-    int getY() const;
     Vector<QPoint> getPointVector();
+
+    int getNumPoints() const;
+    int getX(int point) const;
+    int getY(int point) const;
 
     void setX(int x, int coordNum);
     void setY(int y, int coordNum);
