@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1850</width>
-    <height>850</height>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>1530</x>
       <y>10</y>
       <width>310</width>
-      <height>471</height>
+      <height>511</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -80,7 +80,7 @@
        <x>20</x>
        <y>80</y>
        <width>271</width>
-       <height>371</height>
+       <height>401</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="shapeForm"/>
@@ -90,7 +90,7 @@
     <property name="geometry">
      <rect>
       <x>1490</x>
-      <y>490</y>
+      <y>580</y>
       <width>346</width>
       <height>261</height>
      </rect>
