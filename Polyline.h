@@ -22,10 +22,10 @@ public:
     int getX(int pointNum) const;
     int getY(int pointNum) const;
 
+    Vector<QPoint> getPointVector();
+
     void setX(int value, int point);
     void setY(int value, int point);
-    
-    Vector<QPoint> getPointVector();
 
 private:
     int pointCount;
