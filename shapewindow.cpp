@@ -1329,66 +1329,51 @@ int ShapeWindow::sortId(){
 
 void ShapeWindow::on_pushButton_2_clicked()
 {
-    //clearComboBox();
-    //setupShapeEditor();
     Vector<Shape*>vector = shapeManager.getShapes();
-
-    QString currentShape;
-    currentShape=ui->allShapes->currentText();
-
     Vector<QPoint> pointSet;
     QPoint points;
+    QString currentShape;
+    int id;
+
+    currentShape = ui->allShapes->currentText();
+
     points.setX(10);
     points.setY(10);
     pointSet.push_back(points);
 
+    shapeManager.sortShapes([](Shape * a, Shape * b){ return *b < *a; });
+    id = shapeManager.getShapes()[0]->getID() + 1;
 
     if (currentShape == "Rectangle"){
-        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
-
-        int id = shapeManager.getShapes()[0]->getID() + 1;
-        // add new rectangle
-        Rectangle* add = new Rectangle(id, 10, 10, QPen(), QBrush(), 15, 15);
+        Rectangle* add = new Rectangle(id, 20, 20, QPen(), QBrush(), 20, 20);
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Rectangle");
     } else if (currentShape == "Line"){
-        int id = shapeManager.getShapes()[0]->getID() + 1;
-        // add new line
-        Line* add = new Line(id, QPen(), QBrush(), 10, 10, 15, 15);
-        //vector.push_back(add);
+        Line* add = new Line(id, QPen(), QBrush(), 25, 50, 750, 800);
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Line");
     } else if (currentShape == "Ellipse"){
-        int id = shapeManager.getShapes()[0]->getID() + 1;
-        // add new ellipse
-        Ellipse* add = new Ellipse(id, pointSet, 10, 10);
+        Ellipse* add = new Ellipse(id, 50, 800, 25, 25, QPen(), QBrush());
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Ellipse");
     } else if (currentShape == "Polygon"){
-        int id = shapeManager.getShapes()[0]->getID() + 1;
-        // add new polygon
         Polygon* add = new Polygon(id, QPen(), QBrush(), pointSet, 5);
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Polygon");
     } else if (currentShape == "Polyline"){
-        int id = shapeManager.getShapes()[0]->getID() + 1;
-        // add new polyline
         Polyline* add = new Polyline(id, pointSet);
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Polyline");
     } else if (currentShape == "Text"){
-        int id = shapeManager.getShapes()[0]->getID() + 1;
-        // add new text
         QFont font;
         font.setWeight(QFont::Weight::Thin);
         font.setStyle(QFont::Style::StyleNormal);
         Text* add = new Text(id, pointSet, 10, 10, "Default Text", font, Qt::AlignmentFlag::AlignCenter);
         shapeManager.addShape(add);
-        ui->shapeComboBox->addItem(QString::number(id) + ": Text");
     }
+
     ui->addOrDelete->setText(" is Added.");
 }
-
 
 void ShapeWindow::on_pushButton_clicked()
 {
