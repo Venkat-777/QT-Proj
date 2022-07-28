@@ -11,7 +11,7 @@ class Polyline : public Shape
 {
 public:
     Polyline(int id = -1);
-    Polyline(int id, Vector<QPoint> points);
+    Polyline(int id, Vector<QPoint> points,QPen pen, QBrush brush);
     ~Polyline() override;
 
     void draw(QPaintDevice* device, QPainter* painter) override;
