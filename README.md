@@ -4,11 +4,11 @@ Link to the Github Repository: https://github.com/Ericcccccai/Team-2-QT-Project-
 
 CS1C 2D Graphics Modeler Project Team 2 QT
 
-Hi, we are the midnight coders. This is a QT program that allow the users to add, remove, and edit different shapes. 
+Hi, we are the Midnight Coders. This is a QT program that allows the users to add, remove, and edit different shapes. 
 
 Shapes include Ellipse, Rectangle, Text, Line, Polyline, and Polygon.
 
-The shapes are avliable to add, remove, edit, move, and more. 
+The shapes can be added, removed, edited, moved, and more. 
 
 Requirements:
 
@@ -41,39 +41,39 @@ Individual Project Requirements
    cap style, pen join style, brush color, brush shape. Text has properties: shape dimensions, text string, text color, text alignment, text point
    size, text font family, text font style, text font weight. All shapes must also have a unique ID.
    
-   a) Header File: "Parser.h"
+   a) Header File: "shapeManager.h"
    
-   b) Source File: "Parser.cpp"
+   b) Source File: "shapeManager.cpp"
    
    c) Line Numbers: 
         
-        - Read from shape file: lines 54, 85
+        - Read from shape file: lines 116, 147
         - Shape Type: 
-            i)   Line: line 107
-            ii)  Polyline: line 117
-            iii) Polygon: line 128
-            iv)  Rectangle: line 142
-            v)   Ellipse: line 166
-            vi)  Text: line 190
-                   - Text String: line 572
-                   - Text Color: line 586
-                   - Text Alignment: line 602
-                   - Text Point Size: line 613
-                   - Text Font Family: line 623
-                   - Text Font Style: line 637
-                   - Text Font Weight: line 653	
+            i)   Line: line 169
+            ii)  Polyline: line 179
+            iii) Polygon: line 190
+            iv)  Rectangle: line 204
+            v)   Ellipse: line 228
+            vi)  Text: line 252
+                   - Text String: line 634
+                   - Text Color: line 648
+                   - Text Alignment: line 664
+                   - Text Point Size: line 675
+                   - Text Font Family: line 685
+                   - Text Font Style: line 699
+                   - Text Font Weight: line 715	
         - Shape Properties:
             i)    Shape Dimensions:
-                   - Line, Polyline, Polygon: lines 110, 120, 131, 332
-                   - Rectangle, Ellipse, Text: lines 144, 168, 192, 352
-            ii)   Pen Color: line 410
-            iii)  Pen Width: line 421
-            iv)   Pen Style: line 436
-            v)    Pen Cap Style: line 452
-            vi)   Pen Join Style: line 468
-            vii)  Brush Color: line 511
-            viii) Brush Shape: line 527
-        - Shape Unique ID: lines 61, 92
+                   - Line, Polyline, Polygon: lines 172, 182, 193, 390
+                   - Rectangle, Ellipse, Text: lines 206, 230, 254, 408
+            ii)   Pen Color: line 472
+            iii)  Pen Width: line 483
+            iv)   Pen Style: line 498
+            v)    Pen Cap Style: line 514
+            vi)   Pen Join Style: line 530
+            vii)  Brush Color: line 573
+            viii) Brush Shape: line 589
+        - Shape Unique ID: lines 123, 154
 
 5) Your program should be able to move shapes, including text, being rendered. This is accomplished via a move shape form. All changes are visible
    in the rendering area. – administrator only
@@ -95,11 +95,11 @@ changes are visible in the rendering area. – administrator only
 
 10) Save all changes between executions
 
-       a) Header File: "Parser.h"
+       a) Header File: "shapeManager.h"
 	
-       b) Source File: "Parser.cpp"
+       b) Source File: "shapeManager.cpp"
 	
-       c) Line Number: line 675
+       c) Line Number: line 742
 
 
 ****************************
