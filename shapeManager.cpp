@@ -1,4 +1,4 @@
-#include "shapemanager.h"
+#include "shapeManager.h"
 
 ShapeManager::ShapeManager(QPaintDevice* device)
    : device { device }, painter { new QPainter }, shapes{}, currentShape {nullptr} {}
@@ -146,6 +146,9 @@ void ShapeManager::ReadShapeFile(const string fileName)
     // read the file
     while(inFile)
     {
+        // ignore all white space in the beginning
+        while(inFile.get() == '\n');
+
         // SHAPE ID
         // remove "ShapeID: "
         ReadDelimiter(inFile, ':');
@@ -264,8 +267,8 @@ void ShapeManager::ReadShapeFile(const string fileName)
         // store created shape into the vector
         shapes.push_back(currentShape);
 
-        // ignore empty line between shapes in the input file
-        inFile.ignore(1000, '\n');
+        // ignore all white space after a shape read has been performed
+        while(inFile.get() == '\n');
 
         // clear shapeType; read in next shape in the file
         shapeType.clear();
@@ -767,27 +770,22 @@ void ShapeManager::SaveFile(const string& fileName)
 
             // line
             case 1: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO);
-                    outFile << '\n';
                     break;
 
             // polyline
             case 2: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO);
-                    outFile << '\n';
                     break;
 
             // polygon
             case 3: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
-                    outFile << '\n';
                     break;
 
             // rectangle
             case 4: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
-                    outFile << '\n';
                     break;
 
             // ellipse
             case 5: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
-                    outFile << '\n';
                     break;
 
             // text
@@ -796,15 +794,19 @@ void ShapeManager::SaveFile(const string& fileName)
 
             // circle
             case 7: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
-                    outFile << '\n';
                     break;
 
             // square
             case 8: OutputToFile(outFile, shapes[index], SHAPE_INFO, PEN_INFO, BRUSH_INFO);
-                    outFile << '\n';
                     break;
 
         } // END SWITCH
+
+        // put a space between shape outputs
+        if(index != shapes.size() - 1)
+        {
+            outFile << "\n\n";
+        }
 
     } // END FOR LOOP
 
@@ -919,7 +921,9 @@ void ShapeManager::OutputToFile(ofstream& fileName, Shape* shape, const Output& 
                           fileName << static_cast<Rectangle*>(shape) -> getX()      << ", " << static_cast<Rectangle*>(shape) -> getY() << ", "
                                    << static_cast<Rectangle*>(shape) -> getLength();
                       }
-                      fileName << '\n';
+
+                      if(index != SIZE_AR - 1 && printAr[index + 1] != Output::NONE) fileName << '\n';
+
                       break;
 
             // prints pen information to file
@@ -927,12 +931,14 @@ void ShapeManager::OutputToFile(ofstream& fileName, Shape* shape, const Output& 
                       fileName << "PenWidth: " << shape -> getPen().width() << '\n';
                       fileName << "PenStyle: "     << EnumToString(shape -> getPen().style(),     convert::PEN_STYLE) << '\n';
                       fileName << "PenCapStyle: "  << EnumToString(shape -> getPen().capStyle(),  convert::PEN_CAP)   << '\n';
-                      fileName << "PenJoinStyle: " << EnumToString(shape -> getPen().joinStyle(), convert::PEN_JOIN)  << '\n';
+                      fileName << "PenJoinStyle: " << EnumToString(shape -> getPen().joinStyle(), convert::PEN_JOIN);
+                      if(index != SIZE_AR - 1 && printAr[index + 1] != Output::NONE) fileName << '\n';
                       break;
 
             // prints brush information to file
             case 3  : fileName << "BrushColor: " << QColorToString(shape -> getBrush().color().name().toStdString()) << '\n';
-                      fileName << "BrushStyle: " << EnumToString(shape -> getBrush().style(), convert::BRUSH_STYLE)  << '\n';
+                      fileName << "BrushStyle: " << EnumToString(shape -> getBrush().style(), convert::BRUSH_STYLE);
+                      if(index != SIZE_AR - 1 && printAr[index + 1] != Output::NONE) fileName << '\n';
                       break;
 
             // prints text information to file
@@ -944,6 +950,7 @@ void ShapeManager::OutputToFile(ofstream& fileName, Shape* shape, const Output& 
                       fileName << "TextFontFamily: " << static_cast<Text*>(shape) -> getFont().family().toStdString() << '\n';
                       fileName << "TextFontStyle: "  << EnumToString(static_cast<Text*>(shape) -> getFont().style(), convert::FONT_STYLE)   << '\n';
                       fileName << "TextFontWeight: " << EnumToString(static_cast<Text*>(shape) -> getFont().weight(), convert::FONT_WEIGHT);
+                      if(index != SIZE_AR - 1 && printAr[index + 1] != Output::NONE) fileName << '\n';
                       break;
 
         } // END SWITCH
@@ -1118,14 +1125,3 @@ string ShapeManager::EnumToString(const int& enumTypeValue, const int& enumListV
 /*******************************************************
 * SERIALIZER SERIALIZER SERIALIZER SERIALIZER [end]
 ********************************************************/
-
-
-
-
-
-
-
-
-
-
-
