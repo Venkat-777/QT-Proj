@@ -257,7 +257,7 @@ void ShapeManager::ReadShapeFile(const string fileName)
           ReadDimensions(inFile, Shape::ShapeType::Text, definePoints, defineLength, defineWidth);
           ReadTextProperties(inFile, shapePen, text, textFont, textAlignFlag);
 
-          currentShape = new Text(shapeID, definePoints, defineWidth, defineLength, text, textFont, textAlignFlag);
+          currentShape = new Text(shapeID, definePoints, defineWidth, defineLength, text, textFont, textAlignFlag,QPen(),QBrush());
           currentShape -> setShape(Shape::ShapeType::Text);
           currentShape -> setPen(shapePen);
         }
