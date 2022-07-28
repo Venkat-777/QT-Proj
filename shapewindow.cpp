@@ -1324,8 +1324,10 @@ int ShapeWindow::sortId(){
     }
     return id;
 }
+
 void ShapeWindow::on_pushButton_2_clicked()
 {
+    //clearComboBox();
     //setupShapeEditor();
     Vector<Shape*>vector = shapeManager.getShapes();
 
@@ -1338,45 +1340,52 @@ void ShapeWindow::on_pushButton_2_clicked()
     points.setY(10);
     pointSet.push_back(points);
 
+
     if (currentShape == "Rectangle"){
         int id = shapeManager.getShapes().size() + 1;
         // add new rectangle
-        Rectangle* add = new Rectangle(id, pointSet, 10, 10);
-        vector.push_back(add);
+        Rectangle* add = new Rectangle(id, 10, 10, QPen(), QBrush(), 15, 15);
+        //vector.push_back(add);
         shapeManager.addShape(add);
-        shapeManager.drawShapes();
+        //shapeManager.drawShapes();
+        //clearComboBox();
         //setupShapeEditor();
     } else if (currentShape == "Line"){
         int id = shapeManager.getShapes().size() + 1;
         // add new line
-        Line* add = new Line(id, pointSet);
-        vector.push_back(add);
+        Line* add = new Line(id, QPen(), QBrush(), 10, 10, 15, 15);
+        //vector.push_back(add);
         shapeManager.addShape(add);
-        shapeManager.drawShapes();
+        update();
+        //shapeManager.drawShapes();
+        //clearComboBox();
         //setupShapeEditor();
     } else if (currentShape == "Ellipse"){
         int id = shapeManager.getShapes().size() + 1;
         // add new ellipse
         Ellipse* add = new Ellipse(id, pointSet, 10, 10);
-        vector.push_back(add);
+        //vector.push_back(add);
         shapeManager.addShape(add);
-        shapeManager.drawShapes();
+        //shapeManager.drawShapes();
+        //clearComboBox();
         //setupShapeEditor();
     } else if (currentShape == "Polygon"){
         int id = shapeManager.getShapes().size() + 1;
         // add new polygon
-        Polygon* add = new Polygon(id, pointSet);
-        vector.push_back(add);
+        Polygon* add = new Polygon(id, QPen(), QBrush(), pointSet, 5);
+        //vector.push_back(add);
         shapeManager.addShape(add);
-        shapeManager.drawShapes();
+        //shapeManager.drawShapes();
+        //clearComboBox();
         //setupShapeEditor();
     } else if (currentShape == "Polyline"){
         int id = shapeManager.getShapes().size() + 1;
         // add new polyline
         Polyline* add = new Polyline(id, pointSet);
-        vector.push_back(add);
+        //vector.push_back(add);
         shapeManager.addShape(add);
-        shapeManager.drawShapes();
+        //shapeManager.drawShapes();
+        //clearComboBox();
         //setupShapeEditor();
     } else if (currentShape == "Text"){
         int id = shapeManager.getShapes().size() + 1;
@@ -1385,12 +1394,13 @@ void ShapeWindow::on_pushButton_2_clicked()
         font.setWeight(QFont::Weight::Thin);
         font.setStyle(QFont::Style::StyleNormal);
         Text* add = new Text(id, pointSet, 10, 10, "Default Text", font, Qt::AlignmentFlag::AlignCenter);
-        vector.push_back(add);
+        //vector.push_back(add);
         shapeManager.addShape(add);
-        shapeManager.drawShapes();
+        //shapeManager.drawShapes();
+        //clearComboBox();
         //setupShapeEditor();
     }
-
+    setupShapeEditor();
     ui->addOrDelete->setText(" is Added.");
 }
 
@@ -1400,8 +1410,9 @@ void ShapeWindow::on_pushButton_clicked()
     QMessageBox::StandardButton reply =
                 QMessageBox::question(this, "Delete", "Are you sure you want to delete?"/*OPTIONAL: , QMessageBox::YES | QMessageBox::NO*/);
         if (reply == QMessageBox::Yes){
+            QString ids = ui->selectedShapes->currentText();
             int currentId = 0;
-            currentId = ui->selectedShapes->currentIndex();
+            currentId = ids.toInt()/**/;
             shapeManager.removeShape(currentId);
             ui->addOrDelete->setText(" is Deleted.");
         }
