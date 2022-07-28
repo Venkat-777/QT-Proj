@@ -11,7 +11,7 @@ Line::Line(int id): Shape(id)
 }
 
 Line::Line(int id, QPen pen, QBrush brush, int x1, int x2, int y1, int y2):
-    Shape(id, ShapeType::Line, pen, brush), point1(x1, y1), point2(x2, y2)
+    Shape(id, Shape::ShapeType::Line, pen, brush), point1(x1, y1), point2(x2, y2)
 { }
 
 Line::Line(int id, Vector<QPoint> points)
