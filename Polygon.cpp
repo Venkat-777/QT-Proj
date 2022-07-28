@@ -4,7 +4,7 @@ Polygon::Polygon(int id) : Shape(id), numOfPoints {}, points {}
 {}
 
 Polygon::Polygon(int id, QPen pen, QBrush brush, Vector<QPoint> points, int numOfPoints ) :
-    Shape(id, ShapeType::Polygon, pen, brush), numOfPoints { numOfPoints }
+    Shape(id, Shape::ShapeType::Polygon, pen, brush), numOfPoints { numOfPoints }
 {
     QPoint point;
 
