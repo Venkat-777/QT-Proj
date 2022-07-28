@@ -6,8 +6,8 @@ Text::Text(int id)
 
 
 Text::Text(int id, Vector<QPoint> points, int length, int width,
-           QString text, QFont font, Qt::AlignmentFlag flag)
-    : Shape(id),   width {width}, length {length}, x {points[0].x()}, y {points[0].y()},
+           QString text, QFont font, Qt::AlignmentFlag flag,QPen pen, QBrush brush) //(int id, ShapeType shape, QPen pen, QBrush brush)
+    : Shape(id,Shape::ShapeType::Text,pen,brush),   width {width}, length {length}, x {points[0].x()}, y {points[0].y()},
       font {font}, text {text}, flag {flag}
 { }
 
