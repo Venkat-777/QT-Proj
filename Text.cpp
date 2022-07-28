@@ -73,11 +73,11 @@ void Text::setY(int y)
     this->y = y;
 }
 
-QString Text::getText()
+QString& Text::getText()
 {
     return text;
 }
-QFont Text::getFont()
+QFont& Text::getFont()
 {
     return font;
 }
@@ -97,9 +97,8 @@ int Text::getY()
 {
     return y;
 }
+
 Qt::AlignmentFlag Text::getAlignment()
 {
     return flag;
 }
-
-void ShapeManager::drawId(int id, int x, int y){}
