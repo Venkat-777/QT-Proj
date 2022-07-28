@@ -30,12 +30,12 @@ public:
     void setX(int x);
     void setY(int y);
 
-    QString getText();
-    QFont getFont();
-    int getWidth();
-    int getLength();
-    int getX();
-    int getY();
+    QString& getText();
+    QFont&   getFont();
+    int      getWidth();
+    int      getLength();
+    int      getX();
+    int      getY();
     Qt::AlignmentFlag getAlignment();
 
 private:
