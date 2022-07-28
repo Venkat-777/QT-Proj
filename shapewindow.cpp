@@ -1314,64 +1314,77 @@ void ShapeWindow::changeTextFontWeight(QString fontWeight)
     update();
 }
 
-int ShapeWindow::sortId(){
-    int id = 0;
-    for (int i = 0; i != shapeManager.getShapes().size(); i++){
-        if (id < shapeManager.getShapes()[i]->getID()){
-            id = shapeManager.getShapes()[i]->getID();
-        }
-        //shapeManager.getShapes()[i]->getID();
-
-    //id = shapeManager.getShapes()[shapeManager.getShapes().size()]->getID();
-    }
-    return id;
-}
-
 void ShapeWindow::on_pushButton_2_clicked()
 {
+    //clearComboBox();
+    //setupShapeEditor();
     Vector<Shape*>vector = shapeManager.getShapes();
+
+    QString currentShape;
+    currentShape=ui->allShapes->currentText();
+
     Vector<QPoint> pointSet;
     QPoint points;
-    QString currentShape;
-    int id;
-
-    currentShape = ui->allShapes->currentText();
-
     points.setX(10);
     points.setY(10);
     pointSet.push_back(points);
 
-    shapeManager.sortShapes([](Shape * a, Shape * b){ return *b < *a; });
-    id = shapeManager.getShapes()[0]->getID() + 1;
+    shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
 
     if (currentShape == "Rectangle"){
-        Rectangle* add = new Rectangle(id, 20, 20, QPen(), QBrush(), 20, 20);
+        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
+        int id = shapeManager.getShapes()[0]->getID() + 1;
+        // add new rectangle
+        Rectangle* add = new Rectangle(id, 10, 10, QPen(), QBrush(), 15, 15);
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Rectangle");
     } else if (currentShape == "Line"){
-        Line* add = new Line(id, QPen(), QBrush(), 25, 50, 750, 800);
+        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
+        int id = shapeManager.getShapes()[0]->getID() + 1;
+        // add new line
+        Line* add = new Line(id, QPen(), QBrush(), 23, 50, 750, 800);
+        //Line* add = new Line(id, pointSet);
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Line");
     } else if (currentShape == "Ellipse"){
+        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
+        int id = shapeManager.getShapes()[0]->getID() + 1;
+        // add new ellipse
         Ellipse* add = new Ellipse(id, 50, 800, 25, 25, QPen(), QBrush());
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Ellipse");
     } else if (currentShape == "Polygon"){
-        Polygon* add = new Polygon(id, QPen(), QBrush(), pointSet, 5);
+        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
+        int id = shapeManager.getShapes()[0]->getID() + 1;
+        Vector<QPoint> pointS{};
+        pointS.push_back(QPoint(5,800));
+        pointS.push_back(QPoint(35,810));
+        pointS.push_back(QPoint(40,755));
+        pointS.push_back(QPoint(3,750));
+        // add new polygon
+        Polygon* add = new Polygon(id, QPen(), QBrush(), pointS, 5);
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Polygon");
     } else if (currentShape == "Polyline"){
-        Polyline* add = new Polyline(id, pointSet);
+        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
+        int id = shapeManager.getShapes()[0]->getID() + 1;
+        Vector<QPoint> pointS{};
+        pointS.push_back(QPoint(5,800));
+        pointS.push_back(QPoint(35,810));
+        pointS.push_back(QPoint(40,755));
+        pointS.push_back(QPoint(3,750));
+        // add new polyline
+        Polyline* add = new Polyline(id, pointS, QPen(), QBrush());
         shapeManager.addShape(add);
         ui->shapeComboBox->addItem(QString::number(id) + ": Polyline");
     } else if (currentShape == "Text"){
-        QFont font;
-        font.setWeight(QFont::Weight::Thin);
-        font.setStyle(QFont::Style::StyleNormal);
-        Text* add = new Text(id, pointSet, 10, 10, "Default Text", font, Qt::AlignmentFlag::AlignCenter);
+        shapeManager.sortShapes([](Shape * a, Shape * b){return *b < *a;});
+        int id = shapeManager.getShapes()[0]->getID() + 1;
+        // add new text
+        Text* add = new Text(id, pointSet, 10, 10, "Default Text", QFont(), Qt::AlignmentFlag::AlignCenter, QPen(), QBrush());
         shapeManager.addShape(add);
+        ui->shapeComboBox->addItem(QString::number(id) + ": Text");
     }
-
     ui->addOrDelete->setText(" is Added.");
 }
 
@@ -1384,17 +1397,36 @@ void ShapeWindow::on_pushButton_clicked()
             int currentId = 0;
             currentId = ids.toInt();
             shapeManager.removeShape(currentId);
-            ui->addOrDelete->setText(" is Deleted.");
-            //getSelectedShape();
-            QString targetID;
-            for (int i = 0; i < (ui->shapeComboBox->count()); i++){
-                targetID = ui->shapeComboBox->itemText(i);
-                if (targetID[0] == QString::number(currentId)){
 
-                    ui->shapeComboBox->removeItem(i);
-                }
-            }
+            QString targetID;
+            int SHIT = 0;
+            for (int i = 0; i < (ui->shapeComboBox->count()); i++){
+                 targetID = ui->shapeComboBox->itemText(i);
+                 if (targetID[0] != QString::number(currentId) && targetID[1] == ':'){
+                     SHIT ++;
+                 } else if (targetID[2] == ':' && targetID[0] == '1' && targetID[1] != QString::number(currentId - 10)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '2' && targetID[1] != QString::number(currentId - 20)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '3' && targetID[1] != QString::number(currentId - 30)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '4' && targetID[1] != QString::number(currentId - 40)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '5' && targetID[1] != QString::number(currentId - 50)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '6' && targetID[1] != QString::number(currentId - 60)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '7' && targetID[1] != QString::number(currentId - 70)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '8' && targetID[1] != QString::number(currentId - 80)){
+                     SHIT++;
+                 } else if (targetID[2] == ':' && targetID[0] == '9' && targetID[1] != QString::number(currentId - 90)){
+                     SHIT++;
+                 }
         }
+        ui->shapeComboBox->removeItem(SHIT - 5);
+        ui->addOrDelete->setText(QString::number(SHIT));
+      }
 }
 
 
