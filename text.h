@@ -14,7 +14,7 @@ class Text : public Shape
 public:
     Text(int id = -1);
     Text(int id, Vector<QPoint> points, int length, int width,
-         QString text, QFont font, Qt::AlignmentFlag flag);
+         QString text, QFont font, Qt::AlignmentFlag flag,QPen pen, QBrush brush);
     ~Text() override;
 
     void draw(QPaintDevice * device, QPainter* painter) override;
