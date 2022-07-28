@@ -12,9 +12,10 @@
 3) Display all graphic objects (i.e. shapes including text) in rendering window. The shape id will be displayed above each shape identifying it. 
    The rendering area to display shapes must have minimum dimensions of 1000 pixels (horizontal) by 500 pixels (vertical). The coordinate system
    is defined such that the top left corner of the rendering area is located at point (0,0), the bottom right corner at point (1000,500).
-   -> Header File: 
-   -> Source File: 
-   -> Line Number: 
+   -> Header File: "shapeManager.h"
+   -> Source File: "shapeManager.cpp"
+   -> Line Number: line 66
+        - rendering window with specific dimensions is set using fillRect() for each shape before the shape is drawn
    
 4) Your program should read from a shape file that keeps track of all shapes currently being rendered by the 2D modeler. Shapes are identified by
    their type: line, polyline, polygon, rectangle, ellipse, text. Shapes have properties: shape dimensions, pen color, pen width, pen style, pen
