@@ -66,8 +66,8 @@ changes are visible in the rendering area. – administrator only
    -> Line Number: lines 38, 54
 
 10) Save all changes between executions
-   -> Header File: "Parser.h"
-   -> Source File: "Parser.cpp"
+   -> Header File: "shapeManager.h"
+   -> Source File: "shapeManager.cpp"
    -> Line Number: line 742
 
 
