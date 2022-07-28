@@ -1,4 +1,4 @@
-#include "polygon.h"
+#include "Polygon.h"
 
 Polygon::Polygon(int id) : Shape(id), numOfPoints {}, points {}
 {}
