@@ -1,4 +1,4 @@
-#include "rectangle.h"
+#include "Rectangle.h"
 
 Rectangle::Rectangle(int id)
     : Shape(id), width { 0 }, length { 0 }, x { 0 }, y { 0 }
@@ -80,4 +80,3 @@ int Rectangle::getLength() const
     return length;
 }
 
-void ShapeManager::drawId(int id, int x, int y){}
