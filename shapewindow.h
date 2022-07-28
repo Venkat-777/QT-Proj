@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QComboBox>
+#include <QSpinBox>
 #include "shapemanager.h"
 
 
@@ -35,16 +36,15 @@ public:
     // Pen & Brush settings added to form
     void displayPenBrushSettings();
 
-
+    // Clears form before displaying a new form
     void clearForm();
-
+    void clearComboBox();
 
     // Change Width, Height & coordinates
-    void changeX(int x); // use x1
-    void changeY(int y); // use y1
+    void changeX(int x);
+    void changeY(int y);
     void changeW(int w);
     void changeH(int h);
-
 
     // Change coordinate points
     void changeX1(int x1);
@@ -56,8 +56,8 @@ public:
     void changeX4(int x4);
     void changeY4(int y4);
 
-
     // change Pen & Brush
+    void changePenWidth(int);
     void changePenColor(QString);
     void changePenStyle(QString);
     void changePenCapStyle(QString);
@@ -66,18 +66,18 @@ public:
     void changeBrushStyle(QString);
 
     // change text settings
-    void changeText();
+    void changeText(QString);
     void changeTextPointSize(int);
-    void changeTextColor(QString);
     void changeTextAllignment(QString);
     void changeTextFontFamily(QString);
     void changeTextFontStyle(QString);
     void changeTextFontWeight(QString);
 
-  protected:
-    QComboBox* colorCombo(QColor color);
+    // Move the whole shape
+    void moveXaxis(int x);
+    void moveYaxis(int y);
     
-  private slots:
+    private slots:
 
     void on_pushButton_2_clicked();
 
@@ -87,10 +87,18 @@ public:
 
     int sortId();
 
+  protected:
+    QComboBox* colorCombo(QColor color);
+    QSpinBox*  createSpinBox(int min, int max, int step, int value);
+    QSlider*   createSlider(int min, int max, int position);
+
 private:
     Ui::ShapeWindow *ui;
     ShapeManager shapeManager;
+//    int          canvasWidth;
+//    int          canvasHeight;
 };
+
 
 #endif // SHAPEWINDOW_H
     
