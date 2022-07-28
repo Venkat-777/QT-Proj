@@ -15,6 +15,8 @@ Polyline::Polyline(int id, Vector<QPoint> points,QPen pen, QBrush brush)
         point.setY(ptr->y());
 
         this->points.push_back(point);
+
+        ++pointCount;
     }
 }
 
@@ -87,5 +89,3 @@ void Polyline::setY(int value, int point)
 
     qPoint->setY(value);
 }
-
-void ShapeManager::drawId(int id, int x, int y){}
